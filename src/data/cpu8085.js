@@ -185,42 +185,83 @@ export const IC_INFO = {
     role: '8-bit Microprocessor',
     desc: 'The Intel 8085 is an 8-bit NMOS microprocessor operating at 3–6 MHz. It has a 40-pin DIP package, multiplexed address/data bus (AD0–AD7), 74 instructions, and 7 working registers (A, B, C, D, E, H, L) plus PC and SP.',
     pins: 40,
+    link: 'https://en.wikipedia.org/wiki/Intel_8085',
+    pinout: [
+      'X1', 'X2', 'RESET OUT', 'SOD', 'SID', 'TRAP', 'RST 7.5', 'RST 6.5', 'RST 5.5', 'INTR',
+      'INTA*', 'AD0', 'AD1', 'AD2', 'AD3', 'AD4', 'AD5', 'AD6', 'AD7', 'VSS',
+      'A8', 'A9', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'S0', 'ALE',
+      'WR*', 'RD*', 'S1', 'IO/M*', 'READY', 'RESET IN*', 'CLK OUT', 'HLDA', 'HOLD', 'VCC'
+    ]
   },
   '8155': {
     label: 'Intel 8155',
     role: 'RAM + I/O + Timer',
     desc: '256-byte RAM, 22 programmable I/O lines (Port A, B, C), and a 14-bit timer. Connected to the 8085 via the multiplexed bus. Provides system RAM and timer for the trainer kit.',
     pins: 40,
+    link: 'https://en.wikipedia.org/wiki/Intel_8255', // Wikipedia covers Intel peripherals generally
+    pinout: [
+      'PC3', 'PC4', 'TIMER IN', 'RESET', 'PC5', 'TIMER OUT', 'IO/M*', 'CE*', 'RD*', 'WR*',
+      'ALE', 'AD0', 'AD1', 'AD2', 'AD3', 'AD4', 'AD5', 'AD6', 'AD7', 'VSS',
+      'PA0', 'PA1', 'PA2', 'PA3', 'PA4', 'PA5', 'PA6', 'PA7', 'PB0', 'PB1',
+      'PB2', 'PB3', 'PB4', 'PB5', 'PB6', 'PB7', 'PC0', 'PC1', 'PC2', 'VCC'
+    ]
   },
   '8255': {
     label: 'Intel 8255',
     role: 'Programmable Peripheral Interface (PPI)',
     desc: 'General-purpose I/O chip with 3 8-bit ports (A, B, C). Used for interfacing keyboards, displays, and other peripherals. Can operate in 3 modes: simple I/O, strobed I/O, and bidirectional.',
     pins: 40,
+    link: 'https://en.wikipedia.org/wiki/Intel_8255',
+    pinout: [
+      'PA3', 'PA2', 'PA1', 'PA0', 'RD*', 'CS*', 'GND', 'A1', 'A0', 'PC7',
+      'PC6', 'PC5', 'PC4', 'PC0', 'PC1', 'PC2', 'PC3', 'PB0', 'PB1', 'PB2',
+      'PB3', 'PB4', 'PB5', 'PB6', 'PB7', 'VCC', 'D7', 'D6', 'D5', 'D4',
+      'D3', 'D2', 'D1', 'D0', 'RESET', 'WR*', 'PA7', 'PA6', 'PA5', 'PA4'
+    ]
   },
   '8253': {
     label: 'Intel 8253',
     role: 'Programmable Interval Timer',
     desc: 'Three independent 16-bit timers/counters. Used for baud-rate generation for serial communication (TTY, SER ports). Each counter can operate in 6 different modes.',
     pins: 24,
+    link: 'https://en.wikipedia.org/wiki/Intel_8253',
+    pinout: [
+      'D7', 'D6', 'D5', 'D4', 'D3', 'D2', 'D1', 'D0', 'CLK0', 'OUT0', 'GATE0', 'GND',
+      'OUT1', 'GATE1', 'CLK1', 'GATE2', 'OUT2', 'CLK2', 'A0', 'A1', 'CS*', 'RD*', 'WR*', 'VCC'
+    ]
   },
   'EPROM': {
-    label: 'EPROM (2732/2764)',
+    label: 'EPROM (2732)',
     role: 'Monitor ROM',
     desc: 'Erasable Programmable Read-Only Memory containing the monitor program (firmware). The monitor handles all keyboard input, display, memory examine/modify, and program execution functions.',
-    pins: 28,
+    pins: 24,
+    link: 'https://en.wikipedia.org/wiki/EPROM',
+    pinout: [
+      'A7', 'A6', 'A5', 'A4', 'A3', 'A2', 'A1', 'A0', 'O0', 'O1', 'O2', 'GND',
+      'O3', 'O4', 'O5', 'O6', 'O7', 'CE*', 'A10', 'OE*', 'A11', 'A9', 'A8', 'VCC'
+    ]
   },
   '74138': {
-    label: '74138',
+    label: '74LS138',
     role: '3-to-8 Line Decoder',
     desc: 'Used as an address decoder to select individual memory and I/O chips from the upper address lines. Enables chip-select signals for RAM, ROM, and peripheral ICs.',
     pins: 16,
+    link: 'https://en.wikipedia.org/wiki/7400-series_integrated_circuits',
+    pinout: [
+      'A', 'B', 'C', 'G2A*', 'G2B*', 'G1', 'Y7*', 'GND',
+      'Y6*', 'Y5*', 'Y4*', 'Y3*', 'Y2*', 'Y1*', 'Y0*', 'VCC'
+    ]
   },
   '74373': {
-    label: '74373',
+    label: '74LS373',
     role: 'Octal D-Type Latch',
     desc: 'Used to demultiplex the 8085\'s multiplexed address/data bus (AD0–AD7). Latches the lower 8 bits of the address during the ALE (Address Latch Enable) signal.',
     pins: 20,
+    link: 'https://en.wikipedia.org/wiki/7400-series_integrated_circuits',
+    pinout: [
+      'OE*', '1Q', '1D', '2D', '2Q', '3Q', '3D', '4D', '4Q', 'GND',
+      'LE', '5Q', '5D', '6D', '6Q', '7Q', '7D', '8D', '8Q', 'VCC'
+    ]
   },
 };
 

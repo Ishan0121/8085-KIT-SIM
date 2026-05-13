@@ -1,129 +1,107 @@
 /* ============================================================
    KEYPAD ASSEMBLY
    ============================================================ */
-
 .keypad-assembly {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
   user-select: none;
 }
 
-.keypad-row {
-  display: flex;
-  gap: 5px;
-}
+.keypad-row { display: flex; gap: 6px; }
 
 /* ============================================================
-   TRAINER KEY BASE
+   KEY BASE
    ============================================================ */
 .trainer-key {
   position: relative;
-  width: 54px;
-  height: 46px;
-  border-radius: 3px;
+  width: 56px;
+  height: 48px;
+  border-radius: var(--r-sm);
   cursor: pointer;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding-bottom: 3px;
+  padding-bottom: 4px;
   transition: transform 60ms ease, box-shadow 60ms ease;
   outline: none;
   overflow: hidden;
   flex-shrink: 0;
 }
 
-/* ============================================================
-   BLUE KEYS (function keys)
-   ============================================================ */
+/* ── Blue (function) keys ── */
 .key-blue {
-  background: linear-gradient(160deg, #4a90e2 0%, #2a6bbf 40%, #1a4d8f 100%);
+  background: linear-gradient(160deg, var(--key-blue-top) 0%, var(--key-blue-mid) 45%, var(--key-blue-bot) 100%);
   box-shadow:
-    0 4px 0 0 #0d2d5a,
-    0 5px 4px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.2),
+    0 4px 0 0 var(--key-blue-shadow),
+    0 6px 8px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.25),
     inset 0 -1px 0 rgba(0,0,0,0.3);
-  border: 1px solid #1a4070;
+  border: 1px solid #1a3a7a;
 }
 
 .key-blue:hover {
-  background: linear-gradient(160deg, #5aa0f5 0%, #3a7bd4 40%, #2a5faf 100%);
+  background: linear-gradient(160deg, #60a5fa 0%, #2563eb 45%, #1e40af 100%);
   box-shadow:
-    0 4px 0 0 #0d2d5a,
-    0 5px 8px rgba(74,144,226,0.3),
-    inset 0 1px 0 rgba(255,255,255,0.3),
-    inset 0 -1px 0 rgba(0,0,0,0.3);
+    0 4px 0 0 var(--key-blue-shadow),
+    0 6px 14px rgba(59,130,246,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.3);
 }
 
 .key-blue:focus-visible {
-  box-shadow:
-    0 4px 0 0 #0d2d5a,
-    0 0 0 2px rgba(255,255,255,0.6),
-    0 5px 4px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 0 0 var(--key-blue-shadow), 0 0 0 2px rgba(255,255,255,0.6);
 }
 
 .key-blue.key-pressed {
   transform: translateY(3px);
   box-shadow:
-    0 1px 0 0 #0d2d5a,
-    0 1px 2px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(0,0,0,0.2),
-    inset 0 2px 4px rgba(0,0,0,0.3);
-  background: linear-gradient(160deg, #2a6bbf 0%, #1a4d8f 40%, #0f3268 100%);
+    0 1px 0 0 var(--key-blue-shadow),
+    0 2px 4px rgba(0,0,0,0.4),
+    inset 0 2px 6px rgba(0,0,0,0.35);
+  background: linear-gradient(160deg, var(--key-blue-mid) 0%, var(--key-blue-bot) 100%);
 }
 
-/* SHIFT key active */
 .key-blue.key-shifted {
   box-shadow:
-    0 4px 0 0 #0d2d5a,
-    0 0 8px rgba(74,144,226,0.6),
-    0 0 20px rgba(74,144,226,0.3),
-    inset 0 1px 0 rgba(255,255,255,0.3);
-  background: linear-gradient(160deg, #6ab0ff 0%, #3a7bd4 40%, #2055af 100%);
+    0 4px 0 0 var(--key-blue-shadow),
+    0 0 12px rgba(59,130,246,0.8),
+    0 0 28px rgba(59,130,246,0.4);
+  background: linear-gradient(160deg, #93c5fd 0%, #2563eb 45%, #1d4ed8 100%);
 }
 
-/* ============================================================
-   BLACK KEYS (hex digit keys)
-   ============================================================ */
+/* ── Dark (hex) keys ── */
 .key-black {
-  background: linear-gradient(160deg, #3a3a3a 0%, #222 40%, #111 100%);
+  background: linear-gradient(160deg, var(--key-dark-top) 0%, var(--key-dark-mid) 45%, var(--key-dark-bot) 100%);
   box-shadow:
-    0 4px 0 0 #050505,
-    0 5px 4px rgba(0,0,0,0.6),
+    0 4px 0 0 var(--key-dark-shadow),
+    0 6px 6px rgba(0,0,0,0.65),
     inset 0 1px 0 rgba(255,255,255,0.08),
-    inset 0 -1px 0 rgba(0,0,0,0.4);
-  border: 1px solid #0a0a0a;
+    inset 0 -1px 0 rgba(0,0,0,0.5);
+  border: 1px solid #0a0e18;
 }
 
 .key-black:hover {
-  background: linear-gradient(160deg, #4a4a4a 0%, #333 40%, #1a1a1a 100%);
+  background: linear-gradient(160deg, #3d4a5c 0%, #252e3e 45%, #141c2a 100%);
   box-shadow:
-    0 4px 0 0 #050505,
-    0 5px 8px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.12),
-    inset 0 -1px 0 rgba(0,0,0,0.4);
+    0 4px 0 0 var(--key-dark-shadow),
+    0 6px 10px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.12);
 }
 
 .key-black:focus-visible {
-  box-shadow:
-    0 4px 0 0 #050505,
-    0 0 0 2px rgba(255,255,255,0.4),
-    0 5px 4px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 0 0 var(--key-dark-shadow), 0 0 0 2px rgba(255,255,255,0.4);
 }
 
 .key-black.key-pressed {
   transform: translateY(3px);
   box-shadow:
-    0 1px 0 0 #050505,
-    0 1px 2px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(0,0,0,0.3),
-    inset 0 2px 6px rgba(0,0,0,0.5);
-  background: linear-gradient(160deg, #222 0%, #111 40%, #050505 100%);
+    0 1px 0 0 var(--key-dark-shadow),
+    0 2px 4px rgba(0,0,0,0.55),
+    inset 0 2px 8px rgba(0,0,0,0.55);
+  background: linear-gradient(160deg, var(--key-dark-mid) 0%, var(--key-dark-bot) 100%);
 }
 
-/* ============================================================
-   KEY FACE (label area)
-   ============================================================ */
+/* ── Key face ── */
 .key-face {
   display: flex;
   flex-direction: column;
@@ -143,56 +121,48 @@
 
 .key-label-primary span {
   font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 10px;
-  letter-spacing: 0.3px;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.2px;
   text-align: center;
   white-space: nowrap;
 }
 
-.key-blue .key-label-primary span { color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
-.key-black .key-label-primary span { color: #e0e0e0; text-shadow: 0 1px 1px rgba(0,0,0,0.6); }
+.key-blue  .key-label-primary span { color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.65); }
+.key-black .key-label-primary span { color: #e8ecf2; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
 
 .key-label-sub {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 7px;
-  margin-top: 1px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  margin-top: 2px;
   letter-spacing: 0.5px;
 }
 
-.key-blue .key-label-sub { color: rgba(255,255,255,0.65); }
-.key-black .key-label-sub { color: rgba(180,180,180,0.65); }
-.key-black .key-label-primary span { font-size: 17px; }
+.key-blue  .key-label-sub { color: rgba(255,255,255,0.65); }
+.key-black .key-label-sub { color: rgba(200,210,225,0.6); }
+.key-black .key-label-primary span { font-size: 18px; }
 
-/* ============================================================
-   RIPPLE EFFECT
-   ============================================================ */
+/* ── Ripple ── */
 @keyframes ripple-expand {
-  from { width: 0; height: 0; opacity: 0.4; }
-  to   { width: 100px; height: 100px; opacity: 0; }
+  from { width: 0;     height: 0;     opacity: 0.4; }
+  to   { width: 110px; height: 110px; opacity: 0; }
 }
 
 .key-ripple {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.3);
   animation: ripple-expand 0.35s ease-out forwards;
   pointer-events: none;
 }
 
-/* ============================================================
-   RESPONSIVE (Mobile)
-   ============================================================ */
 @media (max-width: 600px) {
-  .trainer-key {
-    width: 38px;
-    height: 36px;
-  }
-  .key-label-primary span { font-size: 7px; }
+  .trainer-key { width: 40px; height: 36px; }
+  .key-label-primary span { font-size: 8px; }
+  .key-black .key-label-primary span { font-size: 14px; }
   .key-label-sub { font-size: 6px; }
-  .keypad-assembly { gap: 3px; }
-  .keypad-row { gap: 3px; }
+  .keypad-assembly { gap: 4px; }
+  .keypad-row { gap: 4px; }
 }

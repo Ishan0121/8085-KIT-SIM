@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import './SevenSegDisplay.css';
 
 // Segment paths for a single 7-segment digit
-// Segments: a(top), b(top-right), c(bottom-right), d(bottom), e(bottom-left), f(top-left), g(middle)
 const SEG_PATHS = {
   a: 'M 3 2 L 5 0 L 19 0 L 21 2 L 19 4 L 5 4 Z',
   b: 'M 22 3 L 24 5 L 24 19 L 22 21 L 20 19 L 20 5 Z',
@@ -13,7 +12,6 @@ const SEG_PATHS = {
   g: 'M 3 22 L 5 20 L 19 20 L 21 22 L 19 24 L 5 24 Z',
 };
 
-// Which segments to light for each hex digit
 const DIGIT_MAP = {
   '0': ['a','b','c','d','e','f'],
   '1': ['b','c'],
@@ -50,6 +48,73 @@ function SingleDigit({ char, glowing = true }) {
   );
 }
 
+// Info tooltip button beside the display
+export function DisplayInfoBtn({ addressValue, dataValue }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  // Close on outside click
+  useEffect(() => {
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    if (open) document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+
+  const addr = addressValue.replace(/-/g, '0');
+  const data = dataValue.replace(/-/g, '0');
+  const addrDec = parseInt(addr, 16);
+  const dataDec = parseInt(data, 16);
+
+  let statusText = (
+    <>
+      The <b>ADDRESS</b> display (4 digits) shows the current memory
+      address being examined or the Program Counter. The <b>DATA</b> display
+      (2 digits) shows the byte value at that address or the value being entered.
+    </>
+  );
+
+  if (dataValue.trim() === 'E') {
+    statusText = <><b>Execution complete.</b> The program has hit a HLT instruction or breakpoint.</>;
+  } else if (addressValue === '----' && dataValue === '--') {
+    statusText = <><b>System Reset.</b> Ready for input.</>;
+  } else if (addressValue.trim() === '') {
+    statusText = <><b>Waiting for execution address.</b> Enter the starting address and press GO.</>;
+  } else if (['A', 'B', 'C', 'D', 'E', 'H', 'L', 'PC', 'SP'].some(r => addressValue.trim() === r)) {
+    statusText = <><b>Examine Register.</b> Showing the current value of register <b>{addressValue.trim()}</b> in the DATA display.</>;
+  }
+
+  return (
+    <div className="display-info-wrap" ref={ref}>
+      <button
+        className="display-info-btn"
+        onClick={() => setOpen(o => !o)}
+        title="What does the display show?"
+        aria-label="Display info"
+      >
+        ?
+      </button>
+      {open && (
+        <div className="display-info-popup">
+          <div className="dip-title">Display State</div>
+          <div className="dip-row">
+            <span className="dip-label">ADDRESS</span>
+            <span className="dip-hex">{addressValue}</span>
+            <span className="dip-dec">{isNaN(addrDec) ? '—' : addrDec}</span>
+          </div>
+          <div className="dip-row">
+            <span className="dip-label">DATA</span>
+            <span className="dip-hex">{dataValue}</span>
+            <span className="dip-dec">{isNaN(dataDec) ? '—' : dataDec}</span>
+          </div>
+          <div className="dip-desc">
+            {statusText}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function SevenSegDisplay({ addressValue = '----', dataValue = '--' }) {
   const [blink, setBlink] = useState(true);
   const intervalRef = useRef(null);
@@ -64,11 +129,10 @@ export default function SevenSegDisplay({ addressValue = '----', dataValue = '--
 
   return (
     <div className="display-assembly">
-      {/* Bezel */}
       <div className="display-bezel">
-        {/* Address section - 4 digits */}
+        {/* Address section */}
         <div className="display-group">
-          <div className="display-label-top">ADDRESS DISPLAY</div>
+          <div className="display-label-top">ADDRESS</div>
           <div className="display-digits">
             {addrChars.map((ch, i) => (
               <div key={i} className="digit-wrapper">
@@ -78,12 +142,11 @@ export default function SevenSegDisplay({ addressValue = '----', dataValue = '--
           </div>
         </div>
 
-        {/* Separator */}
         <div className="display-separator" />
 
-        {/* Data section - 2 digits */}
+        {/* Data section */}
         <div className="display-group">
-          <div className="display-label-top">DATA DISPLAY</div>
+          <div className="display-label-top">DATA</div>
           <div className="display-digits">
             {dataChars.map((ch, i) => (
               <div key={i} className="digit-wrapper">
@@ -92,12 +155,7 @@ export default function SevenSegDisplay({ addressValue = '----', dataValue = '--
             ))}
           </div>
         </div>
-      </div>
 
-      {/* Labels below display */}
-      <div className="display-bottom-labels">
-        <span>ADDRESS</span>
-        <span>DATA</span>
       </div>
     </div>
   );

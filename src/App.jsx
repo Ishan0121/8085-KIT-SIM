@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Sidebar from './components/Sidebar';
-import SevenSegDisplay from './components/SevenSegDisplay';
+import SevenSegDisplay, { DisplayInfoBtn } from './components/SevenSegDisplay';
 import Keypad from './components/Keypad';
 import { ICInfoModal } from './components/SidePanel';
 import use8085 from './hooks/use8085';
@@ -79,6 +79,7 @@ export default function App() {
         log={log}
         theme={theme}
         onThemeToggle={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
+        setIcInfoKey={setIcInfoKey}
       />
 
       {/* ── Main content ── */}
@@ -111,6 +112,7 @@ export default function App() {
                 <div className="ind-led ind-led-yellow" />
                 <span className="ind-led-label">RUN</span>
               </div>
+              <DisplayInfoBtn addressValue={addressDisplay} dataValue={dataDisplay} />
             </div>
 
             {/* 7-Segment Display */}

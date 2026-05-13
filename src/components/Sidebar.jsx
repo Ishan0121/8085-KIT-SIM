@@ -273,8 +273,7 @@ function KeyReference() {
 }
 
 // ── Chip Info ─────────────────────────────────────────────────
-function ChipInfo() {
-  const [selected, setSelected] = useState(null);
+function ChipInfo({ setIcInfoKey }) {
   const chips = Object.entries(IC_INFO);
   return (
     <div className="sb-section">
@@ -283,17 +282,14 @@ function ChipInfo() {
         {chips.map(([id, info]) => (
           <div
             key={id}
-            className={`chip-card ${selected === id ? 'chip-card-active' : ''}`}
-            onClick={() => setSelected(selected === id ? null : id)}
+            className="chip-card"
+            onClick={() => setIcInfoKey(id)}
           >
             <div className="chip-card-header">
               <span className="chip-card-label">{info.label}</span>
               <span className="chip-card-role">{info.role}</span>
               <span className="chip-card-pins">{info.pins}p</span>
             </div>
-            {selected === id && (
-              <div className="chip-card-desc">{info.desc}</div>
-            )}
           </div>
         ))}
       </div>
@@ -306,7 +302,7 @@ function ChipInfo() {
 export default function Sidebar({
   registers, prevRegisters, flags,
   memory, memDisplay, memBaseAddr, setMemBaseAddr, refreshMemDisplay,
-  log, theme, onThemeToggle,
+  log, theme, onThemeToggle, setIcInfoKey
 }) {
   // On wide screens start expanded, on narrow start collapsed
   const getDefault = () => window.innerWidth >= 900;
@@ -342,7 +338,7 @@ export default function Sidebar({
       case 'opcodes':   return <OpcodeFinder />;
       case 'log':       return <ExecutionLog log={log} />;
       case 'keyref':    return <KeyReference />;
-      case 'chips':     return <ChipInfo />;
+      case 'chips':     return <ChipInfo setIcInfoKey={setIcInfoKey} />;
       case 'settings':  return <SettingsPanel theme={theme} onThemeToggle={onThemeToggle} />;
       default:          return null;
     }

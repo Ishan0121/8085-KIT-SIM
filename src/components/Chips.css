@@ -5,7 +5,7 @@
   display: flex;
   align-items: stretch;
   cursor: pointer;
-  transition: transform 150ms ease, filter 150ms ease;
+  transition: transform var(--t-med) ease, filter var(--t-med) ease;
 }
 
 .dip-chip.dip-h { flex-direction: column; }
@@ -13,13 +13,13 @@
 
 .dip-hovered {
   transform: translateY(-1px);
-  filter: brightness(1.15);
+  filter: brightness(1.18);
 }
 
 /* ---- DIP BODY ---- */
 .dip-body {
-  background: linear-gradient(160deg, #1e1e1e 0%, #141414 50%, #0d0d0d 100%);
-  border: 1px solid #2a2a2a;
+  background: linear-gradient(160deg, var(--ic-body) 0%, #0e0e0e 50%, #080808 100%);
+  border: 1px solid #222;
   border-radius: 2px;
   display: flex;
   flex-direction: column;
@@ -29,9 +29,9 @@
   padding: 4px 6px;
   min-width: 60px;
   box-shadow:
-    0 2px 6px rgba(0,0,0,0.7),
+    0 2px 8px rgba(0,0,0,0.75),
     inset 0 1px 0 rgba(255,255,255,0.04),
-    inset 0 -1px 0 rgba(0,0,0,0.5);
+    inset 0 -1px 0 rgba(0,0,0,0.55);
 }
 
 .dip-large .dip-body {
@@ -39,7 +39,7 @@
   padding: 6px 10px;
 }
 
-/* Notch on top of DIP body */
+/* Notch on top */
 .dip-notch {
   position: absolute;
   top: -1px;
@@ -47,16 +47,16 @@
   transform: translateX(-50%);
   width: 10px;
   height: 5px;
-  background: #2a2a2a;
+  background: var(--ic-notch);
   border-radius: 0 0 5px 5px;
   border: 1px solid #333;
   border-top: none;
 }
 
 .dip-label {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
-  color: #cccccc;
+  color: var(--ic-label);
   letter-spacing: 0.5px;
   text-align: center;
   margin-top: 4px;
@@ -66,7 +66,7 @@
 .dip-sublabel {
   font-family: 'Inter', sans-serif;
   font-size: 7px;
-  color: #888;
+  color: #777;
   text-align: center;
   letter-spacing: 0.3px;
   margin-top: 1px;
@@ -81,44 +81,44 @@
   padding: 0 4px;
 }
 
-.dip-pins-top { align-items: flex-end; padding-bottom: 0; }
+.dip-pins-top    { align-items: flex-end;   padding-bottom: 0; }
 .dip-pins-bottom { align-items: flex-start; padding-top: 0; }
 
-.dip-v .dip-pins { flex-direction: column; padding: 4px 0; }
-.dip-v .dip-pins-top { align-items: flex-end; }
-.dip-v .dip-pins-bottom { align-items: flex-start; }
+.dip-v .dip-pins         { flex-direction: column; padding: 4px 0; }
+.dip-v .dip-pins-top     { align-items: flex-end; }
+.dip-v .dip-pins-bottom  { align-items: flex-start; }
 
 .dip-pin {
   width: 4px;
   height: 8px;
-  background: linear-gradient(to right, #a08040, #c8a84b, #a08040);
+  background: linear-gradient(to right, #9a7838, var(--ic-pin), #9a7838);
   border-radius: 0 0 1px 1px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.55);
 }
 
-.dip-pins-top .dip-pin { border-radius: 1px 1px 0 0; }
-.dip-v .dip-pin { width: 8px; height: 4px; border-radius: 0 1px 1px 0; }
+.dip-pins-top .dip-pin   { border-radius: 1px 1px 0 0; }
+.dip-v .dip-pin          { width: 8px; height: 4px; border-radius: 0 1px 1px 0; }
 .dip-v .dip-pins-top .dip-pin { border-radius: 1px 0 0 1px; }
 
 /* ============================================================
-   CPU CHIP (8085 - large 40-pin)
+   CPU CHIP (8085 — large 40-pin)
    ============================================================ */
 .cpu-chip {
   display: flex;
   flex-direction: row;
   align-items: stretch;
   cursor: pointer;
-  transition: transform 150ms ease, filter 150ms ease;
+  transition: transform var(--t-med) ease, filter var(--t-med) ease;
 }
 
 .cpu-hovered {
   transform: translateY(-2px);
-  filter: brightness(1.2);
+  filter: brightness(1.22);
 }
 
 .cpu-body {
-  background: linear-gradient(160deg, #1c1c1c 0%, #111 50%, #090909 100%);
-  border: 1px solid #2a2a2a;
+  background: linear-gradient(160deg, #1a1a1a 0%, #0d0d0d 50%, #060606 100%);
+  border: 1px solid #222;
   border-radius: 3px;
   display: flex;
   flex-direction: column;
@@ -129,9 +129,9 @@
   min-width: 90px;
   min-height: 60px;
   box-shadow:
-    0 3px 10px rgba(0,0,0,0.8),
+    0 3px 12px rgba(0,0,0,0.85),
     inset 0 1px 0 rgba(255,255,255,0.05),
-    inset 0 -1px 0 rgba(0,0,0,0.6);
+    inset 0 -1px 0 rgba(0,0,0,0.65);
 }
 
 .cpu-notch {
@@ -141,22 +141,22 @@
   transform: translateX(-50%);
   width: 14px;
   height: 7px;
-  background: #1e1e1e;
-  border: 1px solid #333;
+  background: #181818;
+  border: 1px solid #2a2a2a;
   border-radius: 0 0 7px 7px;
 }
 
 .cpu-logo {
   font-family: 'Orbitron', monospace;
   font-size: 7px;
-  color: #5577cc;
+  color: #4466bb;
   letter-spacing: 1px;
   text-transform: uppercase;
   margin-top: 6px;
 }
 
 .cpu-label {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 13px;
   font-weight: bold;
   color: #dddddd;
@@ -168,15 +168,15 @@
 .cpu-sublabel {
   font-family: 'Inter', sans-serif;
   font-size: 8px;
-  color: #777;
+  color: #666;
   letter-spacing: 0.5px;
   margin-top: 1px;
 }
 
 .cpu-mark {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 6px;
-  color: #555;
+  color: #444;
   letter-spacing: 0.3px;
   margin-top: 3px;
 }
@@ -190,8 +190,8 @@
     45deg,
     transparent,
     transparent 4px,
-    rgba(255,255,255,0.01) 4px,
-    rgba(255,255,255,0.01) 5px
+    rgba(255,255,255,0.012) 4px,
+    rgba(255,255,255,0.012) 5px
   );
   pointer-events: none;
 }
@@ -204,19 +204,19 @@
   padding: 4px 0;
 }
 
-.cpu-pins-left { align-items: flex-end; }
+.cpu-pins-left  { align-items: flex-end; }
 .cpu-pins-right { align-items: flex-start; }
 
 .cpu-pin {
   width: 8px;
   height: 4px;
-  background: linear-gradient(to bottom, #a08040, #c8a84b, #a08040);
+  background: linear-gradient(to bottom, #9a7838, var(--ic-pin), #9a7838);
   border-radius: 1px;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.4);
+  box-shadow: 0 1px 1px rgba(0,0,0,0.45);
 }
 
 .cpu-pins-right .cpu-pin { border-radius: 0 1px 1px 0; }
-.cpu-pins-left .cpu-pin { border-radius: 1px 0 0 1px; }
+.cpu-pins-left  .cpu-pin { border-radius: 1px 0 0 1px; }
 
 /* ============================================================
    CRYSTAL
@@ -243,10 +243,10 @@
 .crystal-can {
   width: 12px;
   height: 22px;
-  background: linear-gradient(135deg, #c8cdd8 0%, #909aaa 40%, #c0c5d0 100%);
+  background: linear-gradient(135deg, #c8cdd8 0%, #909aaa 40%, #bfc4cf 100%);
   border-radius: 3px;
   border: 1px solid #7a8090;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  box-shadow: 0 1px 5px rgba(0,0,0,0.55);
   position: relative;
 }
 
@@ -254,7 +254,7 @@
   content: '';
   position: absolute;
   top: 3px; left: 2px; right: 2px; bottom: 3px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent);
   border-radius: 2px;
 }
 
@@ -272,10 +272,10 @@
 .cap-black .cap-top {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #2a2a2a, #111);
+  background: linear-gradient(135deg, #2a2a2a, #0f0f0f);
   border-radius: 50% 50% 2px 2px / 30% 30% 4px 4px;
-  border: 1px solid #3a3a3a;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  border: 1px solid #333;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.55);
 }
 
 .cap-blue .cap-top {
@@ -284,7 +284,7 @@
   background: linear-gradient(135deg, #2255cc, #1133aa);
   border-radius: 50% 50% 2px 2px / 30% 30% 4px 4px;
   border: 1px solid #3366cc;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.55);
 }
 
 /* ============================================================
@@ -294,46 +294,44 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #3a0000;
-  border: 1px solid #555;
+  background: #250000;
+  border: 1px solid #444;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
-  transition: all 200ms ease;
+  transition: all var(--t-med) ease;
 }
 
 .led-indicator.led-red.led-on {
-  background: #ff2200;
-  box-shadow: 0 0 5px #ff2200, 0 0 10px rgba(255,34,0,0.5);
+  background: var(--led-red);
+  box-shadow: 0 0 5px var(--led-red), 0 0 12px var(--red-glow);
   border-color: #ff4400;
 }
 
 .led-indicator.led-green.led-on {
-  background: #22ff44;
-  box-shadow: 0 0 5px #22ff44, 0 0 10px rgba(34,255,68,0.5);
-  border-color: #44ff66;
+  background: var(--green-ok);
+  box-shadow: 0 0 5px var(--green-ok), 0 0 12px var(--green-ok-glow);
+  border-color: #44ff88;
 }
 
 .led-indicator.led-yellow.led-on {
-  background: #ffcc00;
-  box-shadow: 0 0 5px #ffcc00, 0 0 10px rgba(255,204,0,0.5);
-  border-color: #ffdd44;
+  background: var(--yellow-warn);
+  box-shadow: 0 0 5px var(--yellow-warn), 0 0 12px var(--yellow-warn-glow);
+  border-color: #ffe033;
 }
 
 /* ============================================================
    DB9 CONNECTOR
    ============================================================ */
-.db9-connector {
-  cursor: help;
-}
+.db9-connector { cursor: help; }
 
 .db9-shell {
   background: linear-gradient(135deg, #888 0%, #555 50%, #777 100%);
-  border: 1px solid #333;
+  border: 1px solid #2a2a2a;
   border-radius: 2px;
   padding: 5px 7px;
   display: flex;
   flex-direction: column;
   gap: 3px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.22);
 }
 
 .db9-row {
@@ -345,14 +343,14 @@
 .db9-pin {
   width: 5px;
   height: 5px;
-  background: #111;
+  background: #0d0d0d;
   border-radius: 50%;
-  border: 1px solid #555;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,0.8);
+  border: 1px solid #444;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.85);
 }
 
 .db9-label {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 6px;
   color: #eee;
   text-align: center;
@@ -376,7 +374,7 @@
 .header-pin {
   width: 5px;
   height: 10px;
-  background: linear-gradient(to right, #a08040, #c8a84b, #a08040);
+  background: linear-gradient(to right, #9a7838, var(--ic-pin), #9a7838);
   border-radius: 0 0 1px 1px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
@@ -391,7 +389,7 @@
   position: absolute;
   bottom: -12px;
   left: 0;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 6px;
   color: var(--pcb-silkscreen);
   white-space: nowrap;
@@ -400,36 +398,35 @@
 /* ============================================================
    BATTERY HOLDER
    ============================================================ */
-.battery-holder {
-  cursor: help;
-}
+.battery-holder { cursor: help; }
 
 .battery-body {
   width: 40px;
   height: 22px;
-  background: linear-gradient(135deg, #2a3a2a, #1a2a1a);
+  background: linear-gradient(135deg, #2a3a2a, #182818);
   border: 1px solid #3a4a3a;
   border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.55);
   position: relative;
 }
 
 .battery-plus, .battery-minus {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
   font-weight: bold;
 }
-.battery-plus { color: #ff4444; }
-.battery-minus { color: #4444ff; }
+
+.battery-plus  { color: #ff4444; }
+.battery-minus { color: #4488ff; }
 
 .battery-label {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 6px;
-  color: #888;
+  color: #777;
   position: absolute;
   bottom: 2px;
   left: 50%;
@@ -445,8 +442,8 @@
 }
 
 .rpack-body {
-  background: linear-gradient(160deg, #2a2a2a, #111);
-  border: 1px solid #333;
+  background: linear-gradient(160deg, #222, #0d0d0d);
+  border: 1px solid #2a2a2a;
   border-radius: 2px;
   padding: 4px 3px;
   display: flex;
@@ -455,20 +452,20 @@
   align-items: center;
   position: relative;
   min-height: 40px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.65);
 }
 
 .rpack-pin {
   width: 10px;
   height: 3px;
-  background: linear-gradient(to right, #a08040, #c8a84b, #a08040);
+  background: linear-gradient(to right, #9a7838, var(--ic-pin), #9a7838);
   border-radius: 1px;
 }
 
 .rpack-label {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 6px;
-  color: #999;
+  color: #888;
   position: absolute;
   right: -18px;
   top: 50%;
@@ -486,21 +483,21 @@
 }
 
 .logic-body {
-  background: linear-gradient(160deg, #1e1e1e 0%, #111 100%);
-  border: 1px solid #2a2a2a;
+  background: linear-gradient(160deg, var(--ic-body) 0%, #080808 100%);
+  border: 1px solid #222;
   border-radius: 2px;
   padding: 3px 6px;
   min-width: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.65);
 }
 
 .logic-label {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 7px;
-  color: #bbb;
+  color: #bbbbbb;
   letter-spacing: 0.3px;
   text-align: center;
 }
@@ -515,7 +512,7 @@
 .logic-pin {
   width: 3px;
   height: 6px;
-  background: linear-gradient(to right, #a08040, #c8a84b, #a08040);
+  background: linear-gradient(to right, #9a7838, var(--ic-pin), #9a7838);
   border-radius: 0 0 1px 1px;
 }
 
