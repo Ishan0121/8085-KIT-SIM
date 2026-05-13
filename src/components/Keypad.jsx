@@ -112,11 +112,10 @@ function TrainerKey({ keyData, onPress, shifted }) {
   return (
     <div
       className={`trainer-key ${keyData.color === 'blue' ? 'key-blue' : 'key-black'} ${pressed ? 'key-pressed' : ''} ${isShiftKey && shifted ? 'key-shifted' : ''}`}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseLeave}
-      onTouchStart={handleMouseDown}
-      onTouchEnd={handleMouseUp}
+      onPointerDown={handleMouseDown}
+      onPointerUp={handleMouseUp}
+      onPointerLeave={handleMouseLeave}
+      onPointerCancel={handleMouseLeave}
       role="button"
       tabIndex={0}
       title={TOOLTIPS[keyData.id] || keyData.label}
