@@ -57,7 +57,7 @@ body.light-theme .sidebar-rail {
 }
 
 .sidebar-logo-icon {
-  font-size: 26px;
+  font-size: 29px;
   color: #4a9fd4;
   filter: drop-shadow(0 0 8px rgba(74,159,212,0.6));
   animation: pulse-logo 3s ease-in-out infinite;
@@ -134,13 +134,13 @@ body.light-theme .sidebar-nav-btn.active {
 body.light-theme .sidebar-nav-btn.active::before { background: #2255aa; }
 
 .nav-icon {
-  font-size: 18px;
+  font-size: 21px;
   line-height: 1;
 }
 
 .nav-label {
   font-family: 'Inter', sans-serif;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 600;
   color: #4a5568;
   letter-spacing: 0.3px;
@@ -210,7 +210,7 @@ body.light-theme .flyout-header {
 
 .flyout-title {
   font-family: 'Orbitron', monospace;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
   color: #4a9fd4;
   letter-spacing: 0.5px;
@@ -230,7 +230,7 @@ body.light-theme .flyout-title { color: #2255aa; }
   width: 26px;
   height: 26px;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -255,7 +255,7 @@ body.light-theme .flyout-close { border-color: #d0d8e0; color: #607080; }
 
 .sb-section-title {
   font-family: 'Orbitron', monospace;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
   color: #4a9fd4;
   letter-spacing: 1.2px;
@@ -269,7 +269,7 @@ body.light-theme .sb-section-title { color: #2255aa; border-bottom-color: rgba(3
 
 .sb-section-subtitle {
   font-family: 'Inter', sans-serif;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 600;
   color: #506070;
   text-transform: uppercase;
@@ -284,7 +284,7 @@ body.light-theme .sb-section-title { color: #2255aa; border-bottom-color: rgba(3
   border-radius: 6px;
   padding: 7px 10px;
   color: #c0ccd8;
-  font-size: 11px;
+  font-size: 14px;
   font-family: 'Share Tech Mono', monospace;
   outline: none;
   transition: border-color 150ms;
@@ -323,13 +323,13 @@ body.light-theme .reg-row { background: rgba(0,0,0,0.025); }
   100% { background: rgba(255,200,50,0.08); }
 }
 
-.reg-label { font-family: 'Orbitron', monospace; font-size: 10px; font-weight: 700; color: #4a9fd4; min-width: 24px; }
+.reg-label { font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700; color: #4a9fd4; min-width: 24px; }
 body.light-theme .reg-label { color: #2255aa; }
 
-.reg-value { font-size: 13px; font-weight: 600; color: #e0e8f0; min-width: 44px; letter-spacing: 1px; }
+.reg-value { font-size: 16px; font-weight: 600; color: #e0e8f0; min-width: 44px; letter-spacing: 1px; }
 body.light-theme .reg-value { color: #1a2a3a; }
 
-.reg-decimal { font-size: 10px; color: #506070; margin-left: auto; font-family: 'Share Tech Mono', monospace; }
+.reg-decimal { font-size: 13px; color: #506070; margin-left: auto; font-family: 'Share Tech Mono', monospace; }
 
 /* ── Flags ──────────────────────────────────────────────────── */
 .flags-row { display: flex; gap: 5px; flex-wrap: wrap; }
@@ -355,11 +355,11 @@ body.light-theme .reg-value { color: #1a2a3a; }
 
 body.light-theme .flag-set { background: rgba(34,85,170,0.1); border-color: #2255aa; }
 
-.flag-name { font-family: 'Orbitron', monospace; font-size: 8px; color: #506070; letter-spacing: 0.5px; }
+.flag-name { font-family: 'Orbitron', monospace; font-size: 11px; color: #506070; letter-spacing: 0.5px; }
 .flag-set .flag-name { color: #4a9fd4; }
 body.light-theme .flag-set .flag-name { color: #2255aa; }
 
-.flag-val { font-family: 'Share Tech Mono', monospace; font-size: 14px; font-weight: 700; color: #3a4050; line-height: 1; }
+.flag-val { font-family: 'Share Tech Mono', monospace; font-size: 17px; font-weight: 700; color: #3a4050; line-height: 1; }
 .flag-set .flag-val { color: #e8f4ff; }
 
 /* ── Memory Viewer ──────────────────────────────────────────── */
@@ -372,7 +372,7 @@ body.light-theme .flag-set .flag-name { color: #2255aa; }
   border-radius: 4px;
   padding: 5px 8px;
   color: #c0ccd8;
-  font-size: 11px;
+  font-size: 14px;
   font-family: 'Share Tech Mono', monospace;
   outline: none;
   transition: border-color 150ms;
@@ -387,7 +387,7 @@ body.light-theme .mem-jump-input { background: #f0f4f8; border-color: #d0d8e0; c
   border: none;
   border-radius: 4px;
   padding: 5px 12px;
-  font-size: 11px;
+  font-size: 14px;
   cursor: pointer;
   font-family: 'Inter', sans-serif;
   font-weight: 600;
@@ -401,7 +401,7 @@ body.light-theme .mem-jump-input { background: #f0f4f8; border-color: #d0d8e0; c
   display: flex;
   gap: 4px;
   padding: 2px 4px;
-  font-size: 9px;
+  font-size: 12px;
   color: #506070;
   letter-spacing: 0.5px;
   font-family: 'Share Tech Mono', monospace;
@@ -416,8 +416,8 @@ body.light-theme .mem-jump-input { background: #f0f4f8; border-color: #d0d8e0; c
 }
 .mem-row:hover { background: rgba(74,159,212,0.06); }
 
-.mem-addr { font-size: 10px; color: #4a9fd4; min-width: 38px; }
-.mem-cell { font-size: 10px; color: #c0ccd8; min-width: 22px; text-align: center; }
+.mem-addr { font-size: 13px; color: #4a9fd4; min-width: 38px; }
+.mem-cell { font-size: 13px; color: #c0ccd8; min-width: 22px; text-align: center; }
 body.light-theme .mem-addr { color: #2255aa; }
 body.light-theme .mem-cell { color: #2a3040; }
 body.light-theme .mem-row { background: rgba(0,0,0,0.02); }
@@ -429,7 +429,7 @@ body.light-theme .mem-row { background: rgba(0,0,0,0.02); }
   display: flex;
   gap: 4px;
   padding: 2px 4px;
-  font-size: 9px;
+  font-size: 12px;
   color: #506070;
   font-family: 'Share Tech Mono', monospace;
   border-bottom: 1px solid #1e2230;
@@ -453,9 +453,9 @@ body.light-theme .mem-row { background: rgba(0,0,0,0.02); }
 }
 .opcode-row:hover { background: rgba(74,159,212,0.08); }
 
-.opcode-hex { font-size: 10px; color: #ff8844; min-width: 26px; font-weight: 700; }
-.opcode-mnem { font-size: 10px; color: #e0e8f0; flex: 1; }
-.opcode-bytes, .opcode-cycles { font-size: 9px; color: #506070; min-width: 20px; text-align: center; }
+.opcode-hex { font-size: 13px; color: #ff8844; min-width: 26px; font-weight: 700; }
+.opcode-mnem { font-size: 13px; color: #e0e8f0; flex: 1; }
+.opcode-bytes, .opcode-cycles { font-size: 12px; color: #506070; min-width: 20px; text-align: center; }
 body.light-theme .opcode-mnem { color: #1a2a3a; }
 body.light-theme .opcode-hex { color: #cc4400; }
 
@@ -473,10 +473,10 @@ body.light-theme .opcode-hex { color: #cc4400; }
 }
 body.light-theme .log-output { background: #f0f4f8; border-color: #d0d8e0; }
 
-.log-line { font-size: 10px; color: #a0b8c8; letter-spacing: 0.3px; padding: 1px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+.log-line { font-size: 13px; color: #a0b8c8; letter-spacing: 0.3px; padding: 1px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
 body.light-theme .log-line { color: #405060; }
 
-.log-empty { font-size: 10px; color: #506070; font-family: 'Share Tech Mono', monospace; text-align: center; padding: 20px 0; font-style: italic; }
+.log-empty { font-size: 13px; color: #506070; font-family: 'Share Tech Mono', monospace; text-align: center; padding: 20px 0; font-style: italic; }
 
 /* ── Key Reference ──────────────────────────────────────────── */
 .keyref-filter {
@@ -491,7 +491,7 @@ body.light-theme .log-line { color: #405060; }
   border: 1px solid #2a2e3a;
   border-radius: 6px;
   color: #6a7080;
-  font-size: 10px;
+  font-size: 13px;
   font-family: 'Inter', sans-serif;
   padding: 5px 4px;
   cursor: pointer;
@@ -511,7 +511,7 @@ body.light-theme .keyref-filter-btn.active { background: rgba(34,85,170,0.08); b
   display: flex;
   gap: 6px;
   padding: 3px 6px;
-  font-size: 8px;
+  font-size: 11px;
   color: #506070;
   font-family: 'Share Tech Mono', monospace;
   letter-spacing: 0.5px;
@@ -543,7 +543,7 @@ body.light-theme .keyref-hex  { border-left-color: #888; }
 
 .keyref-key {
   font-family: 'Orbitron', monospace;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
   color: #4a9fd4;
   min-width: 68px;
@@ -554,7 +554,7 @@ body.light-theme .keyref-key { color: #2255aa; }
 body.light-theme .keyref-hex .keyref-key { color: #405060; }
 
 .keyref-kbd {
-  font-size: 9px;
+  font-size: 12px;
   color: #a0b8cc;
   background: rgba(255,255,255,0.07);
   border: 1px solid rgba(255,255,255,0.12);
@@ -568,9 +568,9 @@ body.light-theme .keyref-hex .keyref-key { color: #405060; }
 body.light-theme .keyref-kbd { background: #e8ecf2; border-color: #c0c8d4; color: #405060; }
 
 .keyref-desc { flex: 1; }
-.keyref-primary { font-size: 10px; color: #a0b0c0; line-height: 1.4; }
+.keyref-primary { font-size: 13px; color: #a0b0c0; line-height: 1.4; }
 body.light-theme .keyref-primary { color: #405060; }
-.keyref-shift { font-size: 9px; color: #ff8844; margin-top: 2px; line-height: 1.4; }
+.keyref-shift { font-size: 12px; color: #ff8844; margin-top: 2px; line-height: 1.4; }
 
 /* ── Chip Info ──────────────────────────────────────────────── */
 .chip-list { display: flex; flex-direction: column; gap: 6px; }
@@ -594,7 +594,7 @@ body.light-theme .chip-card-active { background: rgba(34,85,170,0.08) !important
 
 .chip-card-label {
   font-family: 'Orbitron', monospace;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
   color: #4a9fd4;
 }
@@ -602,14 +602,14 @@ body.light-theme .chip-card-label { color: #2255aa; }
 
 .chip-card-role {
   flex: 1;
-  font-size: 10px;
+  font-size: 13px;
   color: #ff8844;
   font-family: 'Inter', sans-serif;
 }
 
 .chip-card-pins {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 9px;
+  font-size: 12px;
   color: #506070;
   background: rgba(255,255,255,0.05);
   border-radius: 3px;
@@ -619,7 +619,7 @@ body.light-theme .chip-card-pins { background: #e8ecf2; }
 
 .chip-card-desc {
   margin-top: 8px;
-  font-size: 11px;
+  font-size: 14px;
   color: #8090a0;
   line-height: 1.6;
   border-top: 1px solid rgba(255,255,255,0.05);
@@ -648,20 +648,20 @@ body.light-theme .prog-card { background: #f8fafc; border-color: #d0d8e0; }
 
 .prog-card-name {
   font-family: 'Orbitron', monospace;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
   color: #4a9fd4;
   margin-bottom: 4px;
 }
 body.light-theme .prog-card-name { color: #2255aa; }
 
-.prog-card-desc { font-size: 11px; color: #8090a0; line-height: 1.4; margin-bottom: 6px; }
+.prog-card-desc { font-size: 14px; color: #8090a0; line-height: 1.4; margin-bottom: 6px; }
 body.light-theme .prog-card-desc { color: #506070; }
 
 .prog-card-meta {
   display: flex;
   gap: 10px;
-  font-size: 10px;
+  font-size: 13px;
   color: #506070;
   font-family: 'Share Tech Mono', monospace;
   margin-bottom: 8px;
@@ -674,7 +674,7 @@ body.light-theme .prog-card-desc { color: #506070; }
   border: none;
   border-radius: 6px;
   padding: 7px 0;
-  font-size: 11px;
+  font-size: 14px;
   font-family: 'Inter', sans-serif;
   font-weight: 600;
   cursor: pointer;
@@ -686,14 +686,14 @@ body.light-theme .prog-card-desc { color: #506070; }
 
 /* ── Settings ────────────────────────────────────────────────── */
 .settings-group { margin-bottom: 20px; }
-.settings-label { font-size: 10px; color: #506070; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; font-family: 'Orbitron', monospace; }
+.settings-label { font-size: 13px; color: #506070; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; font-family: 'Orbitron', monospace; }
 body.light-theme .settings-label { color: #8090a0; }
 .settings-btn { 
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   background: rgba(255,255,255,0.05); color: #c0ccd8;
   border: 1px solid #2a2e3a;
   padding: 8px 12px; border-radius: 6px; cursor: pointer;
-  font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+  font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
   transition: all 150ms;
 }
 body.light-theme .settings-btn {
@@ -780,7 +780,7 @@ body.light-theme .settings-btn {
     width: 44px;
     min-height: 44px;
   }
-  .nav-icon { font-size: 16px; }
+  .nav-icon { font-size: 19px; }
   .nav-label { display: none; }
   .sidebar-nav-btn.active::before {
     left: 50%;

@@ -395,9 +395,13 @@ export default function Sidebar({
   const [activePanel, setActivePanel] = useState('registers');
 
   useEffect(() => {
+    let wasMobile = window.innerWidth < 900;
     const handler = () => {
-      if (window.innerWidth < 900) setExpanded(false);
-      else setExpanded(true);
+      const isMobile = window.innerWidth < 900;
+      if (isMobile !== wasMobile) {
+        setExpanded(!isMobile);
+        wasMobile = isMobile;
+      }
     };
     window.addEventListener('resize', handler);
     return () => window.removeEventListener('resize', handler);
