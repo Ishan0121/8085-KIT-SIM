@@ -140,7 +140,7 @@ body.light-theme .sidebar-nav-btn.active::before { background: #2255aa; }
 
 .nav-label {
   font-family: 'Inter', sans-serif;
-  font-size: 12px;
+  font-size: .64rem;
   font-weight: 600;
   color: #4a5568;
   letter-spacing: 0.3px;
@@ -251,6 +251,7 @@ body.light-theme .flyout-close { border-color: #d0d8e0; color: #607080; }
 /* ── Shared Section Styles ──────────────────────────────────── */
 .sb-section {
   margin-bottom: 18px;
+  font-size: .54rem;
 }
 
 .sb-section-title {

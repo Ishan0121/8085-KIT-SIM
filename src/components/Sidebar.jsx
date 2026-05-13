@@ -3,7 +3,7 @@ import { OPCODES, IC_INFO, toHex } from '../data/cpu8085';
 import './Sidebar.css';
 import { 
   Database, Cpu, Search, ClipboardList, Keyboard, 
-  Microchip, FolderOpen, Hexagon, Sun, Moon, X,
+  Microchip, Hexagon, Sun, Moon, X,
   Circle, CircleDot, Settings
 } from 'lucide-react';
 
@@ -39,60 +39,6 @@ const KEY_REFERENCE = [
   { key: 'F',          kbd: 'F',   primary: 'Hex digit F (15)', shift: 'Examine Flags register', color: 'hex' },
 ];
 
-// ── Sample Programs ──────────────────────────────────────────
-const SAMPLE_PROGRAMS = [
-  {
-    id: 'block_move',
-    name: 'Block Move',
-    desc: 'Move 16 bytes from 8050H→8060H to 8070H',
-    addr: 0x8000,
-    bytes: [
-      0x21, 0x50, 0x80, // LXI H, 8050H
-      0x11, 0x70, 0x80, // LXI D, 8070H
-      0x06, 0x10,       // MVI B, 10H (16)
-      0x7E,             // MOV A, M
-      0x12,             // STAX D
-      0x23,             // INX H
-      0x13,             // INX D
-      0x05,             // DCR B
-      0xC2, 0x08, 0x80, // JNZ 8008H
-      0xEF,             // RST 5 (return to monitor)
-    ],
-  },
-  {
-    id: 'fill_mem',
-    name: 'Fill Memory',
-    desc: 'Fill 8100H–810FH with value AAH',
-    addr: 0x8020,
-    bytes: [
-      0x21, 0x00, 0x81, // LXI H, 8100H
-      0x06, 0x10,       // MVI B, 10H
-      0x3E, 0xAA,       // MVI A, AAH
-      0x77,             // MOV M, A
-      0x23,             // INX H
-      0x05,             // DCR B
-      0xC2, 0x27, 0x80, // JNZ loop
-      0xEF,             // RST 5
-    ],
-  },
-  {
-    id: 'sum_series',
-    name: 'Sum of Series',
-    desc: 'Add numbers from 8200H, store result at 8210H',
-    addr: 0x8040,
-    bytes: [
-      0x21, 0x00, 0x82, // LXI H, 8200H
-      0x06, 0x05,       // MVI B, 05H
-      0xAF,             // XRA A (clear A)
-      0x86,             // ADD M
-      0x23,             // INX H
-      0x05,             // DCR B
-      0xC2, 0x46, 0x80, // JNZ 8046H (loop to ADD M)
-      0x32, 0x10, 0x82, // STA 8210H
-      0xEF,             // RST 5
-    ],
-  },
-];
 
 /*
 
@@ -106,7 +52,6 @@ const NAV_ITEMS = [
   { id: 'log',       icon: <ClipboardList size={18} />, label: 'Log' },
   { id: 'keyref',    icon: <Keyboard size={18} />,  label: 'Key Ref' },
   { id: 'chips',     icon: <Microchip size={18} />, label: 'Chip Info' },
-  { id: 'programs',  icon: <FolderOpen size={18} />, label: 'Programs' },
 ];
 
 // ── Register Viewer ──────────────────────────────────────────
@@ -356,38 +301,12 @@ function ChipInfo() {
   );
 }
 
-// ── Sample Programs ───────────────────────────────────────────
-function SamplePrograms({ onLoadProgram }) {
-  return (
-    <div className="sb-section">
-      <div className="sb-section-title">Sample Programs</div>
-      <div className="prog-list">
-        {SAMPLE_PROGRAMS.map(prog => (
-          <div key={prog.id} className="prog-card">
-            <div className="prog-card-name">{prog.name}</div>
-            <div className="prog-card-desc">{prog.desc}</div>
-            <div className="prog-card-meta">
-              <span className="mono">@ {toHex(prog.addr, 4)}H</span>
-              <span>{prog.bytes.length} bytes</span>
-            </div>
-            <button
-              className="prog-load-btn"
-              onClick={() => onLoadProgram(prog)}
-            >
-              Load →
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 // ── Main Sidebar ──────────────────────────────────────────────
 export default function Sidebar({
   registers, prevRegisters, flags,
   memory, memDisplay, memBaseAddr, setMemBaseAddr, refreshMemDisplay,
-  log, theme, onThemeToggle, onLoadProgram,
+  log, theme, onThemeToggle,
 }) {
   // On wide screens start expanded, on narrow start collapsed
   const getDefault = () => window.innerWidth >= 900;
@@ -424,7 +343,6 @@ export default function Sidebar({
       case 'log':       return <ExecutionLog log={log} />;
       case 'keyref':    return <KeyReference />;
       case 'chips':     return <ChipInfo />;
-      case 'programs':  return <SamplePrograms onLoadProgram={onLoadProgram} />;
       case 'settings':  return <SettingsPanel theme={theme} onThemeToggle={onThemeToggle} />;
       default:          return null;
     }
