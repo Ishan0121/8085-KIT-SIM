@@ -91,18 +91,20 @@ function TrainerKey({ keyData, onPress, shifted }) {
   const [pressed, setPressed] = useState(false);
   const [ripple, setRipple] = useState(false);
 
-  const handleMouseDown = useCallback(() => {
+  const handlePointerDown = useCallback((e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
     setPressed(true);
     setRipple(false);
     setTimeout(() => setRipple(true), 10);
   }, []);
 
-  const handleMouseUp = useCallback(() => {
+  const handlePointerUp = useCallback((e) => {
+    e.preventDefault();
     setPressed(false);
     onPress(keyData.id);
   }, [keyData.id, onPress]);
 
-  const handleMouseLeave = useCallback(() => {
+  const handlePointerLeave = useCallback(() => {
     setPressed(false);
   }, []);
 
@@ -112,16 +114,16 @@ function TrainerKey({ keyData, onPress, shifted }) {
   return (
     <div
       className={`trainer-key ${keyData.color === 'blue' ? 'key-blue' : 'key-black'} ${pressed ? 'key-pressed' : ''} ${isShiftKey && shifted ? 'key-shifted' : ''}`}
-      onPointerDown={handleMouseDown}
-      onPointerUp={handleMouseUp}
-      onPointerLeave={handleMouseLeave}
-      onPointerCancel={handleMouseLeave}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerLeave={handlePointerLeave}
+      onPointerCancel={handlePointerLeave}
       role="button"
       tabIndex={0}
       title={TOOLTIPS[keyData.id] || keyData.label}
       aria-label={keyData.label.replace(/\n/g, ' ')}
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { handleMouseDown(); } }}
-      onKeyUp={(e) => { if (e.key === 'Enter' || e.key === ' ') { handleMouseUp(); } }}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { handlePointerDown(e); } }}
+      onKeyUp={(e) => { if (e.key === 'Enter' || e.key === ' ') { handlePointerUp(e); } }}
     >
       <div className="key-face">
         {/* Primary label */}
