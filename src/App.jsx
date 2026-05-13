@@ -49,19 +49,29 @@ export default function App() {
 
   // ---- UI Scale ----
   useEffect(() => {
-    // WebKit zoom works perfectly for scaling the entire UI without layout reflows
-    document.body.style.zoom = uiScale;
-    
-    // For Firefox, which doesn't support zoom well, we can use a CSS transform on the root element
-    if (navigator.userAgent.toLowerCase().includes('firefox')) {
-      const root = document.getElementById('root');
-      if (root) {
-        root.style.transform = `scale(${uiScale})`;
-        root.style.transformOrigin = 'top left';
-        root.style.width = `${100 / uiScale}%`;
-        root.style.height = `${100 / uiScale}%`;
+    const applyScale = () => {
+      // Disable zoom on mobile/tablet to prevent UI overflowing to the right
+      const isMobile = window.innerWidth <= 900;
+      const activeScale = isMobile ? 1 : uiScale;
+
+      // WebKit zoom works perfectly for scaling the entire UI without layout reflows
+      document.body.style.zoom = activeScale;
+      
+      // For Firefox, which doesn't support zoom well, we can use a CSS transform on the root element
+      if (navigator.userAgent.toLowerCase().includes('firefox')) {
+        const root = document.getElementById('root');
+        if (root) {
+          root.style.transform = `scale(${activeScale})`;
+          root.style.transformOrigin = 'top left';
+          root.style.width = `${100 / activeScale}%`;
+          root.style.height = `${100 / activeScale}%`;
+        }
       }
-    }
+    };
+
+    applyScale();
+    window.addEventListener('resize', applyScale);
+    return () => window.removeEventListener('resize', applyScale);
   }, [uiScale]);
 
   // ---- Keyboard shortcuts ----
