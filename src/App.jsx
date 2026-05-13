@@ -62,15 +62,6 @@ export default function App() {
     prevRegisters.current = { ...registers };
   });
 
-  // ---- Load sample program into memory ----
-  const handleLoadProgram = useCallback((prog) => {
-    prog.bytes.forEach((byte, i) => {
-      memory[(prog.addr + i) & 0xFFFF] = byte;
-    });
-    setMemBaseAddr(prog.addr);
-    refreshMemDisplay(prog.addr);
-  }, [memory, setMemBaseAddr, refreshMemDisplay]);
-
   const icInfoData = icInfoKey ? IC_INFO[icInfoKey] : null;
 
   return (
@@ -88,7 +79,6 @@ export default function App() {
         log={log}
         theme={theme}
         onThemeToggle={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
-        onLoadProgram={handleLoadProgram}
       />
 
       {/* ── Main content ── */}
