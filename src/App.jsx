@@ -31,7 +31,6 @@ const KEYBOARD_MAP = {
 export default function App() {
   const [theme, setTheme] = useState('dark');
   const [icInfoKey, setIcInfoKey] = useState(null);
-  const [uiScale, setUiScale] = useState(1.1); // Default scale increased to 110%
   const prevRegisters = useRef(null);
 
   const {
@@ -46,33 +45,6 @@ export default function App() {
   useEffect(() => {
     document.body.classList.toggle('light-theme', theme === 'light');
   }, [theme]);
-
-  // ---- UI Scale ----
-  useEffect(() => {
-    const applyScale = () => {
-      // Disable zoom on mobile/tablet to prevent UI overflowing to the right
-      const isMobile = window.innerWidth <= 900;
-      const activeScale = isMobile ? 1 : uiScale;
-
-      // WebKit zoom works perfectly for scaling the entire UI without layout reflows
-      document.body.style.zoom = activeScale;
-      
-      // For Firefox, which doesn't support zoom well, we can use a CSS transform on the root element
-      if (navigator.userAgent.toLowerCase().includes('firefox')) {
-        const root = document.getElementById('root');
-        if (root) {
-          root.style.transform = `scale(${activeScale})`;
-          root.style.transformOrigin = 'top left';
-          root.style.width = `${100 / activeScale}%`;
-          root.style.height = `${100 / activeScale}%`;
-        }
-      }
-    };
-
-    applyScale();
-    window.addEventListener('resize', applyScale);
-    return () => window.removeEventListener('resize', applyScale);
-  }, [uiScale]);
 
   // ---- Keyboard shortcuts ----
   useEffect(() => {
@@ -117,8 +89,6 @@ export default function App() {
         theme={theme}
         onThemeToggle={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
         onLoadProgram={handleLoadProgram}
-        uiScale={uiScale}
-        setUiScale={setUiScale}
       />
 
       {/* ── Main content ── */}

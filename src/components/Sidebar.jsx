@@ -210,7 +210,7 @@ function MemoryViewer({ memory, baseAddr, setMemBaseAddr, refreshMemDisplay, mem
 }
 
 // ── Settings Panel ─────────────────────────────────────────────
-function SettingsPanel({ theme, onThemeToggle, uiScale, setUiScale }) {
+function SettingsPanel({ theme, onThemeToggle }) {
   return (
     <div className="sb-section">
       <div className="sb-section-title">Settings</div>
@@ -220,22 +220,6 @@ function SettingsPanel({ theme, onThemeToggle, uiScale, setUiScale }) {
         <button className="settings-btn" onClick={onThemeToggle}>
           {theme === 'dark' ? <><Sun size={14}/> Switch to Light Mode</> : <><Moon size={14}/> Switch to Dark Mode</>}
         </button>
-      </div>
-
-      <div className="settings-group">
-        <div className="settings-label">UI Scale: {Math.round(uiScale * 100)}%</div>
-        <input 
-          type="range" 
-          min="0.5" 
-          max="2.5" 
-          step="0.05" 
-          value={uiScale} 
-          onChange={(e) => setUiScale(parseFloat(e.target.value))}
-          style={{ width: '100%', cursor: 'pointer', marginBottom: '8px', accentColor: '#4a9fd4' }}
-        />
-        <div className="scale-controls">
-          <button className="settings-btn" onClick={() => setUiScale(1.1)}>Reset to 110% (Default)</button>
-        </div>
       </div>
     </div>
   );
@@ -404,7 +388,6 @@ export default function Sidebar({
   registers, prevRegisters, flags,
   memory, memDisplay, memBaseAddr, setMemBaseAddr, refreshMemDisplay,
   log, theme, onThemeToggle, onLoadProgram,
-  uiScale, setUiScale,
 }) {
   // On wide screens start expanded, on narrow start collapsed
   const getDefault = () => window.innerWidth >= 900;
@@ -438,7 +421,7 @@ export default function Sidebar({
       case 'keyref':    return <KeyReference />;
       case 'chips':     return <ChipInfo />;
       case 'programs':  return <SamplePrograms onLoadProgram={onLoadProgram} />;
-      case 'settings':  return <SettingsPanel theme={theme} onThemeToggle={onThemeToggle} uiScale={uiScale} setUiScale={setUiScale} />;
+      case 'settings':  return <SettingsPanel theme={theme} onThemeToggle={onThemeToggle} />;
       default:          return null;
     }
   };
