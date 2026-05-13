@@ -1,0 +1,109 @@
+/* ============================================================
+   7-SEGMENT DISPLAY
+   ============================================================ */
+
+.display-assembly {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+
+.display-bezel {
+  background: #0a0000;
+  border: 3px solid #111;
+  border-radius: 4px;
+  box-shadow:
+    inset 0 2px 8px rgba(0,0,0,0.8),
+    0 0 0 1px #2a1a1a,
+    0 2px 6px rgba(0,0,0,0.5);
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Slight red ambient glow inside the bezel */
+.display-bezel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 60%, rgba(255,34,0,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.display-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.display-label-top {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 5px;
+  color: #cc4400;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.display-digits {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.digit-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seg-digit {
+  width: 24px;
+  height: 42px;
+  display: block;
+}
+
+/* OFF segment — very dim, reddish */
+.seg-path.seg-off {
+  fill: var(--led-off, #1f0502);
+  opacity: 0.7;
+}
+
+/* ON segment — bright red */
+.seg-path.seg-on {
+  fill: #ff3300;
+}
+
+/* Glow effect only for ON segments */
+.seg-path.seg-on.seg-glow {
+  fill: #ff4400;
+  filter: drop-shadow(0 0 3px #ff3300) drop-shadow(0 0 6px rgba(255,68,0,0.5));
+}
+
+.display-separator {
+  width: 2px;
+  height: 36px;
+  background: linear-gradient(to bottom, transparent, #3a1a00 30%, #3a1a00 70%, transparent);
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+.display-bottom-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+
+.display-bottom-labels span {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  color: var(--pcb-silkscreen, #d4f0dc);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}

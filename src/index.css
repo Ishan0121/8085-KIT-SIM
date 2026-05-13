@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  /* PCB Colors */
+  --pcb-green: #1a5c2a;
+  --pcb-green-light: #217a34;
+  --pcb-green-dark: #0f3a19;
+  --pcb-green-trace: #2d8a44;
+  --pcb-silkscreen: #d4f0dc;
+  --pcb-pad: #c8a84b;
+  --pcb-pad-dark: #9b7e38;
+  --pcb-solder: #e8e0c8;
+
+  /* IC Chip Colors */
+  --ic-body: #1a1a1a;
+  --ic-body-dark: #0d0d0d;
+  --ic-pin: #b8a060;
+  --ic-label: #cccccc;
+  --ic-notch: #333;
+  --ic-notch-highlight: #555;
+
+  /* Button Colors - Blue (Function) */
+  --btn-blue: #2a6bbf;
+  --btn-blue-light: #3a7fd4;
+  --btn-blue-dark: #1a4d8f;
+  --btn-blue-top: #4a90e2;
+  --btn-blue-pressed: #1a4d8f;
+  --btn-blue-label: #ffffff;
+
+  /* Button Colors - Black (Hex) */
+  --btn-black: #1e1e1e;
+  --btn-black-light: #2a2a2a;
+  --btn-black-dark: #0a0a0a;
+  --btn-black-top: #333333;
+  --btn-black-pressed: #111111;
+  --btn-black-label: #e0e0e0;
+  --btn-black-sublabel: #999999;
+
+  /* Display Colors */
+  --led-bg: #1a0000;
+  --led-red: #ff2200;
+  --led-red-glow: #ff4400;
+  --led-red-dim: #3a0800;
+  --led-off: #1f0502;
+  --display-bezel: #111111;
+
+  /* Workspace (surrounding the board) */
+  --ws-bg-dark: #0f0f14;
+  --ws-bg-light: #e8ecf0;
+  --ws-text-dark: #c8d0dc;
+  --ws-text-light: #2a3040;
+
+  /* Sidebar */
+  --sidebar-bg-dark: #13151c;
+  --sidebar-bg-light: #ffffff;
+  --sidebar-border-dark: #2a2e3a;
+  --sidebar-border-light: #d0d8e0;
+  --sidebar-accent: #3a7fd4;
+
+  /* Transistors/Caps */
+  --cap-blue: #2255aa;
+  --resistor-body: #c8a040;
+  --crystal-metal: #b0b8c8;
+
+  /* Connectors */
+  --connector-black: #1a1a1a;
+  --connector-pin: #c8a84b;
+  --header-white: #e0e0e0;
+
+  /* Timing */
+  --transition-fast: 80ms;
+  --transition-med: 200ms;
+  --transition-slow: 350ms;
+
+  /* Board dimensions */
+  --board-width: 880px;
+  --board-height: 580px;
+  --board-radius: 8px;
+  --board-padding: 16px;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  min-width: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--ws-bg-dark);
+  color: var(--ws-text-dark);
+  transition: background var(--transition-slow), color var(--transition-slow);
+}
+
+body.light-theme {
+  background: var(--ws-bg-light);
+  color: var(--ws-text-light);
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+
+/* ============================================================
+   UTILITY
+   ============================================================ */
+.mono { font-family: 'Share Tech Mono', monospace; }
+.orbitron { font-family: 'Orbitron', monospace; }
+.no-select { user-select: none; }

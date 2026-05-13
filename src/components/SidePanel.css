@@ -1,0 +1,561 @@
+/* ============================================================
+   SIDE PANEL
+   ============================================================ */
+.side-panel {
+  width: 280px;
+  min-width: 280px;
+  background: var(--sidebar-bg-dark, #13151c);
+  border: 1px solid var(--sidebar-border-dark, #2a2e3a);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  flex-shrink: 0;
+  height: fit-content;
+  max-height: 90vh;
+}
+
+body.light-theme .side-panel {
+  background: var(--sidebar-bg-light, #ffffff);
+  border-color: var(--sidebar-border-light, #d0d8e0);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+/* ---- Header ---- */
+.panel-header {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--sidebar-border-dark, #2a2e3a);
+  background: linear-gradient(90deg, #1a1e2a, #13151c);
+}
+
+body.light-theme .panel-header {
+  background: linear-gradient(90deg, #f0f4f8, #ffffff);
+  border-bottom-color: var(--sidebar-border-light, #d0d8e0);
+}
+
+.panel-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4a9fd4;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+body.light-theme .panel-title { color: #2255aa; }
+
+.panel-title-icon {
+  font-size: 16px;
+  animation: spin-slow 8s linear infinite;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--sidebar-border-dark, #2a2e3a);
+  color: var(--ws-text-dark, #c8d0dc);
+  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 200ms, border-color 200ms;
+}
+
+.theme-toggle:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: #4a9fd4;
+}
+
+body.light-theme .theme-toggle {
+  border-color: var(--sidebar-border-light, #d0d8e0);
+  color: var(--ws-text-light, #2a3040);
+}
+
+/* Removed tabs logic */
+
+/* ---- Content area ---- */
+.panel-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+/* ============================================================
+   PANEL SECTIONS
+   ============================================================ */
+.panel-section {
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  color: #4a9fd4;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(74,159,212,0.2);
+}
+
+body.light-theme .section-title { color: #2255aa; border-bottom-color: rgba(34,85,170,0.2); }
+
+.section-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  color: #6a7080;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 10px 0 6px;
+}
+
+/* ============================================================
+   REGISTER GRID
+   ============================================================ */
+.reg-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.reg-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid transparent;
+  transition: background 200ms, border-color 200ms;
+}
+
+body.light-theme .reg-row { background: rgba(0,0,0,0.03); }
+
+.reg-row:hover {
+  background: rgba(74,159,212,0.06);
+  border-color: rgba(74,159,212,0.2);
+}
+
+.reg-changed {
+  background: rgba(255,200,50,0.08) !important;
+  border-color: rgba(255,200,50,0.3) !important;
+  animation: reg-flash 0.4s ease;
+}
+
+@keyframes reg-flash {
+  0% { background: rgba(255,200,50,0.25); }
+  100% { background: rgba(255,200,50,0.08); }
+}
+
+.reg-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: #4a9fd4;
+  min-width: 24px;
+}
+
+body.light-theme .reg-label { color: #2255aa; }
+
+.reg-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e0e8f0;
+  min-width: 40px;
+  letter-spacing: 1px;
+}
+
+body.light-theme .reg-value { color: #1a2a3a; }
+
+.reg-decimal {
+  font-size: 10px;
+  color: #506070;
+  margin-left: auto;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+/* ============================================================
+   FLAGS
+   ============================================================ */
+.flags-row {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.flag-bit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid #2a2e3a;
+  background: rgba(255,255,255,0.02);
+  transition: all 200ms ease;
+  cursor: help;
+  min-width: 34px;
+}
+
+.flag-set {
+  background: rgba(74,159,212,0.15);
+  border-color: #4a9fd4;
+  box-shadow: 0 0 6px rgba(74,159,212,0.2);
+}
+
+body.light-theme .flag-set {
+  background: rgba(34,85,170,0.1);
+  border-color: #2255aa;
+}
+
+.flag-name {
+  font-family: 'Orbitron', monospace;
+  font-size: 8px;
+  color: #6a7080;
+  letter-spacing: 0.5px;
+}
+
+.flag-set .flag-name { color: #4a9fd4; }
+body.light-theme .flag-set .flag-name { color: #2255aa; }
+
+.flag-val {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: #3a4050;
+  line-height: 1;
+}
+
+.flag-set .flag-val { color: #e8f4ff; }
+body.light-theme .flag-set .flag-val { color: #1a2a3a; }
+
+/* ============================================================
+   MEMORY VIEWER
+   ============================================================ */
+.mem-jump-form {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.mem-jump-input {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid #2a2e3a;
+  border-radius: 4px;
+  padding: 5px 8px;
+  color: #c0ccd8;
+  font-size: 11px;
+  font-family: 'Share Tech Mono', monospace;
+  outline: none;
+  transition: border-color 150ms;
+}
+
+.mem-jump-input:focus { border-color: #4a9fd4; }
+body.light-theme .mem-jump-input { background: #f0f4f8; border-color: #d0d8e0; color: #2a3040; }
+
+.mem-jump-btn {
+  background: #2a6bbf;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  transition: background 150ms;
+}
+
+.mem-jump-btn:hover { background: #3a7bd4; }
+
+.mem-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mem-header {
+  display: flex;
+  gap: 4px;
+  padding: 2px 4px;
+  font-size: 9px;
+  color: #506070;
+  letter-spacing: 0.5px;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.mem-row {
+  display: flex;
+  gap: 4px;
+  padding: 3px 4px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.02);
+}
+
+.mem-row:hover { background: rgba(74,159,212,0.06); }
+
+.mem-addr {
+  font-size: 10px;
+  color: #4a9fd4;
+  min-width: 38px;
+}
+
+.mem-cell {
+  font-size: 10px;
+  color: #c0ccd8;
+  min-width: 22px;
+  text-align: center;
+}
+
+body.light-theme .mem-addr { color: #2255aa; }
+body.light-theme .mem-cell { color: #2a3040; }
+body.light-theme .mem-row { background: rgba(0,0,0,0.02); }
+
+/* ============================================================
+   OPCODE FINDER
+   ============================================================ */
+.opcode-search {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid #2a2e3a;
+  border-radius: 6px;
+  padding: 7px 10px;
+  color: #c0ccd8;
+  font-size: 11px;
+  font-family: 'Share Tech Mono', monospace;
+  outline: none;
+  transition: border-color 150ms;
+  margin-bottom: 8px;
+}
+
+.opcode-search:focus { border-color: #4a9fd4; }
+body.light-theme .opcode-search { background: #f0f4f8; border-color: #d0d8e0; color: #2a3040; }
+
+.opcode-results {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.opcode-header {
+  display: flex;
+  gap: 4px;
+  padding: 2px 4px;
+  font-size: 9px;
+  color: #506070;
+  font-family: 'Share Tech Mono', monospace;
+  border-bottom: 1px solid #1e2230;
+  margin-bottom: 2px;
+}
+
+.opcode-header span:nth-child(1) { min-width: 24px; }
+.opcode-header span:nth-child(2) { flex: 1; }
+.opcode-header span:nth-child(3) { min-width: 28px; text-align: center; }
+.opcode-header span:nth-child(4) { min-width: 24px; text-align: center; }
+
+.opcode-row {
+  display: flex;
+  gap: 4px;
+  padding: 3px 4px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.02);
+  cursor: help;
+  align-items: center;
+  transition: background 100ms;
+}
+
+.opcode-row:hover { background: rgba(74,159,212,0.08); }
+
+.opcode-hex {
+  font-size: 10px;
+  color: #ff8844;
+  min-width: 24px;
+  font-weight: 700;
+}
+
+.opcode-mnem {
+  font-size: 10px;
+  color: #e0e8f0;
+  flex: 1;
+}
+
+.opcode-bytes {
+  font-size: 9px;
+  color: #6a7080;
+  min-width: 28px;
+  text-align: center;
+}
+
+.opcode-cycles {
+  font-size: 9px;
+  color: #6a7080;
+  min-width: 24px;
+  text-align: center;
+}
+
+body.light-theme .opcode-mnem { color: #1a2a3a; }
+body.light-theme .opcode-hex { color: #cc4400; }
+
+/* ============================================================
+   EXECUTION LOG
+   ============================================================ */
+.log-section { height: 100%; }
+
+.log-output {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid #1e2230;
+  border-radius: 6px;
+  padding: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+body.light-theme .log-output { background: #f0f4f8; border-color: #d0d8e0; }
+
+.log-line {
+  font-size: 10px;
+  color: #a0b8c8;
+  letter-spacing: 0.3px;
+  padding: 1px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+body.light-theme .log-line { color: #405060; }
+
+.log-empty {
+  font-size: 10px;
+  color: #506070;
+  font-family: 'Share Tech Mono', monospace;
+  text-align: center;
+  padding: 16px 0;
+  font-style: italic;
+}
+
+/* ============================================================
+   IC INFO MODAL
+   ============================================================ */
+.ic-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fade-in 200ms ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.ic-modal {
+  background: #1a1e2a;
+  border: 1px solid #2a3048;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 360px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.05);
+  animation: slide-up 200ms ease;
+}
+
+body.light-theme .ic-modal {
+  background: #ffffff;
+  border-color: #d0d8e0;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+@keyframes slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+.ic-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: 1px solid #2a3048;
+  border-radius: 6px;
+  color: #6a7080;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms;
+}
+
+.ic-modal-close:hover { background: rgba(255,255,255,0.05); color: #c0ccd8; }
+
+.ic-modal-chip {
+  font-family: 'Orbitron', monospace;
+  font-size: 20px;
+  font-weight: 900;
+  color: #4a9fd4;
+  margin-bottom: 4px;
+}
+
+body.light-theme .ic-modal-chip { color: #2255aa; }
+
+.ic-modal-role {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #ff8844;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.ic-modal-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #a0b0c0;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+body.light-theme .ic-modal-desc { color: #405060; }
+
+.ic-modal-pins {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: #6a7080;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid #2a3048;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+body.light-theme .ic-modal-pins { background: #f0f4f8; border-color: #d0d8e0; color: #405060; }
+
+.ic-modal-pin-icon { font-size: 14px; }
