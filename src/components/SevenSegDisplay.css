@@ -39,7 +39,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 65%, rgba(255,40,0,0.10) 0%, transparent 70%);
+  background: var(--ambient-glow, radial-gradient(ellipse at 50% 65%, rgba(255,40,0,0.10) 0%, transparent 70%));
   pointer-events: none;
   border-radius: inherit;
 }
@@ -84,7 +84,7 @@
 .seg-path.seg-on  { fill: var(--led-red); }
 .seg-path.seg-on.seg-glow {
   fill: #ff4400;
-  filter: drop-shadow(0 0 3px var(--red-led)) drop-shadow(0 0 8px rgba(255,68,0,0.5));
+  filter: var(--seg-glow-filter, drop-shadow(0 0 3px var(--red-led)) drop-shadow(0 0 8px rgba(255,68,0,0.5)));
 }
 
 .display-separator {

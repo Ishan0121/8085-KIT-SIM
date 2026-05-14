@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { OPCODES, IC_INFO, toHex } from '../data/cpu8085';
 import './Sidebar.css';
 import { 
@@ -55,7 +55,7 @@ const NAV_ITEMS = [
 ];
 
 // ── Register Viewer ──────────────────────────────────────────
-function RegisterViewer({ registers, flags, prevRegisters }) {
+function RegisterViewer({ registers, flags, prevRegisters, showDecimal }) {
   const regList = [
     { key: 'A',  label: 'A',  desc: 'Accumulator' },
     { key: 'B',  label: 'B',  desc: 'Register B' },
@@ -86,7 +86,7 @@ function RegisterViewer({ registers, flags, prevRegisters }) {
             <div key={key} className={`reg-row ${changed ? 'reg-changed' : ''}`} title={desc}>
               <span className="reg-label">{label}</span>
               <span className="reg-value mono">{toHex(val, wide ? 4 : 2)}</span>
-              <span className="reg-decimal">{val}</span>
+              {showDecimal && <span className="reg-decimal">{val}</span>}
             </div>
           );
         })}
@@ -155,15 +155,65 @@ function MemoryViewer({ memory, baseAddr, setMemBaseAddr, refreshMemDisplay, mem
 }
 
 // ── Settings Panel ─────────────────────────────────────────────
-function SettingsPanel({ theme, onThemeToggle }) {
+function SettingsPanel({
+  theme, onThemeToggle,
+  glowIntensity, setGlowIntensity,
+  keypadSound, setKeypadSound,
+  soundProfile, setSoundProfile,
+  volume, setVolume,
+  autoScrollLog, setAutoScrollLog,
+  clearLogOnReset, setClearLogOnReset,
+  showDecimal, setShowDecimal
+}) {
   return (
     <div className="sb-section">
       <div className="sb-section-title">Settings</div>
       
       <div className="settings-group">
-        <div className="settings-label">Theme</div>
-        <button className="settings-btn" onClick={onThemeToggle}>
+        <div className="settings-label">Appearance</div>
+        <button className="settings-btn" onClick={onThemeToggle} style={{ width: '100%', marginBottom: '8px' }}>
           {theme === 'dark' ? <><Sun size={14}/> Switch to Light Mode</> : <><Moon size={14}/> Switch to Dark Mode</>}
+        </button>
+
+        <div className="settings-label" style={{ marginTop: '12px' }}>Glow Intensity</div>
+        <div className="settings-btn-group scale-controls">
+          <button className={`settings-btn ${glowIntensity === 'low' ? 'active' : ''}`} onClick={() => setGlowIntensity('low')}>Low</button>
+          <button className={`settings-btn ${glowIntensity === 'medium' ? 'active' : ''}`} onClick={() => setGlowIntensity('medium')}>Med</button>
+          <button className={`settings-btn ${glowIntensity === 'high' ? 'active' : ''}`} onClick={() => setGlowIntensity('high')}>High</button>
+        </div>
+      </div>
+
+      <div className="settings-group">
+        <div className="settings-label">Audio</div>
+        <button className="settings-btn" style={{marginBottom: '8px', width: '100%'}} onClick={() => setKeypadSound(!keypadSound)}>
+          {keypadSound ? 'Disable Keypad Sound' : 'Enable Keypad Sound'}
+        </button>
+        
+        {keypadSound && (
+          <>
+            <div className="settings-btn-group scale-controls" style={{ marginBottom: '8px' }}>
+              <button className={`settings-btn ${soundProfile === 'mechanical' ? 'active' : ''}`} onClick={() => setSoundProfile('mechanical')}>Mechanical</button>
+              <button className={`settings-btn ${soundProfile === 'beep' ? 'active' : ''}`} onClick={() => setSoundProfile('beep')}>Beep</button>
+            </div>
+            
+            <div className="volume-control" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span className="settings-label" style={{ margin: 0 }}>Volume</span>
+              <input type="range" min="0" max="100" value={volume} onChange={e => setVolume(e.target.value)} style={{ flex: 1 }} />
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className="settings-group">
+        <div className="settings-label">Behavior & Layout</div>
+        <button className="settings-btn" style={{width: '100%', marginBottom: '8px'}} onClick={() => setAutoScrollLog(!autoScrollLog)}>
+          {autoScrollLog ? 'Disable Auto-scroll Log' : 'Enable Auto-scroll Log'}
+        </button>
+        <button className="settings-btn" style={{width: '100%', marginBottom: '8px'}} onClick={() => setClearLogOnReset(!clearLogOnReset)}>
+          {clearLogOnReset ? 'Disable Clear Log on Reset' : 'Enable Clear Log on Reset'}
+        </button>
+        <button className="settings-btn" style={{width: '100%'}} onClick={() => setShowDecimal(!showDecimal)}>
+          {showDecimal ? 'Hide Decimal Registers' : 'Show Decimal Registers'}
         </button>
       </div>
     </div>
@@ -219,7 +269,15 @@ function OpcodeFinder() {
 }
 
 // ── Execution Log ─────────────────────────────────────────────
-function ExecutionLog({ log }) {
+function ExecutionLog({ log, autoScrollLog }) {
+  const endRef = useRef(null);
+
+  useEffect(() => {
+    if (autoScrollLog && endRef.current) {
+      endRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [log, autoScrollLog]);
+
   return (
     <div className="sb-section">
       <div className="sb-section-title">Execution Log</div>
@@ -228,6 +286,7 @@ function ExecutionLog({ log }) {
           ? <span className="log-empty">— No activity yet —</span>
           : log.map((line, i) => <div key={i} className="log-line mono">{line}</div>)
         }
+        <div ref={endRef} />
       </div>
     </div>
   );
@@ -302,7 +361,11 @@ function ChipInfo({ setIcInfoKey }) {
 export default function Sidebar({
   registers, prevRegisters, flags,
   memory, memDisplay, memBaseAddr, setMemBaseAddr, refreshMemDisplay,
-  log, theme, onThemeToggle, setIcInfoKey
+  log, theme, onThemeToggle, setIcInfoKey,
+  glowIntensity, setGlowIntensity,
+  keypadSound, setKeypadSound, soundProfile, setSoundProfile, volume, setVolume,
+  autoScrollLog, setAutoScrollLog, clearLogOnReset, setClearLogOnReset,
+  showDecimal, setShowDecimal
 }) {
   // On wide screens start expanded, on narrow start collapsed
   const getDefault = () => window.innerWidth >= 900;
@@ -333,13 +396,22 @@ export default function Sidebar({
 
   const renderPanel = () => {
     switch (activePanel) {
-      case 'registers': return <RegisterViewer registers={registers} prevRegisters={prevRegisters} flags={flags} />;
+      case 'registers': return <RegisterViewer registers={registers} prevRegisters={prevRegisters} flags={flags} showDecimal={showDecimal} />;
       case 'memory':    return <MemoryViewer memory={memory} baseAddr={memBaseAddr} setMemBaseAddr={setMemBaseAddr} refreshMemDisplay={refreshMemDisplay} memDisplay={memDisplay} />;
       case 'opcodes':   return <OpcodeFinder />;
-      case 'log':       return <ExecutionLog log={log} />;
+      case 'log':       return <ExecutionLog log={log} autoScrollLog={autoScrollLog} />;
       case 'keyref':    return <KeyReference />;
       case 'chips':     return <ChipInfo setIcInfoKey={setIcInfoKey} />;
-      case 'settings':  return <SettingsPanel theme={theme} onThemeToggle={onThemeToggle} />;
+      case 'settings':  return <SettingsPanel 
+          theme={theme} onThemeToggle={onThemeToggle} 
+          glowIntensity={glowIntensity} setGlowIntensity={setGlowIntensity}
+          keypadSound={keypadSound} setKeypadSound={setKeypadSound} 
+          soundProfile={soundProfile} setSoundProfile={setSoundProfile}
+          volume={volume} setVolume={setVolume}
+          autoScrollLog={autoScrollLog} setAutoScrollLog={setAutoScrollLog} 
+          clearLogOnReset={clearLogOnReset} setClearLogOnReset={setClearLogOnReset}
+          showDecimal={showDecimal} setShowDecimal={setShowDecimal}
+        />;
       default:          return null;
     }
   };

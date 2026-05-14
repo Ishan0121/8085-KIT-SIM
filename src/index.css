@@ -157,3 +157,18 @@ body {
 .mono     { font-family: 'JetBrains Mono', monospace; }
 .orbitron { font-family: 'Orbitron', sans-serif; }
 .no-select { user-select: none; }
+
+/* ── Display & Hardware Themes ── */
+
+body.glow-low {
+  --seg-glow-filter: drop-shadow(0 0 2px var(--red-led));
+  --ambient-glow: radial-gradient(ellipse at 50% 65%, rgba(255,40,0,0.05) 0%, transparent 60%);
+}
+body.glow-medium {
+  --seg-glow-filter: drop-shadow(0 0 3px var(--red-led)) drop-shadow(0 0 8px rgba(255,68,0,0.5));
+  --ambient-glow: radial-gradient(ellipse at 50% 65%, rgba(255,40,0,0.10) 0%, transparent 70%);
+}
+body.glow-high {
+  --seg-glow-filter: drop-shadow(0 0 5px var(--red-led)) drop-shadow(0 0 12px rgba(255,68,0,0.8)) drop-shadow(0 0 24px rgba(255,68,0,0.4));
+  --ambient-glow: radial-gradient(ellipse at 50% 65%, rgba(255,40,0,0.18) 0%, transparent 75%);
+}
