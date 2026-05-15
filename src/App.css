@@ -79,6 +79,29 @@
   text-transform: uppercase;
 }
 
+.badge-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-base);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.badge-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border-dim);
+}
+
 .badge-green {
   background: rgba(74, 222, 128, 0.1);
   color: var(--green-ok);
@@ -257,7 +280,7 @@ kbd {
 @media (max-width: 600px) {
   .main-content { margin-left: 0; padding-bottom: 64px; }
   .topbar-title { font-size: 12px; }
-  .topbar-badges { display: none; }
+  .topbar-badges .badge:not(.badge-btn) { display: none; }
   .trainer-enclosure-slim { padding: 14px; gap: 16px; }
   .hint-bar { display: none; }
 }

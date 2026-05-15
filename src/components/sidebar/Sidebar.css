@@ -463,7 +463,7 @@
   border: 1px solid var(--border-dim);
   border-radius: var(--r-md);
   padding: 10px 12px;
-  max-height: 340px;
+  max-height: calc(100vh - 240px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;

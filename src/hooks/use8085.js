@@ -26,7 +26,7 @@ export default function use8085() {
   const [registers, setRegisters] = useState(INITIAL_REGISTERS);
   const [flags, setFlags] = useState(INITIAL_FLAGS);
   const memRef = useRef(createInitialMemory());
-  const [memDisplay, setMemDisplay] = useState(Array(16).fill(0));
+  const [memVersion, setMemVersion] = useState(0);
   const [memBaseAddr, setMemBaseAddr] = useState(0x2000);
 
   // Display state
@@ -54,12 +54,8 @@ export default function use8085() {
     setLog(prev => [...prev.slice(-99), `> ${msg}`]);
   }, []);
 
-  const refreshMemDisplay = useCallback((base) => {
-    const slice = [];
-    for (let i = 0; i < 16; i++) {
-      slice.push(memRef.current[(base + i) & 0xFFFF]);
-    }
-    setMemDisplay(slice);
+  const refreshMemDisplay = useCallback(() => {
+    setMemVersion(v => v + 1);
   }, []);
 
   // ---- RESET ----
@@ -130,7 +126,7 @@ export default function use8085() {
     setDataDisplay(toHex(memRef.current[addr]));
     setInputBuffer('');
     setInputMode(INPUT_MODE.DATA);
-    refreshMemDisplay(addr);
+    refreshMemDisplay();
     addLog(`MEM: ${toHex(addr, 4)} = ${toHex(memRef.current[addr])}`);
   }, [inputBuffer, refreshMemDisplay, addLog]);
 
@@ -141,7 +137,7 @@ export default function use8085() {
     memRef.current[currentAddr] = value;
     setDataDisplay(toHex(value));
     setInputBuffer('');
-    refreshMemDisplay(memBaseAddr);
+    refreshMemDisplay();
     addLog(`WRITE: [${toHex(currentAddr, 4)}] = ${toHex(value)}`);
   }, [inputBuffer, currentAddr, memBaseAddr, refreshMemDisplay, addLog]);
 
@@ -153,7 +149,7 @@ export default function use8085() {
     for (let a = f; a <= t; a++) {
       memRef.current[a] = b;
     }
-    refreshMemDisplay(memBaseAddr);
+    refreshMemDisplay();
     addLog(`FILL: ${toHex(f, 4)}–${toHex(t, 4)} with ${toHex(b)}`);
   }, [memBaseAddr, refreshMemDisplay, addLog]);
 
@@ -176,7 +172,7 @@ export default function use8085() {
       // Update state
       setRegisters(finalRegisters);
       setFlags(finalFlags);
-      refreshMemDisplay(memBaseAddr);
+      refreshMemDisplay();
       
       addLog(`Execution finished: ${steps} steps, Halted: ${halted}`);
 
@@ -264,7 +260,7 @@ export default function use8085() {
     registers, setRegisters,
     flags, setFlags,
     memory: memRef.current,
-    memDisplay, memBaseAddr, setMemBaseAddr, refreshMemDisplay,
+    memVersion, memBaseAddr, setMemBaseAddr, refreshMemDisplay,
     addressDisplay, dataDisplay, displayBlink,
     inputMode, trainerMode, shifted,
     currentAddr,

@@ -1,0 +1,207 @@
+/* ============================================================
+   IC INFO MODAL
+   ============================================================ */
+.ic-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.82);
+  backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+  animation: fade-in 200ms ease;
+  padding: 20px;
+}
+
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+.ic-modal {
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-base);
+  border-radius: var(--r-xl);
+  padding: 32px;
+  width: 100%;
+  max-width: 820px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: var(--shadow-lg), 0 0 80px rgba(0,229,255,0.08);
+  animation: slide-up 220ms var(--ease-out);
+}
+
+@keyframes slide-up {
+  from { transform: translateY(24px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Grid: info on left, pinout on right */
+.ic-modal-layout {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: start;
+}
+
+.ic-modal-close {
+  position: absolute; top: 16px; right: 16px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-base);
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  width: 32px; height: 32px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--t-fast);
+  z-index: 2;
+}
+.ic-modal-close:hover {
+  border-color: var(--accent-border);
+  color: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* ─── Info column ─── */
+.ic-modal-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 0;
+}
+
+.ic-modal-chip {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 26px; font-weight: 900;
+  color: var(--accent);
+  text-shadow: 0 0 28px var(--accent-glow);
+  line-height: 1.2; margin-bottom: 8px;
+}
+
+.ic-modal-role {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 800;
+  color: var(--orange); letter-spacing: 1.5px;
+  text-transform: uppercase; margin-bottom: 18px;
+}
+
+.ic-modal-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px; color: var(--text-secondary);
+  line-height: 1.8; margin-bottom: 24px;
+}
+
+.ic-modal-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--accent); font-size: 13px; font-weight: 600;
+  text-decoration: none;
+  border: 1px solid var(--accent-border);
+  border-radius: var(--r-sm);
+  padding: 8px 16px;
+  background: var(--accent-subtle);
+  transition: all var(--t-fast);
+  width: fit-content; margin-top: auto;
+}
+.ic-modal-link:hover {
+  background: rgba(0,229,255,0.14);
+  border-color: var(--accent);
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+
+/* ─── DIP Pinout Diagram ─── */
+/* The diagram is: [left-pins] [body] [right-pins] side by side */
+.ic-pinout-diagram {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.ic-dip-pins-left,
+.ic-dip-pins-right {
+  display: flex;
+  flex-direction: column;
+}
+
+/* IC body — sits between the two pin columns */
+.ic-dip-body {
+  background: linear-gradient(170deg, #1c1c1c 0%, #101010 60%, #080808 100%);
+  border: 1px solid #282828;
+  border-radius: 4px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  min-height: 40px;
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.85),
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    inset 0 -1px 0 rgba(0,0,0,0.5);
+}
+
+.ic-dip-notch {
+  position: absolute;
+  top: -1px; left: 50%;
+  transform: translateX(-50%);
+  width: 20px; height: 10px;
+  background: #060606;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border: 1px solid #282828;
+  border-top: none;
+}
+
+/* Chip name — rotated vertical inside body */
+.ic-dip-label {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 8px; font-weight: 700;
+  color: #2c2c2c; letter-spacing: 4px;
+  text-transform: uppercase;
+  user-select: none;
+  padding: 6px 0;
+  white-space: nowrap;
+}
+
+/* Each pin row is a flex row */
+.ic-pin-row {
+  display: flex;
+  align-items: center;
+  height: 20px;
+}
+
+
+
+.ic-pin-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; color: var(--text-muted);
+  width: 18px; text-align: center;
+  flex-shrink: 0; line-height: 1;
+}
+
+.ic-pin-metal {
+  width: 10px; height: 3px;
+  background: linear-gradient(90deg, #8a6a28, #c8a84b, #8a6a28);
+  flex-shrink: 0;
+}
+
+.ic-dip-pins-right .ic-pin-metal {
+  background: linear-gradient(270deg, #8a6a28, #c8a84b, #8a6a28);
+}
+
+.ic-pin-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--text-secondary);
+  white-space: nowrap; padding: 0 6px; line-height: 1;
+}
+
+.ic-dip-pins-right .ic-pin-name { text-align: left; }
+
+/* Responsive: single column on small screens */
+@media (max-width: 640px) {
+  .ic-modal { padding: 20px; }
+  .ic-modal-layout { grid-template-columns: 1fr; gap: 28px; }
+  .ic-pinout-diagram { justify-content: center; }
+  .ic-modal-chip { font-size: 20px; }
+}

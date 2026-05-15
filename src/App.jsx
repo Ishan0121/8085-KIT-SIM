@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import Sidebar from './components/Sidebar';
-import SevenSegDisplay, { DisplayInfoBtn } from './components/SevenSegDisplay';
-import Keypad from './components/Keypad';
-import { ICInfoModal } from './components/SidePanel';
+import Sidebar from './components/sidebar/Sidebar';
+import SevenSegDisplay, { DisplayInfoBtn } from './components/hardware/SevenSegDisplay';
+import Keypad from './components/hardware/Keypad';
+import ICInfoModal from './components/modals/ICInfoModal';
+import GuideModal from './components/modals/GuideModal';
 import use8085 from './hooks/use8085';
 import { IC_INFO, toHex } from './data/cpu8085';
-import { Hexagon } from 'lucide-react';
+import { Hexagon, BookOpen } from 'lucide-react';
 import './App.css';
 
 // Keyboard shortcut mapping
@@ -48,6 +49,7 @@ export default function App() {
   const [showDecimal, setShowDecimal] = useState(() => getSavedSetting('sim_showDecimal', true));
 
   const [icInfoKey, setIcInfoKey] = useState(null);
+  const [showGuide, setShowGuide] = useState(false);
   const prevRegisters = useRef(null);
 
   // ---- Persist Settings ----
@@ -62,7 +64,7 @@ export default function App() {
 
   const {
     registers, flags,
-    memory, memDisplay, memBaseAddr, setMemBaseAddr, refreshMemDisplay,
+    memory, memVersion, memBaseAddr, setMemBaseAddr, refreshMemDisplay,
     addressDisplay, dataDisplay,
     shifted, log, setLog,
     handleKey: rawHandleKey,
@@ -165,7 +167,7 @@ export default function App() {
         prevRegisters={prevRegisters.current}
         flags={flags}
         memory={memory}
-        memDisplay={memDisplay}
+        memVersion={memVersion}
         memBaseAddr={memBaseAddr}
         setMemBaseAddr={setMemBaseAddr}
         refreshMemDisplay={refreshMemDisplay}
@@ -191,6 +193,10 @@ export default function App() {
             <span className="topbar-title">8085 Trainer Kit Simulator</span>
           </div>
           <div className="topbar-badges">
+            <button className="badge-btn" onClick={() => setShowGuide(true)} title="View Guide">
+              <BookOpen size={14} style={{ marginRight: '4px' }} />
+              Guide
+            </button>
             <span className="badge badge-green">Phase 1</span>
             <span className="badge badge-blue">Digital Twin</span>
           </div>
@@ -240,6 +246,11 @@ export default function App() {
           <span className="hint-item"><kbd>+</kbd> FILL</span>
         </div>
       </main>
+
+      {/* Guide Modal */}
+      {showGuide && (
+        <GuideModal onClose={() => setShowGuide(false)} />
+      )}
 
       {/* IC Info Modal */}
       {icInfoData && (
