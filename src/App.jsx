@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Sidebar from './components/sidebar/Sidebar';
 import SevenSegDisplay, { DisplayInfoBtn } from './components/hardware/SevenSegDisplay';
+import RealtimeTranslator from './components/hardware/RealtimeTranslator';
 import Keypad from './components/hardware/Keypad';
 import ICInfoModal from './components/modals/ICInfoModal';
 import GuideModal from './components/modals/GuideModal';
@@ -47,6 +48,7 @@ export default function App() {
   const [autoScrollLog, setAutoScrollLog] = useState(() => getSavedSetting('sim_autoScrollLog', true));
   const [clearLogOnReset, setClearLogOnReset] = useState(() => getSavedSetting('sim_clearLogOnReset', false));
   const [showDecimal, setShowDecimal] = useState(() => getSavedSetting('sim_showDecimal', true));
+  const [showRealtimeTranslator, setShowRealtimeTranslator] = useState(() => getSavedSetting('sim_showRealtimeTranslator', true));
 
   const [icInfoKey, setIcInfoKey] = useState(null);
   const [showGuide, setShowGuide] = useState(false);
@@ -61,6 +63,7 @@ export default function App() {
   useEffect(() => localStorage.setItem('sim_autoScrollLog', JSON.stringify(autoScrollLog)), [autoScrollLog]);
   useEffect(() => localStorage.setItem('sim_clearLogOnReset', JSON.stringify(clearLogOnReset)), [clearLogOnReset]);
   useEffect(() => localStorage.setItem('sim_showDecimal', JSON.stringify(showDecimal)), [showDecimal]);
+  useEffect(() => localStorage.setItem('sim_showRealtimeTranslator', JSON.stringify(showRealtimeTranslator)), [showRealtimeTranslator]);
 
   const {
     registers, flags,
@@ -68,6 +71,7 @@ export default function App() {
     addressDisplay, dataDisplay,
     shifted, log, setLog,
     handleKey: rawHandleKey,
+    currentAddr
   } = use8085();
 
   // ---- Appearance ----
@@ -181,6 +185,7 @@ export default function App() {
         autoScrollLog={autoScrollLog} setAutoScrollLog={setAutoScrollLog}
         clearLogOnReset={clearLogOnReset} setClearLogOnReset={setClearLogOnReset}
         showDecimal={showDecimal} setShowDecimal={setShowDecimal}
+        showRealtimeTranslator={showRealtimeTranslator} setShowRealtimeTranslator={setShowRealtimeTranslator}
         setIcInfoKey={setIcInfoKey}
       />
 
@@ -225,6 +230,16 @@ export default function App() {
             <div className="display-zone">
               <SevenSegDisplay addressValue={addressDisplay} dataValue={dataDisplay} />
             </div>
+
+            {/* Opcode Translator LCD */}
+            {showRealtimeTranslator && (
+              <RealtimeTranslator 
+                dataValue={dataDisplay} 
+                memory={memory} 
+                currentAddr={currentAddr} 
+                memBaseAddr={memBaseAddr} 
+              />
+            )}
 
             {/* Keypad */}
             <div className="keypad-zone">

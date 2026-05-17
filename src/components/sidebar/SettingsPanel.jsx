@@ -9,7 +9,8 @@ export default function SettingsPanel({
   volume, setVolume,
   autoScrollLog, setAutoScrollLog,
   clearLogOnReset, setClearLogOnReset,
-  showDecimal, setShowDecimal
+  showDecimal, setShowDecimal,
+  showRealtimeTranslator, setShowRealtimeTranslator
 }) {
   return (
     <div className="sb-section">
@@ -58,8 +59,11 @@ export default function SettingsPanel({
         <button className="settings-btn" style={{width: '100%', marginBottom: '8px'}} onClick={() => setClearLogOnReset(!clearLogOnReset)}>
           {clearLogOnReset ? 'Disable Clear Log on Reset' : 'Enable Clear Log on Reset'}
         </button>
-        <button className="settings-btn" style={{width: '100%'}} onClick={() => setShowDecimal(!showDecimal)}>
+        <button className="settings-btn" style={{width: '100%', marginBottom: '8px'}} onClick={() => setShowDecimal(!showDecimal)}>
           {showDecimal ? 'Hide Decimal Registers' : 'Show Decimal Registers'}
+        </button>
+        <button className="settings-btn" style={{width: '100%'}} onClick={() => setShowRealtimeTranslator(!showRealtimeTranslator)}>
+          {showRealtimeTranslator ? 'Disable Opcode Translator LCD' : 'Enable Opcode Translator LCD'}
         </button>
       </div>
     </div>

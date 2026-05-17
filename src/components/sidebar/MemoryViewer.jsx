@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { toHex } from '../../data/cpu8085';
+import { exportMemory, importMemoryFile } from '../../utils/memoryStorage';
 
 export default function MemoryViewer({ memory, memVersion, baseAddr, setMemBaseAddr, refreshMemDisplay }) {
   const [jumpInput, setJumpInput] = useState('');
@@ -12,6 +13,29 @@ export default function MemoryViewer({ memory, memVersion, baseAddr, setMemBaseA
     refreshMemDisplay(addr);
     setJumpInput('');
     setRowCount(4); // Reset to 4 rows on new jump
+  };
+
+  const fileInputRef = useRef(null);
+  const [exportFormat, setExportFormat] = useState('json');
+
+  const handleExport = () => {
+    const defaultName = '8085_project';
+    const projectName = window.prompt("Enter project name:", defaultName);
+    if (projectName !== null) {
+      exportMemory(memory, exportFormat, projectName.trim() || defaultName);
+    }
+  };
+
+  const handleImport = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const success = await importMemoryFile(file, memory);
+    if (success) {
+      refreshMemDisplay();
+    } else {
+      alert("Failed to load memory file. Ensure the format is correct.");
+    }
+    e.target.value = ''; // Reset input
   };
 
   const rows = [];
@@ -44,7 +68,25 @@ export default function MemoryViewer({ memory, memVersion, baseAddr, setMemBaseA
         />
         <button className="mem-jump-btn" type="submit">Go</button>
       </form>
-      <div className="mem-grid" style={{ maxHeight: 'calc(100vh - 280px)', overflowY: 'auto' }}>
+
+      {/* Memory Save/Load UI */}
+      <div className="mem-storage-controls" style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+        <select 
+          className="settings-btn" 
+          value={exportFormat} 
+          onChange={e => setExportFormat(e.target.value)}
+          style={{ flex: 1, padding: '4px', textAlign: 'center' }}
+        >
+          <option value="json">JSON</option>
+          <option value="hex">.HEX</option>
+          <option value="bin">.BIN</option>
+        </select>
+        <button className="settings-btn" onClick={handleExport} style={{ flex: 1, padding: '4px' }}>Export</button>
+        <button className="settings-btn" onClick={() => fileInputRef.current.click()} style={{ flex: 1, padding: '4px' }}>Import</button>
+        <input type="file" ref={fileInputRef} onChange={handleImport} style={{ display: 'none' }} accept=".json,.hex,.bin" />
+      </div>
+
+      <div className="mem-grid" style={{ maxHeight: 'calc(100vh - 320px)', overflowY: 'auto' }}>
         <div className="mem-header" style={{ position: 'sticky', top: 0, backgroundColor: 'var(--bg-elevated)', zIndex: 1 }}>
           <span className="mem-addr">Addr</span>
           <span className="mem-cell">+0</span>
