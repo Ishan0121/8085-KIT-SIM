@@ -797,6 +797,75 @@
   z-index: 199;
 }
 
+/* ── Assembler Panel ── */
+.assembler-controls {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+  align-items: flex-end;
+}
+.assembler-controls .input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.assembler-controls .input-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.assembler-textarea {
+  width: 100%;
+  height: 180px;
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-base);
+  border-radius: var(--r-md);
+  padding: 12px;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  resize: vertical;
+  outline: none;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.assembler-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+.assembler-status {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: var(--r-sm);
+  background: var(--bg-raised);
+  border-left: 3px solid transparent;
+}
+.status-success { border-left-color: var(--green); background: rgba(34,197,94,0.05); }
+.status-error { border-left-color: var(--red); background: rgba(239,68,68,0.05); }
+
+.status-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+.status-success .status-header { color: var(--green); }
+.status-error .status-header { color: var(--red); }
+
+.status-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: 'JetBrains Mono', monospace;
+}
+.status-list li { margin-bottom: 3px; }
+
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .sidebar { position: fixed; height: 100vh; }

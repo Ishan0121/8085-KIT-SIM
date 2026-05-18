@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './Sidebar.css';
 import { 
   Database, Cpu, Search, ClipboardList, Keyboard, 
-  Microchip, Hexagon, Settings, X, Code, ListOrdered
+  Microchip, Hexagon, Settings, X, Code, ListOrdered, Terminal
 } from 'lucide-react';
 
 import RegisterViewer from './RegisterViewer';
 import MemoryViewer from './MemoryViewer';
 import DisassemblerPanel from './DisassemblerPanel';
+import AssemblerPanel from './AssemblerPanel';
 import OpcodeFinder from './OpcodeFinder';
 import ExecutionLog from './ExecutionLog';
 import KeyReference from './KeyReference';
@@ -17,6 +18,7 @@ import SettingsPanel from './SettingsPanel';
 const NAV_ITEMS = [
   { id: 'registers', icon: <Database size={18} />, label: 'Registers' },
   { id: 'memory',    icon: <Cpu size={18} />, label: 'Memory' },
+  { id: 'assembler', icon: <Terminal size={18} />, label: 'Assembler' },
   { id: 'disasm',    icon: <Code size={18} />, label: 'Disassem' },
   { id: 'opcodes',   icon: <Search size={18} />, label: 'Opcodes' },
   { id: 'log',       icon: <ClipboardList size={18} />, label: 'Log' },
@@ -144,6 +146,7 @@ export default function Sidebar({
     switch (activePanel) {
       case 'registers': return <RegisterViewer registers={registers} prevRegisters={prevRegisters} flags={flags} showDecimal={showDecimal} />;
       case 'memory':    return <MemoryViewer memory={memory} memVersion={memVersion} baseAddr={memBaseAddr} setMemBaseAddr={setMemBaseAddr} refreshMemDisplay={refreshMemDisplay} />;
+      case 'assembler': return <AssemblerPanel memory={memory} memBaseAddr={memBaseAddr} setMemBaseAddr={setMemBaseAddr} refreshMemDisplay={refreshMemDisplay} />;
       case 'disasm':    return <DisassemblerPanel memory={memory} memVersion={memVersion} baseAddr={memBaseAddr} setMemBaseAddr={setMemBaseAddr} refreshMemDisplay={refreshMemDisplay} />;
       case 'opcodes':   return <OpcodeFinder />;
       case 'log':       return <ExecutionLog log={log} autoScrollLog={autoScrollLog} />;
