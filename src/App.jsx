@@ -222,10 +222,9 @@ export default function App() {
 
         {/* Trainer area — display + keypad only */}
         <div className="trainer-area">
-          {/* Flag LED bar — floats centered above the board enclosure */}
-          <FlagLEDBar flags={flags} />
 
           <div className="trainer-enclosure-slim">
+
             {/* Board label */}
             <div className="board-name-label">8085 MICROPROCESSOR KIT</div>
 
@@ -241,6 +240,9 @@ export default function App() {
               </div>
               <DisplayInfoBtn addressValue={addressDisplay} dataValue={dataDisplay} />
             </div>
+
+          {/* Flag LED bar — floats centered above the board enclosure */}
+          <FlagLEDBar flags={flags} />
 
             {/* 7-Segment Display */}
             <div className="display-zone">

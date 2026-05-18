@@ -55,7 +55,7 @@ export default function RealtimeTranslator({ dataValue, memory, currentAddr, mem
 
   return (
     <div className="translator-lcd" style={{
-      marginTop: '15px',
+      margin: '2px',
       padding: '6px 12px',
       backgroundColor: '#0a0f0d',
       border: '2px solid #1c2621',
