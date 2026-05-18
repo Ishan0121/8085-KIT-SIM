@@ -144,7 +144,7 @@ export default function use8085({ strictMode = false } = {}) {
     setInputBuffer('');
     refreshMemDisplay();
     addLog(`WRITE: [${toHex(currentAddr, 4)}] = ${toHex(value)}`);
-  }, [inputBuffer, currentAddr, memBaseAddr, refreshMemDisplay, addLog]);
+  }, [inputBuffer, currentAddr, refreshMemDisplay, addLog]);
 
   // ---- FILL ----
   const handleFill = useCallback((fromAddr, toAddr, fillByte) => {
@@ -156,7 +156,7 @@ export default function use8085({ strictMode = false } = {}) {
     }
     refreshMemDisplay();
     addLog(`FILL: ${toHex(f, 4)}–${toHex(t, 4)} with ${toHex(b)}`);
-  }, [memBaseAddr, refreshMemDisplay, addLog]);
+  }, [refreshMemDisplay, addLog]);
 
   // ---- GO (Execute) ----
   const handleGo = useCallback(() => {
@@ -195,7 +195,7 @@ export default function use8085({ strictMode = false } = {}) {
       setTrainerMode(TRAINER_MODE.MONITOR);
       setInputBuffer('');
     }
-  }, [trainerMode, inputBuffer, registers, flags, addLog, refreshMemDisplay, memBaseAddr, breakpoints, strictMode]);
+  }, [trainerMode, inputBuffer, registers, flags, addLog, refreshMemDisplay, breakpoints, strictMode]);
 
   // ---- STEP ----
   const handleStep = useCallback(() => {

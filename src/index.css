@@ -20,12 +20,18 @@
 
   --green-ok:        #4ade80;
   --green-ok-glow:   rgba(74, 222, 128, 0.28);
+  --green:           #4ade80;
+
+  --red:             #f87171;
+  --red-glow-soft:   rgba(248, 113, 113, 0.22);
 
   --yellow:          #fbbf24;
   --yellow-glow:     rgba(251, 191, 36, 0.25);
 
   --red-led:         #ff3b1e;
   --red-glow:        rgba(255, 59, 30, 0.45);
+
+  --bg-hover:        var(--bg-raised);
 
   /* ── Dark BG layers ── */
   --bg-root:         #050810;
@@ -119,6 +125,9 @@ body.light-theme {
   --accent-border: rgba(0, 119, 204, 0.3);
   --rail-bg:       #eaf2fc;
   --flyout-bg:     #ffffff;
+  --green:         #16a34a;
+  --red:           #dc2626;
+  --bg-hover:      var(--bg-raised);
 }
 
 /* ============================================================
@@ -157,6 +166,11 @@ body {
 .mono     { font-family: 'JetBrains Mono', monospace; }
 .orbitron { font-family: 'Orbitron', sans-serif; }
 .no-select { user-select: none; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 /* ── Display & Hardware Themes ── */
 

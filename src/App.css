@@ -97,9 +97,10 @@
 }
 
 .badge-btn:hover {
-  background: var(--bg-hover);
+  background: var(--bg-raised);
   color: var(--text-primary);
-  border-color: var(--border-dim);
+  border-color: var(--accent-border);
+  box-shadow: 0 0 8px var(--accent-glow);
 }
 
 .badge-green {

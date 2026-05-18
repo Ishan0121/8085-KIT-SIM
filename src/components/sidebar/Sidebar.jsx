@@ -18,8 +18,8 @@ import SettingsPanel from './SettingsPanel';
 const NAV_ITEMS = [
   { id: 'registers', icon: <Database size={18} />, label: 'Registers' },
   { id: 'memory',    icon: <Cpu size={18} />, label: 'Memory' },
-  { id: 'assembler', icon: <Terminal size={18} />, label: 'Assembler' },
-  { id: 'disasm',    icon: <Code size={18} />, label: 'Disassem' },
+  { id: 'assembler', icon: <Terminal size={18} />, label: 'Asmblr' },
+  { id: 'disasm',    icon: <Code size={18} />, label: 'Disasmblr' },
   { id: 'opcodes',   icon: <Search size={18} />, label: 'Opcodes' },
   { id: 'log',       icon: <ClipboardList size={18} />, label: 'Log' },
   { id: 'keyref',    icon: <Keyboard size={18} />,  label: 'Key Ref' },
