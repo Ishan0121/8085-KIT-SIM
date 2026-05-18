@@ -3,6 +3,7 @@ import Sidebar from './components/sidebar/Sidebar';
 import SevenSegDisplay, { DisplayInfoBtn } from './components/hardware/SevenSegDisplay';
 import RealtimeTranslator from './components/hardware/RealtimeTranslator';
 import Keypad from './components/hardware/Keypad';
+import FlagLEDBar from './components/hardware/FlagLEDBar';
 import ICInfoModal from './components/modals/ICInfoModal';
 import GuideModal from './components/modals/GuideModal';
 import use8085 from './hooks/use8085';
@@ -221,6 +222,9 @@ export default function App() {
 
         {/* Trainer area — display + keypad only */}
         <div className="trainer-area">
+          {/* Flag LED bar — floats centered above the board enclosure */}
+          <FlagLEDBar flags={flags} />
+
           <div className="trainer-enclosure-slim">
             {/* Board label */}
             <div className="board-name-label">8085 MICROPROCESSOR KIT</div>

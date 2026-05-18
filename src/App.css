@@ -121,9 +121,11 @@
 .trainer-area {
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 28px;
+  gap: 24px;
+  padding: 32px 28px 40px;
   background:
     radial-gradient(ellipse at 30% 20%, rgba(0,229,255,0.04) 0%, transparent 55%),
     radial-gradient(ellipse at 70% 80%, rgba(168,85,247,0.03) 0%, transparent 55%);
