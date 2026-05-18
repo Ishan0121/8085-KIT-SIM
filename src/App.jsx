@@ -49,6 +49,8 @@ export default function App() {
   const [clearLogOnReset, setClearLogOnReset] = useState(() => getSavedSetting('sim_clearLogOnReset', false));
   const [showDecimal, setShowDecimal] = useState(() => getSavedSetting('sim_showDecimal', true));
   const [showRealtimeTranslator, setShowRealtimeTranslator] = useState(() => getSavedSetting('sim_showRealtimeTranslator', true));
+  const [strictMode, setStrictMode] = useState(() => getSavedSetting('sim_strictMode', false));
+  const [colorTheme, setColorTheme] = useState(() => getSavedSetting('sim_colorTheme', 'default'));
 
   const [icInfoKey, setIcInfoKey] = useState(null);
   const [showGuide, setShowGuide] = useState(false);
@@ -64,6 +66,8 @@ export default function App() {
   useEffect(() => localStorage.setItem('sim_clearLogOnReset', JSON.stringify(clearLogOnReset)), [clearLogOnReset]);
   useEffect(() => localStorage.setItem('sim_showDecimal', JSON.stringify(showDecimal)), [showDecimal]);
   useEffect(() => localStorage.setItem('sim_showRealtimeTranslator', JSON.stringify(showRealtimeTranslator)), [showRealtimeTranslator]);
+  useEffect(() => localStorage.setItem('sim_strictMode', JSON.stringify(strictMode)), [strictMode]);
+  useEffect(() => localStorage.setItem('sim_colorTheme', JSON.stringify(colorTheme)), [colorTheme]);
 
   const {
     registers, flags,
@@ -71,15 +75,18 @@ export default function App() {
     addressDisplay, dataDisplay,
     shifted, log, setLog,
     handleKey: rawHandleKey,
-    currentAddr
-  } = use8085();
+    currentAddr,
+    handleStep, breakpoints, toggleBreakpoint,
+    ports, portsVersion, writePort
+  } = use8085({ strictMode });
 
   // ---- Appearance ----
   useEffect(() => {
-    document.body.className = ''; // Reset classes
+    document.body.className = '';
     if (theme === 'light') document.body.classList.add('light-theme');
+    if (colorTheme !== 'default') document.body.classList.add(`theme-${colorTheme}`);
     document.body.classList.add(`glow-${glowIntensity}`);
-  }, [theme, glowIntensity]);
+  }, [theme, glowIntensity, colorTheme]);
 
   // ---- Audio ----
   const playClickSound = useCallback(() => {
@@ -187,6 +194,11 @@ export default function App() {
         showDecimal={showDecimal} setShowDecimal={setShowDecimal}
         showRealtimeTranslator={showRealtimeTranslator} setShowRealtimeTranslator={setShowRealtimeTranslator}
         setIcInfoKey={setIcInfoKey}
+        strictMode={strictMode} setStrictMode={setStrictMode}
+        colorTheme={colorTheme} setColorTheme={setColorTheme}
+        handleStep={handleStep}
+        breakpoints={breakpoints} toggleBreakpoint={toggleBreakpoint}
+        ports={ports} portsVersion={portsVersion} writePort={writePort}
       />
 
       {/* ── Main content ── */}

@@ -22,12 +22,17 @@ export const TRAINER_MODE = {
   EXECUTE: 'EXECUTE',
 };
 
-export default function use8085() {
+export default function use8085({ strictMode = false } = {}) {
   const [registers, setRegisters] = useState(INITIAL_REGISTERS);
   const [flags, setFlags] = useState(INITIAL_FLAGS);
   const memRef = useRef(createInitialMemory());
   const [memVersion, setMemVersion] = useState(0);
   const [memBaseAddr, setMemBaseAddr] = useState(0x2000);
+
+  // Breakpoints and Ports
+  const [breakpoints, setBreakpoints] = useState(new Set());
+  const portsRef = useRef(new Uint8Array(256));
+  const [portsVersion, setPortsVersion] = useState(0);
 
   // Display state
   // addressDisplay: 4 hex chars  (e.g. "2000")
@@ -167,14 +172,22 @@ export default function use8085() {
       addLog(`GO: Executing from ${toHex(startAddr, 4)}`);
       
       // Run the emulator
-      const { finalRegisters, finalFlags, halted, steps } = executeProgram(memRef.current, startAddr, registers, flags);
+      const { finalRegisters, finalFlags, halted, steps, illegalOpcode } = executeProgram(
+        memRef.current, startAddr, registers, flags, 100000, breakpoints, portsRef.current, strictMode
+      );
       
-      // Update state
       setRegisters(finalRegisters);
       setFlags(finalFlags);
       refreshMemDisplay();
-      
-      addLog(`Execution finished: ${steps} steps, Halted: ${halted}`);
+      setPortsVersion(v => v + 1);
+
+      if (illegalOpcode !== undefined) {
+        addLog(`ILLEGAL OPCODE: 0x${illegalOpcode.toString(16).toUpperCase().padStart(2,'0')} at PC=${toHex(finalRegisters.PC - 1, 4)} — halted (strict mode)`);
+      } else if (breakpoints.has(finalRegisters.PC)) {
+        addLog(`Breakpoint hit at ${toHex(finalRegisters.PC, 4)} after ${steps} steps`);
+      } else {
+        addLog(`Execution finished: ${steps} steps, Halted: ${halted}`);
+      }
 
       setAddressDisplay(toHex(finalRegisters.PC, 4));
       setDataDisplay('E ');
@@ -182,7 +195,40 @@ export default function use8085() {
       setTrainerMode(TRAINER_MODE.MONITOR);
       setInputBuffer('');
     }
-  }, [trainerMode, inputBuffer, registers, flags, addLog, refreshMemDisplay, memBaseAddr]);
+  }, [trainerMode, inputBuffer, registers, flags, addLog, refreshMemDisplay, memBaseAddr, breakpoints, strictMode]);
+
+  // ---- STEP ----
+  const handleStep = useCallback(() => {
+    const startAddr = registers.PC;
+    const { finalRegisters, finalFlags, illegalOpcode } = executeProgram(
+      memRef.current, startAddr, registers, flags, 1, new Set(), portsRef.current, strictMode
+    );
+    setRegisters(finalRegisters);
+    setFlags(finalFlags);
+    refreshMemDisplay();
+    setPortsVersion(v => v + 1);
+    if (illegalOpcode !== undefined) {
+      addLog(`STEP: ILLEGAL OPCODE 0x${illegalOpcode.toString(16).toUpperCase().padStart(2,'0')} (strict mode)`);
+    } else {
+      addLog(`STEP: PC=${toHex(finalRegisters.PC, 4)}`);
+    }
+    setAddressDisplay(toHex(finalRegisters.PC, 4));
+    setDataDisplay(toHex(memRef.current[finalRegisters.PC]));
+  }, [registers, flags, addLog, refreshMemDisplay, strictMode]);
+
+  // ---- BREAKPOINTS & PORTS ----
+  const toggleBreakpoint = useCallback((addr) => {
+    setBreakpoints(prev => {
+      const next = new Set(prev);
+      if (next.has(addr)) next.delete(addr); else next.add(addr);
+      return next;
+    });
+  }, []);
+
+  const writePort = useCallback((port, value) => {
+    portsRef.current[port] = value & 0xFF;
+    setPortsVersion(v => v + 1);
+  }, []);
 
   // ---- NEXT ----
   const handleNext = useCallback(() => {
@@ -264,9 +310,12 @@ export default function use8085() {
     addressDisplay, dataDisplay, displayBlink,
     inputMode, trainerMode, shifted,
     currentAddr,
-    log,
+    log, setLog,
     handleKey,
     confirmInput,
     handleFill,
+    handleStep,
+    breakpoints, toggleBreakpoint,
+    ports: portsRef.current, portsVersion, writePort,
   };
 }

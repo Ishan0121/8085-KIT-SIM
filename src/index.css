@@ -172,3 +172,122 @@ body.glow-high {
   --seg-glow-filter: drop-shadow(0 0 5px var(--red-led)) drop-shadow(0 0 12px rgba(255,68,0,0.8)) drop-shadow(0 0 24px rgba(255,68,0,0.4));
   --ambient-glow: radial-gradient(ellipse at 50% 65%, rgba(255,40,0,0.18) 0%, transparent 75%);
 }
+
+/* ── PHOSPHOR THEME: Amber Terminal ── */
+body.theme-amber {
+  --accent:          #ffb000;
+  --accent-dim:      #cc8c00;
+  --accent-deep:     #7a5200;
+  --accent-glow:     rgba(255, 176, 0, 0.25);
+  --accent-subtle:   rgba(255, 176, 0, 0.08);
+  --accent-border:   rgba(255, 176, 0, 0.3);
+  --bg-root:         #0a0800;
+  --bg-base:         #100d00;
+  --bg-surface:      #181000;
+  --bg-elevated:     #201600;
+  --bg-raised:       #2a1e00;
+  --bg-overlay:      #342500;
+  --border-faint:    rgba(255, 176, 0, 0.05);
+  --border-dim:      rgba(255, 176, 0, 0.09);
+  --border-base:     rgba(255, 176, 0, 0.16);
+  --border-strong:   rgba(255, 176, 0, 0.28);
+  --text-primary:    #ffd060;
+  --text-secondary:  #c8900a;
+  --text-muted:      #7a5800;
+  --green-ok:        #ffb000;
+  --rail-bg:         var(--bg-surface);
+  --flyout-bg:       var(--bg-elevated);
+  --shadow-glow:     0 0 24px rgba(255,176,0,0.22);
+  /* Display */
+  --red-led:          #ffb000;
+  --led-red:          #ffb000;
+  --led-off:          #1a0e00;
+  --display-bezel:    #080500;
+  --red-glow:         rgba(255,176,0,0.5);
+  --seg-lit-color:    #ffcc44;
+  --seg-label-color:  #a06000;
+  --seg-separator-color: #4a3000;
+  --seg-glow-color:   rgba(255,176,0,0.55);
+  --seg-glow-filter:  drop-shadow(0 0 4px #ffb000) drop-shadow(0 0 10px rgba(255,176,0,0.6));
+  --ambient-glow:     radial-gradient(ellipse at 50% 65%, rgba(255,150,0,0.12) 0%, transparent 70%);
+}
+
+/* ── PHOSPHOR THEME: Hacker Green ── */
+body.theme-green {
+  --accent:          #00ff41;
+  --accent-dim:      #00cc33;
+  --accent-deep:     #007020;
+  --accent-glow:     rgba(0, 255, 65, 0.22);
+  --accent-subtle:   rgba(0, 255, 65, 0.07);
+  --accent-border:   rgba(0, 255, 65, 0.28);
+  --bg-root:         #000d00;
+  --bg-base:         #001200;
+  --bg-surface:      #001a00;
+  --bg-elevated:     #002200;
+  --bg-raised:       #002e00;
+  --bg-overlay:      #003800;
+  --border-faint:    rgba(0, 255, 65, 0.05);
+  --border-dim:      rgba(0, 255, 65, 0.09);
+  --border-base:     rgba(0, 255, 65, 0.16);
+  --border-strong:   rgba(0, 255, 65, 0.28);
+  --text-primary:    #a8ffa8;
+  --text-secondary:  #40c040;
+  --text-muted:      #1a6020;
+  --green-ok:        #00ff41;
+  --red-led:         #00ff41;
+  --rail-bg:         var(--bg-surface);
+  --flyout-bg:       var(--bg-elevated);
+  --shadow-glow:     0 0 24px rgba(0,255,65,0.22);
+  /* Display */
+  --led-red:          #00ff41;
+  --led-off:          #001500;
+  --display-bezel:    #000800;
+  --red-glow:         rgba(0,255,65,0.5);
+  --seg-lit-color:    #44ff77;
+  --seg-label-color:  #007a20;
+  --seg-separator-color: #004a18;
+  --seg-glow-color:   rgba(0,255,65,0.55);
+  --seg-glow-filter:  drop-shadow(0 0 4px #00ff41) drop-shadow(0 0 10px rgba(0,255,65,0.6));
+  --ambient-glow:     radial-gradient(ellipse at 50% 65%, rgba(0,255,65,0.10) 0%, transparent 70%);
+}
+
+/* ── PHOSPHOR THEME: Synthwave Pink ── */
+body.theme-pink {
+  --accent:          #ff00ff;
+  --accent-dim:      #cc00cc;
+  --accent-deep:     #700070;
+  --accent-glow:     rgba(255, 0, 255, 0.22);
+  --accent-subtle:   rgba(255, 0, 255, 0.07);
+  --accent-border:   rgba(255, 0, 255, 0.28);
+  --bg-root:         #0d0010;
+  --bg-base:         #120018;
+  --bg-surface:      #1a0024;
+  --bg-elevated:     #220030;
+  --bg-raised:       #2e003e;
+  --bg-overlay:      #38004a;
+  --border-faint:    rgba(255, 0, 255, 0.05);
+  --border-dim:      rgba(255, 0, 255, 0.09);
+  --border-base:     rgba(255, 0, 255, 0.16);
+  --border-strong:   rgba(255, 0, 255, 0.28);
+  --text-primary:    #ffaaff;
+  --text-secondary:  #cc44cc;
+  --text-muted:      #6a006a;
+  --green-ok:        #ff00ff;
+  --orange:          #ff66ff;
+  --violet:          #00ffff;
+  --red-led:         #ff00ff;
+  --rail-bg:         var(--bg-surface);
+  --flyout-bg:       var(--bg-elevated);
+  --shadow-glow:     0 0 24px rgba(255,0,255,0.22);
+  /* Display */
+  --led-red:          #ff00ff;
+  --led-off:          #1a0020;
+  --display-bezel:    #0a0010;
+  --red-glow:         rgba(255,0,255,0.5);
+  --seg-lit-color:    #ff44ff;
+  --seg-label-color:  #8a008a;
+  --seg-separator-color: #500060;
+  --seg-glow-color:   rgba(255,0,255,0.55);
+  --seg-glow-filter:  drop-shadow(0 0 4px #ff00ff) drop-shadow(0 0 10px rgba(255,0,255,0.6));
+  --ambient-glow:     radial-gradient(ellipse at 50% 65%, rgba(255,0,255,0.10) 0%, transparent 70%);
+}

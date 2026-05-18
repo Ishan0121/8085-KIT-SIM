@@ -18,8 +18,10 @@ export const INITIAL_REGISTERS = {
 export const INITIAL_FLAGS = {
   S: 0,  // Sign
   Z: 0,  // Zero
+  X5: 0, // Undocumented (bit 5) — K flag / overflow-related
   AC: 0, // Auxiliary Carry
   P: 0,  // Parity
+  V: 0,  // Undocumented (bit 1) — Signed overflow (V flag)
   CY: 0, // Carry
   IE: 0, // Interrupt Enable
 };

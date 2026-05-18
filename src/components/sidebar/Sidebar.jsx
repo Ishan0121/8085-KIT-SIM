@@ -32,7 +32,10 @@ export default function Sidebar({
   keypadSound, setKeypadSound, soundProfile, setSoundProfile, volume, setVolume,
   autoScrollLog, setAutoScrollLog, clearLogOnReset, setClearLogOnReset,
   showDecimal, setShowDecimal,
-  showRealtimeTranslator, setShowRealtimeTranslator
+  showRealtimeTranslator, setShowRealtimeTranslator,
+  strictMode, setStrictMode, colorTheme, setColorTheme,
+  handleStep, breakpoints, toggleBreakpoint,
+  ports, portsVersion, writePort
 }) {
   // On wide screens start expanded, on narrow start collapsed
   const getDefault = () => window.innerWidth >= 900;
@@ -156,6 +159,8 @@ export default function Sidebar({
           clearLogOnReset={clearLogOnReset} setClearLogOnReset={setClearLogOnReset}
           showDecimal={showDecimal} setShowDecimal={setShowDecimal}
           showRealtimeTranslator={showRealtimeTranslator} setShowRealtimeTranslator={setShowRealtimeTranslator}
+          strictMode={strictMode} setStrictMode={setStrictMode}
+          colorTheme={colorTheme} setColorTheme={setColorTheme}
         />;
       default:          return null;
     }

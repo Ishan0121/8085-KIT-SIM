@@ -55,7 +55,7 @@
   font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
   font-weight: 700;
-  color: #aa3300;
+  color: var(--seg-label-color, #aa3300);
   letter-spacing: 2px;
   text-transform: uppercase;
   opacity: 0.9;
@@ -83,14 +83,14 @@
 .seg-path.seg-off { fill: var(--led-off); opacity: 0.75; }
 .seg-path.seg-on  { fill: var(--led-red); }
 .seg-path.seg-on.seg-glow {
-  fill: #ff4400;
+  fill: var(--seg-lit-color, #ff4400);
   filter: var(--seg-glow-filter, drop-shadow(0 0 3px var(--red-led)) drop-shadow(0 0 8px rgba(255,68,0,0.5)));
 }
 
 .display-separator {
   width: 2px;
   height: 48px;
-  background: linear-gradient(to bottom, transparent, #3a1500 30%, #3a1500 70%, transparent);
+  background: linear-gradient(to bottom, transparent, var(--seg-separator-color, #3a1500) 30%, var(--seg-separator-color, #3a1500) 70%, transparent);
   opacity: 0.45;
   flex-shrink: 0;
 }
@@ -205,8 +205,8 @@
   font-family: 'JetBrains Mono', monospace;
   font-size: 14px;
   font-weight: 700;
-  color: var(--red-led);
-  text-shadow: 0 0 8px var(--red-glow);
+  color: var(--led-red);
+  text-shadow: 0 0 8px var(--seg-glow-color, var(--red-glow));
   letter-spacing: 2px;
   flex: 1;
 }

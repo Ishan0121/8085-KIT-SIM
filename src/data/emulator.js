@@ -4,7 +4,7 @@ import { OPCODES, calcParity } from './cpu8085';
  * 8085 Instruction Execution Engine
  */
 
-export function executeProgram(memory, startAddr, initialRegisters, initialFlags, maxSteps = 100000) {
+export function executeProgram(memory, startAddr, initialRegisters, initialFlags, maxSteps = 100000, breakpoints = new Set(), ports = new Uint8Array(256), strictMode = false) {
   // Clone state so we don't mutate React state directly during run (we'll return final state)
   const regs = { ...initialRegisters };
   const flags = { ...initialFlags };
@@ -55,6 +55,28 @@ export function executeProgram(memory, startAddr, initialRegisters, initialFlags
     flags.Z = res8 === 0 ? 1 : 0;
     flags.S = (res8 & 0x80) ? 1 : 0;
     flags.P = calcParity(res8);
+  };
+
+  // Helper: Compute undocumented V (overflow) and X5 (K) flags for ADD-type ops
+  // V = carry_into_MSB XOR carry_out_of_MSB (classic signed overflow definition)
+  // X5 (K) = V XOR S (hardware-accurate approximation per Ken Shirriff)
+  const updateUndoc_add = (a, b, result) => {
+    if (!strictMode) return;
+    const carryIn  = ((a & 0x7F) + (b & 0x7F)) >> 7; // carry into bit 7
+    const carryOut = (result >> 8) & 1;                // carry out of bit 7
+    flags.V  = carryIn ^ carryOut;
+    flags.X5 = flags.V ^ flags.S;
+  };
+
+  // Helper: Compute undocumented flags for SUB-type ops (b is the subtrahend)
+  const updateUndoc_sub = (a, b, result) => {
+    if (!strictMode) return;
+    // For subtraction, treat as addition with ~b + 1 (two's complement)
+    const bComp = (~b) & 0xFF;
+    const carryIn  = ((a & 0x7F) + (bComp & 0x7F) + 1) >> 7;
+    const carryOut = ((result & 0x1FF) >> 8) ^ 1; // borrow logic
+    flags.V  = carryIn ^ carryOut;
+    flags.X5 = flags.V ^ flags.S;
   };
 
   // Execution Loop
@@ -192,44 +214,44 @@ export function executeProgram(memory, startAddr, initialRegisters, initialFlags
       case 0xEB: { const temp = getHL(); setHL(getDE()); setDE(temp); } break; // XCHG
 
       // ── Arithmetic (ADD / ADC) ───────────────
-      case 0x80: { const val = regs.B; const r = regs.A + val; flags.AC = ((regs.A & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADD B
-      case 0x81: { const val = regs.C; const r = regs.A + val; flags.AC = ((regs.A & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADD C
-      case 0x82: { const val = regs.D; const r = regs.A + val; flags.AC = ((regs.A & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADD D
-      case 0x83: { const val = regs.E; const r = regs.A + val; flags.AC = ((regs.A & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADD E
-      case 0x84: { const val = regs.H; const r = regs.A + val; flags.AC = ((regs.A & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADD H
-      case 0x85: { const val = regs.L; const r = regs.A + val; flags.AC = ((regs.A & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADD L
-      case 0x86: { const val = readMem(getHL()); const r = regs.A + val; flags.AC = ((regs.A & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADD M
-      case 0x87: { const val = regs.A; const r = regs.A + val; flags.AC = ((regs.A & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADD A
-      case 0x88: { const val = regs.B; const r = regs.A + val + flags.CY; flags.AC = ((regs.A & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADC B
-      case 0x89: { const val = regs.C; const r = regs.A + val + flags.CY; flags.AC = ((regs.A & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADC C
-      case 0x8A: { const val = regs.D; const r = regs.A + val + flags.CY; flags.AC = ((regs.A & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADC D
-      case 0x8B: { const val = regs.E; const r = regs.A + val + flags.CY; flags.AC = ((regs.A & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADC E
-      case 0x8C: { const val = regs.H; const r = regs.A + val + flags.CY; flags.AC = ((regs.A & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADC H
-      case 0x8D: { const val = regs.L; const r = regs.A + val + flags.CY; flags.AC = ((regs.A & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADC L
-      case 0x8E: { const val = readMem(getHL()); const r = regs.A + val + flags.CY; flags.AC = ((regs.A & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADC M
-      case 0x8F: { const val = regs.A; const r = regs.A + val + flags.CY; flags.AC = ((regs.A & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADC A
-      case 0xC6: { const val = readMem(regs.PC++); const r = regs.A + val; flags.AC = ((regs.A & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ADI
-      case 0xCE: { const val = readMem(regs.PC++); const r = regs.A + val + flags.CY; flags.AC = ((regs.A & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; } break; // ACI
+      case 0x80: { const a0=regs.A; const val = regs.B; const r = a0 + val; flags.AC = ((a0 & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADD B
+      case 0x81: { const a0=regs.A; const val = regs.C; const r = a0 + val; flags.AC = ((a0 & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADD C
+      case 0x82: { const a0=regs.A; const val = regs.D; const r = a0 + val; flags.AC = ((a0 & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADD D
+      case 0x83: { const a0=regs.A; const val = regs.E; const r = a0 + val; flags.AC = ((a0 & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADD E
+      case 0x84: { const a0=regs.A; const val = regs.H; const r = a0 + val; flags.AC = ((a0 & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADD H
+      case 0x85: { const a0=regs.A; const val = regs.L; const r = a0 + val; flags.AC = ((a0 & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADD L
+      case 0x86: { const a0=regs.A; const val = readMem(getHL()); const r = a0 + val; flags.AC = ((a0 & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADD M
+      case 0x87: { const a0=regs.A; const val = regs.A; const r = a0 + val; flags.AC = ((a0 & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADD A
+      case 0x88: { const a0=regs.A; const val = regs.B; const r = a0 + val + flags.CY; flags.AC = ((a0 & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADC B
+      case 0x89: { const a0=regs.A; const val = regs.C; const r = a0 + val + flags.CY; flags.AC = ((a0 & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADC C
+      case 0x8A: { const a0=regs.A; const val = regs.D; const r = a0 + val + flags.CY; flags.AC = ((a0 & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADC D
+      case 0x8B: { const a0=regs.A; const val = regs.E; const r = a0 + val + flags.CY; flags.AC = ((a0 & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADC E
+      case 0x8C: { const a0=regs.A; const val = regs.H; const r = a0 + val + flags.CY; flags.AC = ((a0 & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADC H
+      case 0x8D: { const a0=regs.A; const val = regs.L; const r = a0 + val + flags.CY; flags.AC = ((a0 & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADC L
+      case 0x8E: { const a0=regs.A; const val = readMem(getHL()); const r = a0 + val + flags.CY; flags.AC = ((a0 & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADC M
+      case 0x8F: { const a0=regs.A; const val = regs.A; const r = a0 + val + flags.CY; flags.AC = ((a0 & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADC A
+      case 0xC6: { const a0=regs.A; const val = readMem(regs.PC++); const r = a0 + val; flags.AC = ((a0 & 0x0F) + (val & 0x0F)) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ADI
+      case 0xCE: { const a0=regs.A; const val = readMem(regs.PC++); const r = a0 + val + flags.CY; flags.AC = ((a0 & 0x0F) + (val & 0x0F) + flags.CY) > 0x0F ? 1 : 0; updateZSP(r); flags.CY = r > 0xFF ? 1 : 0; regs.A = r & 0xFF; updateUndoc_add(a0,val,r); } break; // ACI
 
       // ── Arithmetic (SUB / SBB) ───────────────
-      case 0x90: { const val = regs.B; const r = regs.A - val; flags.AC = ((regs.A & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SUB B
-      case 0x91: { const val = regs.C; const r = regs.A - val; flags.AC = ((regs.A & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SUB C
-      case 0x92: { const val = regs.D; const r = regs.A - val; flags.AC = ((regs.A & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SUB D
-      case 0x93: { const val = regs.E; const r = regs.A - val; flags.AC = ((regs.A & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SUB E
-      case 0x94: { const val = regs.H; const r = regs.A - val; flags.AC = ((regs.A & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SUB H
-      case 0x95: { const val = regs.L; const r = regs.A - val; flags.AC = ((regs.A & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SUB L
-      case 0x96: { const val = readMem(getHL()); const r = regs.A - val; flags.AC = ((regs.A & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SUB M
-      case 0x97: { const val = regs.A; const r = regs.A - val; flags.AC = ((regs.A & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SUB A
-      case 0x98: { const val = regs.B; const r = regs.A - val - flags.CY; flags.AC = ((regs.A & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SBB B
-      case 0x99: { const val = regs.C; const r = regs.A - val - flags.CY; flags.AC = ((regs.A & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SBB C
-      case 0x9A: { const val = regs.D; const r = regs.A - val - flags.CY; flags.AC = ((regs.A & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SBB D
-      case 0x9B: { const val = regs.E; const r = regs.A - val - flags.CY; flags.AC = ((regs.A & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SBB E
-      case 0x9C: { const val = regs.H; const r = regs.A - val - flags.CY; flags.AC = ((regs.A & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SBB H
-      case 0x9D: { const val = regs.L; const r = regs.A - val - flags.CY; flags.AC = ((regs.A & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SBB L
-      case 0x9E: { const val = readMem(getHL()); const r = regs.A - val - flags.CY; flags.AC = ((regs.A & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SBB M
-      case 0x9F: { const val = regs.A; const r = regs.A - val - flags.CY; flags.AC = ((regs.A & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SBB A
-      case 0xD6: { const val = readMem(regs.PC++); const r = regs.A - val; flags.AC = ((regs.A & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SUI
-      case 0xDE: { const val = readMem(regs.PC++); const r = regs.A - val - flags.CY; flags.AC = ((regs.A & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; } break; // SBI
+      case 0x90: { const a0=regs.A; const val = regs.B; const r = a0 - val; flags.AC = ((a0 & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SUB B
+      case 0x91: { const a0=regs.A; const val = regs.C; const r = a0 - val; flags.AC = ((a0 & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SUB C
+      case 0x92: { const a0=regs.A; const val = regs.D; const r = a0 - val; flags.AC = ((a0 & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SUB D
+      case 0x93: { const a0=regs.A; const val = regs.E; const r = a0 - val; flags.AC = ((a0 & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SUB E
+      case 0x94: { const a0=regs.A; const val = regs.H; const r = a0 - val; flags.AC = ((a0 & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SUB H
+      case 0x95: { const a0=regs.A; const val = regs.L; const r = a0 - val; flags.AC = ((a0 & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SUB L
+      case 0x96: { const a0=regs.A; const val = readMem(getHL()); const r = a0 - val; flags.AC = ((a0 & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SUB M
+      case 0x97: { const a0=regs.A; const val = regs.A; const r = a0 - val; flags.AC = ((a0 & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SUB A
+      case 0x98: { const a0=regs.A; const val = regs.B; const r = a0 - val - flags.CY; flags.AC = ((a0 & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SBB B
+      case 0x99: { const a0=regs.A; const val = regs.C; const r = a0 - val - flags.CY; flags.AC = ((a0 & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SBB C
+      case 0x9A: { const a0=regs.A; const val = regs.D; const r = a0 - val - flags.CY; flags.AC = ((a0 & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SBB D
+      case 0x9B: { const a0=regs.A; const val = regs.E; const r = a0 - val - flags.CY; flags.AC = ((a0 & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SBB E
+      case 0x9C: { const a0=regs.A; const val = regs.H; const r = a0 - val - flags.CY; flags.AC = ((a0 & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SBB H
+      case 0x9D: { const a0=regs.A; const val = regs.L; const r = a0 - val - flags.CY; flags.AC = ((a0 & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SBB L
+      case 0x9E: { const a0=regs.A; const val = readMem(getHL()); const r = a0 - val - flags.CY; flags.AC = ((a0 & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SBB M
+      case 0x9F: { const a0=regs.A; const val = regs.A; const r = a0 - val - flags.CY; flags.AC = ((a0 & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SBB A
+      case 0xD6: { const a0=regs.A; const val = readMem(regs.PC++); const r = a0 - val; flags.AC = ((a0 & 0x0F) - (val & 0x0F)) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SUI
+      case 0xDE: { const a0=regs.A; const val = readMem(regs.PC++); const r = a0 - val - flags.CY; flags.AC = ((a0 & 0x0F) - (val & 0x0F) - flags.CY) < 0 ? 0 : 1; updateZSP(r); flags.CY = r < 0 ? 1 : 0; regs.A = r & 0xFF; updateUndoc_sub(a0,val,r); } break; // SBI
 
       // ── Increment / Decrement (8-bit) ────────
       case 0x04: { const val = regs.B; const r = (val + 1); flags.AC = ((val & 0x0F) + 1) > 0x0F ? 1 : 0; regs.B = r & 0xFF; updateZSP(r); } break; // INR B
@@ -345,20 +367,32 @@ export function executeProgram(memory, startAddr, initialRegisters, initialFlags
       case 0xC5: regs.SP -= 2; writeWord(regs.SP, getBC()); break; // PUSH B
       case 0xD5: regs.SP -= 2; writeWord(regs.SP, getDE()); break; // PUSH D
       case 0xE5: regs.SP -= 2; writeWord(regs.SP, getHL()); break; // PUSH H
-      case 0xF5: { regs.SP -= 2; const psw = (flags.S << 7) | (flags.Z << 6) | (flags.AC << 4) | (flags.P << 2) | 2 | flags.CY; writeWord(regs.SP, (regs.A << 8) | psw); } break; // PUSH PSW
+      case 0xF5: { // PUSH PSW
+        regs.SP -= 2;
+        // Accurate 8085 PSW bit layout:
+        //  7=S, 6=Z, 5=X5(K), 4=AC, 3=0(hardwired), 2=P, 1=V(OV), 0=CY
+        const psw = (flags.S  << 7) | (flags.Z  << 6) |
+                    (flags.X5 << 5) | (flags.AC << 4) |
+                    (0        << 3) | (flags.P  << 2) |
+                    (flags.V  << 1) | flags.CY;
+        writeWord(regs.SP, (regs.A << 8) | psw);
+      } break;
       case 0xC1: setBC(readWord(regs.SP)); regs.SP += 2; break; // POP B
       case 0xD1: setDE(readWord(regs.SP)); regs.SP += 2; break; // POP D
       case 0xE1: setHL(readWord(regs.SP)); regs.SP += 2; break; // POP H
       case 0xF1: { // POP PSW
         const val = readWord(regs.SP);
         regs.SP += 2;
-        regs.A = (val >> 8) & 0xFF;
+        regs.A    = (val >> 8) & 0xFF;
         const psw = val & 0xFF;
-        flags.S = (psw >> 7) & 1;
-        flags.Z = (psw >> 6) & 1;
-        flags.AC = (psw >> 4) & 1;
-        flags.P = (psw >> 2) & 1;
-        flags.CY = psw & 1;
+        flags.S   = (psw >> 7) & 1;
+        flags.Z   = (psw >> 6) & 1;
+        flags.X5  = (psw >> 5) & 1; // undocumented K flag
+        flags.AC  = (psw >> 4) & 1;
+        // bit 3 is always 0
+        flags.P   = (psw >> 2) & 1;
+        flags.V   = (psw >> 1) & 1; // undocumented overflow
+        flags.CY  =  psw       & 1;
       } break;
       case 0xE3: { const temp = getHL(); setHL(readWord(regs.SP)); writeWord(regs.SP, temp); } break; // XTHL
       case 0xF9: regs.SP = getHL(); break; // SPHL
@@ -382,11 +416,16 @@ export function executeProgram(memory, startAddr, initialRegisters, initialFlags
 
 
       default:
-        // Unimplemented opcode, halt to prevent infinite loops of garbage
-        halted = true;
+        if (strictMode) {
+          halted = true;
+          flags._illegalOpcode = opcode; // signal to caller
+        } else {
+          // Permissive: halt silently to prevent infinite loops
+          halted = true;
+        }
         break;
     }
   }
 
-  return { finalRegisters: regs, finalFlags: flags, halted, steps };
+  return { finalRegisters: regs, finalFlags: flags, halted, steps, illegalOpcode: flags._illegalOpcode };
 }
