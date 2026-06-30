@@ -142,31 +142,50 @@ export default function Sidebar({
     }
   };
 
-  const renderPanel = () => {
-    switch (activePanel) {
-      case 'registers': return <RegisterViewer registers={registers} prevRegisters={prevRegisters} flags={flags} showDecimal={showDecimal} />;
-      case 'memory':    return <MemoryViewer memory={memory} memVersion={memVersion} baseAddr={memBaseAddr} setMemBaseAddr={setMemBaseAddr} refreshMemDisplay={refreshMemDisplay} />;
-      case 'assembler': return <AssemblerPanel memory={memory} memBaseAddr={memBaseAddr} setMemBaseAddr={setMemBaseAddr} refreshMemDisplay={refreshMemDisplay} />;
-      case 'disasm':    return <DisassemblerPanel memory={memory} memVersion={memVersion} baseAddr={memBaseAddr} setMemBaseAddr={setMemBaseAddr} refreshMemDisplay={refreshMemDisplay} />;
-      case 'opcodes':   return <OpcodeFinder />;
-      case 'log':       return <ExecutionLog log={log} autoScrollLog={autoScrollLog} />;
-      case 'keyref':    return <KeyReference />;
-      case 'chips':     return <ChipInfo setIcInfoKey={setIcInfoKey} />;
-      case 'settings':  return <SettingsPanel 
-          theme={theme} onThemeToggle={onThemeToggle} 
-          glowIntensity={glowIntensity} setGlowIntensity={setGlowIntensity}
-          keypadSound={keypadSound} setKeypadSound={setKeypadSound} 
-          soundProfile={soundProfile} setSoundProfile={setSoundProfile}
-          volume={volume} setVolume={setVolume}
-          autoScrollLog={autoScrollLog} setAutoScrollLog={setAutoScrollLog} 
-          clearLogOnReset={clearLogOnReset} setClearLogOnReset={setClearLogOnReset}
-          showDecimal={showDecimal} setShowDecimal={setShowDecimal}
-          showRealtimeTranslator={showRealtimeTranslator} setShowRealtimeTranslator={setShowRealtimeTranslator}
-          strictMode={strictMode} setStrictMode={setStrictMode}
-          colorTheme={colorTheme} setColorTheme={setColorTheme}
-        />;
-      default:          return null;
-    }
+  const renderPanels = () => {
+    return (
+      <>
+        <div style={{ display: activePanel === 'registers' ? 'block' : 'none', height: '100%' }}>
+          <RegisterViewer registers={registers} prevRegisters={prevRegisters} flags={flags} showDecimal={showDecimal} />
+        </div>
+        <div style={{ display: activePanel === 'memory' ? 'block' : 'none', height: '100%' }}>
+          <MemoryViewer memory={memory} memVersion={memVersion} baseAddr={memBaseAddr} setMemBaseAddr={setMemBaseAddr} refreshMemDisplay={refreshMemDisplay} />
+        </div>
+        <div style={{ display: activePanel === 'assembler' ? 'block' : 'none', height: '100%' }}>
+          <AssemblerPanel memory={memory} memBaseAddr={memBaseAddr} setMemBaseAddr={setMemBaseAddr} refreshMemDisplay={refreshMemDisplay} />
+        </div>
+        <div style={{ display: activePanel === 'disasm' ? 'block' : 'none', height: '100%' }}>
+          <DisassemblerPanel memory={memory} memVersion={memVersion} baseAddr={memBaseAddr} setMemBaseAddr={setMemBaseAddr} refreshMemDisplay={refreshMemDisplay} />
+        </div>
+        <div style={{ display: activePanel === 'opcodes' ? 'block' : 'none', height: '100%' }}>
+          <OpcodeFinder />
+        </div>
+        <div style={{ display: activePanel === 'log' ? 'block' : 'none', height: '100%' }}>
+          <ExecutionLog log={log} autoScrollLog={autoScrollLog} />
+        </div>
+        <div style={{ display: activePanel === 'keyref' ? 'block' : 'none', height: '100%' }}>
+          <KeyReference />
+        </div>
+        <div style={{ display: activePanel === 'chips' ? 'block' : 'none', height: '100%' }}>
+          <ChipInfo setIcInfoKey={setIcInfoKey} />
+        </div>
+        <div style={{ display: activePanel === 'settings' ? 'block' : 'none', height: '100%' }}>
+          <SettingsPanel 
+            theme={theme} onThemeToggle={onThemeToggle} 
+            glowIntensity={glowIntensity} setGlowIntensity={setGlowIntensity}
+            keypadSound={keypadSound} setKeypadSound={setKeypadSound} 
+            soundProfile={soundProfile} setSoundProfile={setSoundProfile}
+            volume={volume} setVolume={setVolume}
+            autoScrollLog={autoScrollLog} setAutoScrollLog={setAutoScrollLog} 
+            clearLogOnReset={clearLogOnReset} setClearLogOnReset={setClearLogOnReset}
+            showDecimal={showDecimal} setShowDecimal={setShowDecimal}
+            showRealtimeTranslator={showRealtimeTranslator} setShowRealtimeTranslator={setShowRealtimeTranslator}
+            strictMode={strictMode} setStrictMode={setStrictMode}
+            colorTheme={colorTheme} setColorTheme={setColorTheme}
+          />
+        </div>
+      </>
+    );
   };
 
   return (
@@ -219,7 +238,7 @@ export default function Sidebar({
           <button className="flyout-close" onClick={() => setExpanded(false)} aria-label="Close panel"><X size={16} /></button>
         </div>
         <div className="flyout-content">
-          {renderPanel()}
+          {renderPanels()}
         </div>
       </div>
 

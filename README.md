@@ -4,16 +4,17 @@ A modern, web-based digital twin of the classic Intel 8085 Microprocessor Traine
 
 ## 🚀 Features
 
-- **High-Fidelity Interface:** Authentic 7-segment display and hex keypad layout, mirroring the physical trainer kits used in microprocessor labs.
+- **High-Fidelity Interface:** Authentic 7-segment display, hex keypad layout, Opcode Translator LCD, and LED Flag Indicators, mirroring physical trainer kits.
+- **Cycle-Accurate Simulation Engine:** Generator-based CPU core with T-state yielding and full support for both standard and undocumented status flags (V, X5).
+- **Integrated Assembler & Disassembler:** Write code with label support, compile directly to memory, and disassemble memory contents in real-time.
+- **Advanced Execution Control:** Step-level debugging and execution control panel for analyzing instruction flow and hardware-level behavior.
 - **Modern Sidebar Tools:**
-  - **Live State Viewer:** Real-time monitoring of CPU registers (A, B, C, D, E, H, L, PC, SP) and Flags (S, Z, AC, P, CY) with change highlighting.
-  - **Memory Viewer:** Interactive hex grid to examine and navigate the 64KB memory space.
+  - **Live State Viewer:** Real-time monitoring of CPU registers and Flags with change highlighting.
+  - **Memory Viewer:** Expandable, interactive hex grid to examine the 64KB memory space.
   - **Opcode Finder:** Quick lookup tool for 8085 mnemonics, hex codes, byte sizes, and machine cycles.
-  - **Execution Log:** Scrollable history of your operations and inputs.
-  - **Key Reference:** Built-in guide for keypad functions and keyboard shortcuts.
-  - **Sample Programs:** One-click loading of pre-written assembly programs (e.g., Block Move, Fill Memory) into memory.
-- **Full Keyboard Support:** Map your physical keyboard to the trainer kit's keypad for rapid data entry.
-- **Dark/Light Mode:** Responsive themes to suit your environment.
+  - **Interactive IC Docs:** Clickable chips revealing pinout diagrams and external reference links.
+  - **Import & Export:** Save your assembly programs and memory states as JSON files, and easily import them back.
+- **Customizable Experience:** Resizable UI panels, dynamic phosphor-inspired color themes, and persistent configuration settings.
 
 ## 🛠️ Technology Stack
 
@@ -28,8 +29,8 @@ Ensure you have [Node.js](https://nodejs.org/) installed on your machine.
 
 1. **Clone the repository** (if you haven't already):
    ```bash
-   git clone <repository-url>
-   cd 8085-SIM
+   git clone https://github.com/Ishan0121/8085-KIT-SIM.git
+   cd 8085-KIT-SIM
    ```
 
 2. **Install dependencies:**

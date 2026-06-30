@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { disassembleMemory } from '../../utils/disassembler';
 import { toHex } from '../../data/cpu8085';
+import { Copy } from 'lucide-react';
 
 export default function DisassemblerPanel({ memory, memVersion, baseAddr, setMemBaseAddr, refreshMemDisplay }) {
   const [startAddrInput, setStartAddrInput] = useState('');
   const [lines, setLines] = useState([]);
+  const [copyStatus, setCopyStatus] = useState('');
 
   useEffect(() => {
     setLines(disassembleMemory(memory, baseAddr, 100));
@@ -20,9 +22,29 @@ export default function DisassemblerPanel({ memory, memVersion, baseAddr, setMem
     }
   };
 
+  const handleCopy = () => {
+    if (lines.length === 0) return;
+    const textToCopy = lines.map(line => `${toHex(line.address, 4)}\t${line.hex}\t${line.mnemonic}`).join('\n');
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      setCopyStatus('Copied!');
+      setTimeout(() => setCopyStatus(''), 2000);
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+    });
+  }; 
+
   return (
     <div className="sb-section" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <div className="sb-section-title">Disassembler</div>
+      <div className="sb-section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span>Disassembler</span>
+        <button 
+          onClick={handleCopy} 
+          title="Copy Assembly"
+          className='mem-jump-btn'
+        >
+          {copyStatus ? <span style={{ fontSize: '10px' }}>{copyStatus}</span> : <Copy size={14} />}
+        </button>
+      </div>
       
       <form className="mem-jump-form" onSubmit={handleUpdate}>
         <input

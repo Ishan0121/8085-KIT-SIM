@@ -9,9 +9,12 @@ Welcome to the 8085 Trainer Kit Simulator! This guide will help you understand t
 The simulator consists of two main areas:
 1. **Main Screen:** The Trainer Kit hardware interface.
    - **7-Segment Display:** Shows the current 16-bit memory address (left 4 digits) and the 8-bit data stored at that address (right 2 digits).
+   - **Opcode Translator LCD:** Real-time translation of the current opcode being entered or executed.
+   - **LED Flag Indicators:** Visual status lights for CPU flags located on the board.
    - **Hex Keypad:** Used for entering hex values (0-9, A-F) and executing commands.
-2. **Left Sidebar:** Modern developer tools.
-   - Expand the sidebar by clicking the icons to access Registers, Memory Viewer, Opcode reference, Execution Log, Keypad Reference, Chip info, and Sample Programs.
+2. **Left Sidebar & Tools:** Modern developer tools and resizable panels.
+   - Expand the sidebar to access Registers, Memory Viewer, Assembler, Disassembler, Opcode reference, IC Docs, Settings, and Import/Export.
+   - Panels can be resized to suit your workflow.
 
 ---
 
@@ -66,17 +69,41 @@ You can click the buttons on the screen or use your physical keyboard for faster
 - **Examine Memory:** Use the **Memory Viewer** in the sidebar. You can type an address in the jump box to instantly view a 16-byte block of memory starting from that location.
 - **Examine Registers:** Open the **Registers** tab in the sidebar. It updates in real-time as programs execute or as you step through code. Modified registers will flash yellow. Alternatively, use the **EXREG** (`X`) key to cycle through registers on the 7-segment display.
 
+### 4. How to Use the Assembler
+
+The built-in Assembler allows you to write programs using standard 8085 mnemonics and labels.
+
+1. Open the **Assembler** panel from the sidebar.
+2. Type or paste your assembly code. You can use labels (e.g., `START: MOV A, B`).
+3. Set your desired **Base Address** (e.g., `8000H`).
+4. Click **Assemble & Load**. The compiler will provide real-time status feedback for any errors or successfully load the machine code into the specified memory location.
+5. Use the **Disassembler** panel to verify the loaded code or to navigate through memory-mapped instructions.
+
+### 5. Stepping Through Code (Debugging)
+
+With the execution control panel, you can debug your code step-by-step:
+
+1. Load your program and reset the CPU.
+2. Use the **Step** functionality to execute one instruction (or machine cycle) at a time.
+3. Observe the **Registers**, **LED Flags**, and **Opcode Translator** to analyze hardware-level behavior during execution.
+
+### 6. Interactive IC Documentation
+
+To learn more about the integrated circuits (ICs) used in the hardware:
+
+1. Click on any of the rendered chips on the main board.
+2. A modal will pop up showing the detailed pinout diagram and provide direct external links for further learning.
+
 ---
 
-## 📁 Using Sample Programs
+## 💾 Importing and Exporting Programs
 
-To get started quickly, the simulator includes pre-written sample programs. 
+You can save your work and load it later using the Import/Export functionality.
 
 1. Open the **Sidebar**.
-2. Click the folder icon (**Programs**).
-3. Click **Load →** on any of the available programs (e.g., "Block Move", "Fill Memory", "Sum of Series").
-4. The program's opcodes will be instantly loaded into the specified memory addresses (e.g., 8000H).
-5. You can then use the **GO** command to execute it from its starting address, or explore the loaded bytes using the Memory Viewer.
+2. Navigate to the **Import/Export** panel (folder icon).
+3. **Export:** Click the **Export** button to download your current memory state and assembly code as a JSON file. This is perfect for saving your progress or sharing code with others.
+4. **Import:** Click the **Import** button and select a previously exported JSON file to instantly load the memory state and code back into the simulator.
 
 ---
 
