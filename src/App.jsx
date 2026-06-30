@@ -29,6 +29,7 @@ const KEYBOARD_MAP = {
   '+': 'FILL',
   'v': 'VCT_INT', 'V': 'VCT_INT',
   'Delete': 'DEL_DATA',
+  'Shift': 'SHIFT',
 };
 
 // Helper for localStorage persistence
@@ -269,13 +270,17 @@ export default function App() {
         {/* Keyboard hint bar */}
         <div className="hint-bar">
           <span className="hint-item"><kbd>0–9 A–F</kbd> Hex input</span>
-          <span className="hint-item"><kbd>G</kbd> GO</span>
           <span className="hint-item"><kbd>Esc</kbd> RESET</span>
+          <span className="hint-item"><kbd>V</kbd> VCT INT</span>
+          <span className="hint-item"><kbd>Shift</kbd> SHIFT</span>
           <span className="hint-item"><kbd>X</kbd> EXREG</span>
-          <span className="hint-item"><kbd>N</kbd> NEXT</span>
           <span className="hint-item"><kbd>I</kbd> INS DATA</span>
           <span className="hint-item"><kbd>Del</kbd> DEL DATA</span>
-          <span className="hint-item"><kbd>M</kbd> Block Move</span>
+          <span className="hint-item"><kbd>G</kbd> GO</span>
+          <span className="hint-item"><kbd>M</kbd> B.M</span>
+          <span className="hint-item"><kbd>R</kbd> REL EXMEM</span>
+          <span className="hint-item"><kbd>S</kbd> STRING PRE</span>
+          <span className="hint-item"><kbd>N</kbd> NEXT</span>
           <span className="hint-item"><kbd>+</kbd> FILL</span>
         </div>
       </main>
