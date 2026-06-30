@@ -151,7 +151,7 @@ export default function Sidebar({
         <div style={{ display: activePanel === 'memory' ? 'block' : 'none', height: '100%' }}>
           <MemoryViewer memory={memory} memVersion={memVersion} baseAddr={memBaseAddr} setMemBaseAddr={setMemBaseAddr} refreshMemDisplay={refreshMemDisplay} />
         </div>
-        <div style={{ display: activePanel === 'assembler' ? 'block' : 'none', height: '100%' }}>
+        <div style={{ display: activePanel === 'assembler' ? 'flex' : 'none', flex: 1, flexDirection: 'column', height: '100%' }}>
           <AssemblerPanel memory={memory} memBaseAddr={memBaseAddr} setMemBaseAddr={setMemBaseAddr} refreshMemDisplay={refreshMemDisplay} />
         </div>
         <div style={{ display: activePanel === 'disasm' ? 'block' : 'none', height: '100%' }}>

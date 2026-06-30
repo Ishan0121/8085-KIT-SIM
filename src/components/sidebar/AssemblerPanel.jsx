@@ -246,10 +246,8 @@ HLT           ; Stop execution
   const [showSamples, setShowSamples] = useState(false);
   const [activeCategory, setActiveCategory] = useState(CATEGORIES[0]);
 
-  // Sync base address input when changed from another panel
-  useEffect(() => {
-    setBaseAddrInput(toHex(memBaseAddr, 4));
-  }, [memBaseAddr]);
+  // Initial sync only, do not update when memBaseAddr changes globally
+
 
   const handleAssemble = () => {
     setStatus(null);
@@ -289,7 +287,7 @@ HLT           ; Stop execution
   const visibleSamples = SAMPLE_PROGRAMS.filter(p => p.category === activeCategory);
 
   return (
-    <div className="sb-section">
+    <div className="sb-section" style={{ display: 'flex', flexDirection: 'column', height: '100%', marginBottom: 0 }}>
 
       {/* ── Description ── */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
@@ -471,6 +469,7 @@ HLT           ; Stop execution
       {/* ── Code Textarea ── */}
       <textarea
         className="assembler-textarea"
+        style={{ flex: 1, minHeight: '180px' }}
         value={code}
         onChange={(e) => { setCode(e.target.value); setStatus(null); }}
         spellCheck={false}
