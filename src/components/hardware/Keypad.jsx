@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import './Keypad.css';
 
 /**
  * Keypad layout matching the physical 8085 trainer kit:
@@ -110,10 +109,29 @@ function TrainerKey({ keyData, onPress, shifted }) {
 
   const lines = keyData.label.split('\n');
   const isShiftKey = keyData.id === 'SHIFT';
+  const isBlue = keyData.color === 'blue';
+
+  let keyClasses = "relative w-10 h-9 sm:w-[56px] sm:h-[48px] rounded-lg cursor-pointer flex items-end justify-center pb-1 transition-all duration-[60ms] outline-none overflow-hidden shrink-0 select-none group";
+
+  if (isBlue) {
+    if (pressed) {
+      keyClasses += " translate-y-[2px] shadow-[0_1px_0_0_theme(colors.blue.950),0_2px_4px_rgba(0,0,0,0.5),inset_0_2px_6px_rgba(0,0,0,0.3)] bg-gradient-to-br from-blue-700 to-blue-900 border border-blue-950";
+    } else if (isShiftKey && shifted) {
+      keyClasses += " shadow-[0_4px_0_0_theme(colors.blue.950),0_0_12px_rgba(34,211,238,0.5)] bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-700 border border-blue-950";
+    } else {
+      keyClasses += " shadow-[0_4px_0_0_theme(colors.blue.950),0_6px_8px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.2)] bg-gradient-to-br from-blue-500 via-blue-700 to-blue-900 hover:from-blue-400 hover:via-blue-600 hover:to-blue-800 border border-blue-950";
+    }
+  } else {
+    if (pressed) {
+      keyClasses += " translate-y-[2px] shadow-[0_1px_0_0_theme(colors.slate.950),0_2px_4px_rgba(0,0,0,0.5),inset_0_2px_8px_rgba(0,0,0,0.5)] bg-gradient-to-br from-slate-800 to-slate-950 border border-slate-950";
+    } else {
+      keyClasses += " shadow-[0_4px_0_0_theme(colors.slate.950),0_5px_6px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.1)] bg-gradient-to-br from-slate-700 via-slate-800 to-slate-950 hover:from-slate-600 hover:via-slate-700 hover:to-slate-900 border border-slate-950";
+    }
+  }
 
   return (
     <div
-      className={`trainer-key ${keyData.color === 'blue' ? 'key-blue' : 'key-black'} ${pressed ? 'key-pressed' : ''} ${isShiftKey && shifted ? 'key-shifted' : ''}`}
+      className={keyClasses}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerLeave}
@@ -125,28 +143,35 @@ function TrainerKey({ keyData, onPress, shifted }) {
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { handlePointerDown(e); } }}
       onKeyUp={(e) => { if (e.key === 'Enter' || e.key === ' ') { handlePointerUp(e); } }}
     >
-      <div className="key-face">
+      <div className="flex flex-col items-center justify-center w-full h-full pointer-events-none">
+        {/* Shortcut indicator on function keys */}
+        {isBlue && keyData.shortcut && (
+          <div className="absolute top-0.5 right-1 text-[5px] sm:text-[6px] font-mono font-bold text-white/40 drop-shadow-sm tracking-tighter">
+            {keyData.shortcut.replace('Escape', 'ESC').toUpperCase()}
+          </div>
+        )}
+        
         {/* Primary label */}
-        <div className="key-label-primary">
+        <div className="flex flex-col items-center leading-[1.1]">
           {lines.map((line, i) => (
-            <span key={i}>{line}</span>
+            <span key={i} className={`font-inter font-bold tracking-[0.2px] text-center whitespace-nowrap ${isBlue ? 'text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.65)] text-[8px] sm:text-[11px]' : 'text-[#e8ecf2] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-[14px] sm:text-[18px]'}`}>{line}</span>
           ))}
         </div>
         {/* Sub-label (register name) */}
         {keyData.sub && (
-          <div className="key-label-sub">{keyData.sub}</div>
+          <div className={`font-mono text-[6px] sm:text-[8px] mt-[2px] tracking-[0.5px] ${isBlue ? 'text-white/65' : 'text-[#c8d2e1]/60'}`}>{keyData.sub}</div>
         )}
       </div>
-      {ripple && <span className="key-ripple" onAnimationEnd={() => setRipple(false)} />}
+      {ripple && <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/30 pointer-events-none w-0 h-0 animate-[ripple-expand_0.35s_ease-out_forwards]" onAnimationEnd={() => setRipple(false)} />}
     </div>
   );
 }
 
 export default function Keypad({ onKey, shifted }) {
   return (
-    <div className="keypad-assembly">
+    <div className="flex flex-col gap-2 sm:gap-3 select-none">
       {KEYPAD_LAYOUT.map((row, ri) => (
-        <div key={ri} className="keypad-row">
+        <div key={ri} className="flex gap-2 sm:gap-3">
           {row.map((key) => (
             <TrainerKey
               key={key.id}

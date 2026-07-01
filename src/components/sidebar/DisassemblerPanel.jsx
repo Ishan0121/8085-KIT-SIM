@@ -34,43 +34,43 @@ export default function DisassemblerPanel({ memory, memVersion, baseAddr, setMem
   }; 
 
   return (
-    <div className="sb-section" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <div className="sb-section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span>Disassembler</span>
+    <div className="flex flex-col h-full">
+      <div className="flex justify-between items-center mb-3">
+        <span className="font-orbitron text-[11px] font-bold uppercase tracking-wider text-slate-400">Disassembler</span>
         <button 
           onClick={handleCopy} 
           title="Copy Assembly"
-          className='mem-jump-btn'
+          className="flex items-center justify-center bg-cyan-700 hover:bg-cyan-600 text-white rounded-md px-3 py-1 font-inter text-[11px] font-bold transition-colors cursor-pointer shrink-0 shadow-sm"
         >
-          {copyStatus ? <span style={{ fontSize: '10px' }}>{copyStatus}</span> : <Copy size={14} />}
+          {copyStatus ? <span className="text-[10px]">{copyStatus}</span> : <Copy size={14} />}
         </button>
       </div>
       
-      <form className="mem-jump-form" onSubmit={handleUpdate}>
+      <form className="flex gap-2 mb-3" onSubmit={handleUpdate}>
         <input
-          className="mem-jump-input mono"
+          className="w-24 px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-md text-cyan-400 font-mono text-[13px] outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all uppercase placeholder-slate-600"
           placeholder={toHex(baseAddr, 4)}
           value={startAddrInput}
           onChange={e => setStartAddrInput(e.target.value.toUpperCase())}
           maxLength={4}
         />
-        <button className="mem-jump-btn" type="submit">Scan</button>
+        <button className="flex items-center justify-center bg-cyan-700 hover:bg-cyan-600 text-white rounded-md px-3 py-1.5 font-inter text-[12px] font-bold shadow-sm transition-colors cursor-pointer shrink-0" type="submit">Scan</button>
       </form>
 
-      <div className="opcode-results" style={{ flex: 1, overflowY: 'auto', marginTop: '8px' }}>
-        <div className="opcode-header">
-          <span style={{ minWidth: '40px' }}>Addr</span>
-          <span style={{ minWidth: '70px' }}>Hex</span>
-          <span style={{ flex: 1 }}>Mnemonic</span>
+      <div className="flex-1 overflow-y-auto mt-2 bg-slate-900/50 border border-slate-700/50 rounded-lg flex flex-col">
+        <div className="flex items-center px-3 py-2 border-b border-slate-700/50 bg-slate-800/50 text-[10px] font-bold font-inter text-slate-400 uppercase tracking-wider sticky top-0 backdrop-blur-sm z-10">
+          <span className="w-10 shrink-0">Addr</span>
+          <span className="w-[70px] shrink-0">Hex</span>
+          <span className="flex-1">Mnemonic</span>
         </div>
         {lines.length === 0 ? (
-          <div style={{ padding: '8px', textAlign: 'center', color: 'var(--text-muted)' }}>No code found</div>
+          <div className="p-4 text-center text-[11px] text-slate-500 font-inter">No code found</div>
         ) : (
           lines.map((line, idx) => (
-            <div key={idx} className="opcode-row" style={{ padding: '4px 8px' }}>
-              <span className="mono opcode-hex" style={{ minWidth: '40px', color: 'var(--accent)' }}>{toHex(line.address, 4)}</span>
-              <span className="mono" style={{ minWidth: '70px', fontSize: '11px', color: 'var(--text-muted)' }}>{line.hex}</span>
-              <span className="mono opcode-mnem">{line.mnemonic}</span>
+            <div key={idx} className="flex items-center px-3 py-1.5 border-b border-slate-800 hover:bg-slate-800/50 transition-colors group">
+              <span className="w-10 shrink-0 font-mono text-[13px] text-cyan-400">{toHex(line.address, 4)}</span>
+              <span className="w-[70px] shrink-0 font-mono text-[11px] text-slate-400 group-hover:text-slate-300 transition-colors">{line.hex}</span>
+              <span className="flex-1 font-mono text-[13px] text-slate-200">{line.mnemonic}</span>
             </div>
           ))
         )}

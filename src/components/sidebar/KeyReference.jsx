@@ -36,31 +36,36 @@ export default function KeyReference() {
   const [filter, setFilter] = useState('all');
   const filtered = filter === 'all' ? KEY_REFERENCE : KEY_REFERENCE.filter(k => k.color === filter);
   return (
-    <div className="sb-section">
-      <div className="sb-section-title">Key Reference</div>
-      <div className="keyref-filter">
+    <div className="flex flex-col h-full mb-4">
+      <div className="font-orbitron text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3">Key Reference</div>
+      <div className="flex bg-slate-900 border border-slate-700 p-1 rounded-md mb-3 shrink-0">
         {['all', 'func', 'hex'].map(f => (
           <button
             key={f}
-            className={`keyref-filter-btn ${filter === f ? 'active' : ''}`}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded font-inter text-[10px] font-bold tracking-wide uppercase transition-colors ${filter === f ? 'bg-slate-700 text-cyan-400 shadow-sm' : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800'}`}
             onClick={() => setFilter(f)}
           >
-            {f === 'all' ? 'All' : f === 'func' ? <><CircleDot size={12} className="inline-icon" /> Function</> : <><Circle size={12} className="inline-icon" /> Hex</>}
+            {f === 'all' ? 'All' : f === 'func' ? <><CircleDot size={12} /> Function</> : <><Circle size={12} /> Hex</>}
           </button>
         ))}
       </div>
-      <div className="keyref-table">
-        <div className="keyref-header">
-          <span>Key</span><span>Kbd</span><span>Function</span>
+      <div className="flex-1 overflow-y-auto bg-slate-900/50 border border-slate-700/50 rounded-lg flex flex-col min-h-[300px]">
+        <div className="flex items-center px-3 py-2 border-b border-slate-700/50 bg-slate-800/50 text-[10px] font-bold font-inter text-slate-400 uppercase tracking-wider sticky top-0 backdrop-blur-sm z-10">
+          <span className="w-16 shrink-0">Key</span>
+          <span className="w-10 shrink-0">Kbd</span>
+          <span className="flex-1">Function</span>
         </div>
         {filtered.map(item => (
-          <div key={item.key} className={`keyref-row keyref-${item.color}`}>
-            <span className="keyref-key">{item.key}</span>
-            <span className="keyref-kbd mono">{item.kbd}</span>
-            <div className="keyref-desc">
-              <div className="keyref-primary">{item.primary}</div>
+          <div key={item.key} className={`flex items-start px-3 py-2 border-b border-slate-800 hover:bg-slate-800/50 transition-colors ${item.color === 'func' ? 'bg-cyan-900/5' : ''}`}>
+            <span className={`w-16 shrink-0 font-inter text-[10px] font-bold mt-0.5 ${item.color === 'func' ? 'text-cyan-400' : 'text-slate-200'}`}>{item.key}</span>
+            <span className="w-10 shrink-0 font-mono text-[11px] font-bold text-slate-500 bg-slate-800/80 border border-slate-700 rounded px-1.5 py-0.5 w-max h-max mt-0.5">{item.kbd}</span>
+            <div className="flex-1 flex flex-col gap-1 min-w-0">
+              <div className="font-inter text-[11px] text-slate-300 leading-snug">{item.primary}</div>
               {item.shift !== '—' && (
-                <div className="keyref-shift">⇧ {item.shift}</div>
+                <div className="font-inter text-[9.5px] text-slate-500 flex items-center gap-1.5">
+                  <span className="text-[10px] font-bold text-slate-400 bg-slate-800 border border-slate-700 rounded px-1 shrink-0">⇧</span>
+                  <span className="leading-tight">{item.shift}</span>
+                </div>
               )}
             </div>
           </div>

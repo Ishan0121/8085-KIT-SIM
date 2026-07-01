@@ -54,31 +54,34 @@ export default function OpcodeFinder() {
   }, [search]);
   
   return (
-    <div className="sb-section">
-      <div className="sb-section-title">Opcode / Hex Finder</div>
+    <div className="flex flex-col h-full mb-4">
+      <div className="font-orbitron text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3">Opcode / Hex Finder</div>
       <input
-        className="sb-search"
+        className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-md text-slate-200 font-mono text-xs outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all mb-3 placeholder-slate-600"
         placeholder="Search MOV, ADD, 3E …"
         value={search}
         onChange={e => setSearch(e.target.value)}
       />
       {results.length > 0 && (
-        <div className="opcode-results" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
-          <div className="opcode-header" style={{ position: 'sticky', top: 0, backgroundColor: 'var(--bg-elevated)', zIndex: 1 }}>
-            <span>Op</span><span>Mnemonic</span><span>B</span><span>T</span>
+        <div className="flex-1 overflow-y-auto bg-slate-900/50 border border-slate-700/50 rounded-lg flex flex-col min-h-[300px]">
+          <div className="flex items-center px-3 py-2 border-b border-slate-700/50 bg-slate-800/50 text-[10px] font-bold font-inter text-slate-400 uppercase tracking-wider sticky top-0 backdrop-blur-sm z-10">
+            <span className="w-8 shrink-0">Op</span>
+            <span className="flex-1">Mnemonic</span>
+            <span className="w-4 shrink-0 text-center">B</span>
+            <span className="w-4 shrink-0 text-center">T</span>
           </div>
           {results.map(([opcode, info]) => (
-            <div key={opcode} className="opcode-row" title={info.desc}>
-              <span className="mono opcode-hex">{toHex(parseInt(opcode))}</span>
-              <span className="mono opcode-mnem">{info.mnemonic}</span>
-              <span className="opcode-bytes">{info.bytes}</span>
-              <span className="opcode-cycles">{info.cycles}</span>
+            <div key={opcode} className="flex items-center px-3 py-1.5 border-b border-slate-800 hover:bg-slate-800/50 transition-colors group cursor-help" title={info.desc}>
+              <span className="w-8 shrink-0 font-mono text-[13px] text-cyan-400">{toHex(parseInt(opcode))}</span>
+              <span className="flex-1 font-mono text-[12px] text-slate-200">{info.mnemonic}</span>
+              <span className="w-4 shrink-0 text-center font-inter text-[11px] text-slate-400">{info.bytes}</span>
+              <span className="w-4 shrink-0 text-center font-inter text-[11px] text-slate-400">{info.cycles}</span>
             </div>
           ))}
         </div>
       )}
       {results.length === 0 && search.trim() !== '' && (
-        <div className="opcode-results" style={{ padding: '10px', textAlign: 'center', opacity: 0.6 }}>
+        <div className="p-4 text-center text-[11px] text-slate-500 font-inter">
           No opcodes found for "{search}"
         </div>
       )}

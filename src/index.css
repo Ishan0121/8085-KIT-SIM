@@ -1,307 +1,75 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@400;600;700;900&family=Inter:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
 
-/* ============================================================
-   DESIGN TOKENS
-   ============================================================ */
-:root {
-  /* ── Accent / Brand ── */
-  --accent:          #00e5ff;
-  --accent-dim:      #00b8d4;
-  --accent-deep:     #006880;
-  --accent-glow:     rgba(0, 229, 255, 0.22);
-  --accent-subtle:   rgba(0, 229, 255, 0.07);
-  --accent-border:   rgba(0, 229, 255, 0.28);
-
-  --violet:          #a855f7;
-  --violet-glow:     rgba(168, 85, 247, 0.2);
-
-  --orange:          #fb923c;
-  --orange-glow:     rgba(251, 146, 60, 0.22);
-
-  --green-ok:        #4ade80;
-  --green-ok-glow:   rgba(74, 222, 128, 0.28);
-  --green:           #4ade80;
-
-  --red:             #f87171;
-  --red-glow-soft:   rgba(248, 113, 113, 0.22);
-
-  --yellow:          #fbbf24;
-  --yellow-glow:     rgba(251, 191, 36, 0.25);
-
-  --red-led:         #ff3b1e;
-  --red-glow:        rgba(255, 59, 30, 0.45);
-
-  --bg-hover:        var(--bg-raised);
-
-  /* ── Dark BG layers ── */
-  --bg-root:         #050810;
-  --bg-base:         #080c18;
-  --bg-surface:      #0c1220;
-  --bg-elevated:     #101828;
-  --bg-raised:       #182135;
-  --bg-overlay:      #1c2a40;
-
-  /* ── Borders ── */
-  --border-faint:    rgba(255,255,255,0.04);
-  --border-dim:      rgba(255,255,255,0.07);
-  --border-base:     rgba(255,255,255,0.11);
-  --border-strong:   rgba(255,255,255,0.18);
-
-  /* ── Text ── */
-  --text-primary:    #e8f0fe;
-  --text-secondary:  #94a3b8;
-  --text-muted:      #4b6080;
-  --text-accent:     var(--accent);
-
-  /* ── PCB hardware ── */
-  --pcb-green:       #1a5c2a;
-  --pcb-silkscreen:  #c8e8d4;
-  --ic-body:         #0e0e0e;
-  --ic-pin:          #c8a84b;
-  --ic-label:        #d0d0d0;
-  --ic-notch:        #252525;
-  --display-bezel:   #060000;
-  --led-off:         #180200;
-  --led-red:         var(--red-led);
-
-  /* ── Keypad colors ── */
-  --key-blue-top:    #3b82f6;
-  --key-blue-mid:    #1d4ed8;
-  --key-blue-bot:    #1e3a8a;
-  --key-blue-shadow: #0c1a4a;
-  --key-dark-top:    #2d3748;
-  --key-dark-mid:    #1a2234;
-  --key-dark-bot:    #101520;
-  --key-dark-shadow: #050810;
-
-  /* ── Sidebar ── */
-  --rail-bg:         var(--bg-surface);
-  --rail-width:      68px;
-  --flyout-bg:       var(--bg-elevated);
-  --flyout-width:    300px;
-
-  /* ── Transitions ── */
-  --t-snap:   100ms;
-  --t-fast:   150ms;
-  --t-med:    250ms;
-  --t-slow:   380ms;
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-in:  cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* ── Radius ── */
-  --r-xs:   3px;
-  --r-sm:   6px;
-  --r-md:   10px;
-  --r-lg:   14px;
-  --r-xl:   20px;
-  --r-pill: 9999px;
-
-  /* ── Shadows ── */
-  --shadow-sm:   0 2px 8px rgba(0,0,0,0.45);
-  --shadow-md:   0 4px 24px rgba(0,0,0,0.55);
-  --shadow-lg:   0 12px 48px rgba(0,0,0,0.7);
-  --shadow-glow: 0 0 24px var(--accent-glow);
+@theme {
+  --font-inter: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-orbitron: 'Orbitron', sans-serif;
 }
 
-/* ── LIGHT THEME ── */
-body.light-theme {
-  --bg-root:       #dde6f0;
-  --bg-base:       #e8f0f8;
-  --bg-surface:    #f0f5fc;
-  --bg-elevated:   #ffffff;
-  --bg-raised:     #e4edf8;
-  --bg-overlay:    #ffffff;
-  --border-faint:  rgba(0,0,0,0.04);
-  --border-dim:    rgba(0,0,0,0.08);
-  --border-base:   rgba(0,0,0,0.14);
-  --border-strong: rgba(0,0,0,0.22);
-  --text-primary:  #0f1e30;
-  --text-secondary:#3a5070;
-  --text-muted:    #7a96b0;
-  --accent:        #0077cc;
-  --accent-dim:    #0055aa;
-  --accent-glow:   rgba(0, 119, 204, 0.18);
-  --accent-subtle: rgba(0, 119, 204, 0.07);
-  --accent-border: rgba(0, 119, 204, 0.3);
-  --rail-bg:       #eaf2fc;
-  --flyout-bg:     #ffffff;
-  --green:         #16a34a;
-  --red:           #dc2626;
-  --bg-hover:      var(--bg-raised);
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    font-family: var(--font-inter);
+    background-color: theme('colors.slate.950');
+    color: theme('colors.slate.100');
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #root {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: theme('colors.slate.700');
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: theme('colors.slate.500');
+  }
 }
 
-/* ============================================================
-   RESET & BASE
-   ============================================================ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@layer utilities {
+  .no-select {
+    user-select: none;
+  }
 
-html, body { width: 100%; height: 100%; overflow: hidden; }
+  /* Keyframe animations */
+  @keyframes ripple-expand {
+    from {
+      width: 0;
+      height: 0;
+      opacity: 0.4;
+    }
+    to {
+      width: 110px;
+      height: 110px;
+      opacity: 0;
+    }
+  }
 
-body {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  background: var(--bg-root);
-  color: var(--text-primary);
-  -webkit-font-smoothing: antialiased;
-  transition: background var(--t-slow), color var(--t-slow);
-}
-
-#root { height: 100%; display: flex; flex-direction: column; }
-
-/* ============================================================
-   SCROLLBAR
-   ============================================================ */
-::-webkit-scrollbar       { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb {
-  background: var(--border-base);
-  border-radius: var(--r-pill);
-}
-::-webkit-scrollbar-thumb:hover { background: var(--accent-dim); }
-
-/* ============================================================
-   UTILITIES
-   ============================================================ */
-.mono     { font-family: 'JetBrains Mono', monospace; }
-.orbitron { font-family: 'Orbitron', sans-serif; }
-.no-select { user-select: none; }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ── Display & Hardware Themes ── */
-
-body.glow-low {
-  --seg-glow-filter: drop-shadow(0 0 2px var(--red-led));
-  --ambient-glow: radial-gradient(ellipse at 50% 65%, rgba(255,40,0,0.05) 0%, transparent 60%);
-}
-body.glow-medium {
-  --seg-glow-filter: drop-shadow(0 0 3px var(--red-led)) drop-shadow(0 0 8px rgba(255,68,0,0.5));
-  --ambient-glow: radial-gradient(ellipse at 50% 65%, rgba(255,40,0,0.10) 0%, transparent 70%);
-}
-body.glow-high {
-  --seg-glow-filter: drop-shadow(0 0 5px var(--red-led)) drop-shadow(0 0 12px rgba(255,68,0,0.8)) drop-shadow(0 0 24px rgba(255,68,0,0.4));
-  --ambient-glow: radial-gradient(ellipse at 50% 65%, rgba(255,40,0,0.18) 0%, transparent 75%);
-}
-
-/* ── PHOSPHOR THEME: Amber Terminal ── */
-body.theme-amber {
-  --accent:          #ffb000;
-  --accent-dim:      #cc8c00;
-  --accent-deep:     #7a5200;
-  --accent-glow:     rgba(255, 176, 0, 0.25);
-  --accent-subtle:   rgba(255, 176, 0, 0.08);
-  --accent-border:   rgba(255, 176, 0, 0.3);
-  --bg-root:         #0a0800;
-  --bg-base:         #100d00;
-  --bg-surface:      #181000;
-  --bg-elevated:     #201600;
-  --bg-raised:       #2a1e00;
-  --bg-overlay:      #342500;
-  --border-faint:    rgba(255, 176, 0, 0.05);
-  --border-dim:      rgba(255, 176, 0, 0.09);
-  --border-base:     rgba(255, 176, 0, 0.16);
-  --border-strong:   rgba(255, 176, 0, 0.28);
-  --text-primary:    #ffd060;
-  --text-secondary:  #c8900a;
-  --text-muted:      #7a5800;
-  --green-ok:        #ffb000;
-  --rail-bg:         var(--bg-surface);
-  --flyout-bg:       var(--bg-elevated);
-  --shadow-glow:     0 0 24px rgba(255,176,0,0.22);
-  /* Display */
-  --red-led:          #ffb000;
-  --led-red:          #ffb000;
-  --led-off:          #1a0e00;
-  --display-bezel:    #080500;
-  --red-glow:         rgba(255,176,0,0.5);
-  --seg-lit-color:    #ffcc44;
-  --seg-label-color:  #a06000;
-  --seg-separator-color: #4a3000;
-  --seg-glow-color:   rgba(255,176,0,0.55);
-  --seg-glow-filter:  drop-shadow(0 0 4px #ffb000) drop-shadow(0 0 10px rgba(255,176,0,0.6));
-  --ambient-glow:     radial-gradient(ellipse at 50% 65%, rgba(255,150,0,0.12) 0%, transparent 70%);
-}
-
-/* ── PHOSPHOR THEME: Hacker Green ── */
-body.theme-green {
-  --accent:          #00ff41;
-  --accent-dim:      #00cc33;
-  --accent-deep:     #007020;
-  --accent-glow:     rgba(0, 255, 65, 0.22);
-  --accent-subtle:   rgba(0, 255, 65, 0.07);
-  --accent-border:   rgba(0, 255, 65, 0.28);
-  --bg-root:         #000d00;
-  --bg-base:         #001200;
-  --bg-surface:      #001a00;
-  --bg-elevated:     #002200;
-  --bg-raised:       #002e00;
-  --bg-overlay:      #003800;
-  --border-faint:    rgba(0, 255, 65, 0.05);
-  --border-dim:      rgba(0, 255, 65, 0.09);
-  --border-base:     rgba(0, 255, 65, 0.16);
-  --border-strong:   rgba(0, 255, 65, 0.28);
-  --text-primary:    #a8ffa8;
-  --text-secondary:  #40c040;
-  --text-muted:      #1a6020;
-  --green-ok:        #00ff41;
-  --red-led:         #00ff41;
-  --rail-bg:         var(--bg-surface);
-  --flyout-bg:       var(--bg-elevated);
-  --shadow-glow:     0 0 24px rgba(0,255,65,0.22);
-  /* Display */
-  --led-red:          #00ff41;
-  --led-off:          #001500;
-  --display-bezel:    #000800;
-  --red-glow:         rgba(0,255,65,0.5);
-  --seg-lit-color:    #44ff77;
-  --seg-label-color:  #007a20;
-  --seg-separator-color: #004a18;
-  --seg-glow-color:   rgba(0,255,65,0.55);
-  --seg-glow-filter:  drop-shadow(0 0 4px #00ff41) drop-shadow(0 0 10px rgba(0,255,65,0.6));
-  --ambient-glow:     radial-gradient(ellipse at 50% 65%, rgba(0,255,65,0.10) 0%, transparent 70%);
-}
-
-/* ── PHOSPHOR THEME: Synthwave Pink ── */
-body.theme-pink {
-  --accent:          #ff00ff;
-  --accent-dim:      #cc00cc;
-  --accent-deep:     #700070;
-  --accent-glow:     rgba(255, 0, 255, 0.22);
-  --accent-subtle:   rgba(255, 0, 255, 0.07);
-  --accent-border:   rgba(255, 0, 255, 0.28);
-  --bg-root:         #0d0010;
-  --bg-base:         #120018;
-  --bg-surface:      #1a0024;
-  --bg-elevated:     #220030;
-  --bg-raised:       #2e003e;
-  --bg-overlay:      #38004a;
-  --border-faint:    rgba(255, 0, 255, 0.05);
-  --border-dim:      rgba(255, 0, 255, 0.09);
-  --border-base:     rgba(255, 0, 255, 0.16);
-  --border-strong:   rgba(255, 0, 255, 0.28);
-  --text-primary:    #ffaaff;
-  --text-secondary:  #cc44cc;
-  --text-muted:      #6a006a;
-  --green-ok:        #ff00ff;
-  --orange:          #ff66ff;
-  --violet:          #00ffff;
-  --red-led:         #ff00ff;
-  --rail-bg:         var(--bg-surface);
-  --flyout-bg:       var(--bg-elevated);
-  --shadow-glow:     0 0 24px rgba(255,0,255,0.22);
-  /* Display */
-  --led-red:          #ff00ff;
-  --led-off:          #1a0020;
-  --display-bezel:    #0a0010;
-  --red-glow:         rgba(255,0,255,0.5);
-  --seg-lit-color:    #ff44ff;
-  --seg-label-color:  #8a008a;
-  --seg-separator-color: #500060;
-  --seg-glow-color:   rgba(255,0,255,0.55);
-  --seg-glow-filter:  drop-shadow(0 0 4px #ff00ff) drop-shadow(0 0 10px rgba(255,0,255,0.6));
-  --ambient-glow:     radial-gradient(ellipse at 50% 65%, rgba(255,0,255,0.10) 0%, transparent 70%);
+  .animate-ripple {
+    animation: ripple-expand 0.35s ease-out forwards;
+  }
 }

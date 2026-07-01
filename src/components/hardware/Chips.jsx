@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './Chips.css';
 
 /**
  * Realistic DIP IC component

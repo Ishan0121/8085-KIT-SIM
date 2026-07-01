@@ -21,28 +21,30 @@ export default function RegisterViewer({ registers, flags, prevRegisters, showDe
     { key: 'CY', label: 'CY', title: 'Carry' },
   ];
   return (
-    <div className="sb-section">
-      <div className="sb-section-title">Registers</div>
-      <div className="reg-grid">
+    <div className="flex flex-col mb-4">
+      <div className="font-orbitron text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3">Registers</div>
+      <div className="grid grid-cols-2 gap-2">
         {regList.map(({ key, label, desc, wide }) => {
           const val = registers[key];
           const prev = prevRegisters?.[key];
           const changed = val !== prev;
           return (
-            <div key={key} className={`reg-row ${changed ? 'reg-changed' : ''}`} title={desc}>
-              <span className="reg-label">{label}</span>
-              <span className="reg-value mono">{toHex(val, wide ? 4 : 2)}</span>
-              {showDecimal && <span className="reg-decimal">{val}</span>}
+            <div key={key} className={`flex items-center justify-between bg-slate-800 border rounded-md px-2 py-1.5 transition-all ${changed ? 'border-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.3)]' : 'border-slate-700'}`} title={desc}>
+              <span className="font-orbitron text-[10px] font-bold text-slate-400">{label}</span>
+              <div className="flex items-baseline gap-1">
+                <span className="font-mono text-[13px] text-cyan-400">{toHex(val, wide ? 4 : 2)}</span>
+                {showDecimal && <span className="text-[9px] text-slate-500">{val}</span>}
+              </div>
             </div>
           );
         })}
       </div>
-      <div className="sb-section-subtitle">Flags</div>
-      <div className="flags-row">
+      <div className="font-orbitron text-[10px] font-bold uppercase tracking-wider text-slate-500 mt-4 mb-2">Flags</div>
+      <div className="flex gap-1.5 justify-between">
         {flagList.map(({ key, label, title }) => (
-          <div key={key} className={`flag-bit ${flags[key] ? 'flag-set' : 'flag-clear'}`} title={title}>
-            <span className="flag-name">{label}</span>
-            <span className="flag-val">{flags[key]}</span>
+          <div key={key} className={`flex flex-col items-center flex-1 border rounded-md py-1 px-0.5 transition-colors ${flags[key] ? 'border-cyan-500 text-cyan-400 bg-cyan-900/30 shadow-[0_0_8px_rgba(6,182,212,0.2)]' : 'border-slate-700 text-slate-500 bg-slate-800'}`} title={title}>
+            <span className="font-orbitron text-[9px] font-bold mb-0.5">{label}</span>
+            <span className="font-mono text-[11px]">{flags[key]}</span>
           </div>
         ))}
       </div>

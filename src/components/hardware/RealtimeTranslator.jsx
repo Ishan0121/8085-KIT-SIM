@@ -54,27 +54,14 @@ export default function RealtimeTranslator({ dataValue, memory, currentAddr, mem
   }
 
   return (
-    <div className="translator-lcd" style={{
-      margin: '2px',
-      padding: '6px 12px',
-      backgroundColor: '#0a0f0d',
-      border: '2px solid #1c2621',
-      borderRadius: '4px',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      fontFamily: "'JetBrains Mono', monospace",
-      color: '#33ffaa',
-      boxShadow: 'inset 0 0 10px rgba(51, 255, 170, 0.1)',
-      borderBottom: '2px solid #2a3a32'
-    }}>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <span style={{ fontSize: '10px', color: '#1f8a5c', fontWeight: 'bold', letterSpacing: '1px', textTransform: 'uppercase' }}>Opcode Translator</span>
-        <span style={{ fontSize: '16px', fontWeight: 'bold', textShadow: '0 0 5px rgba(51, 255, 170, 0.4)' }}>
+    <div className="m-[2px] px-3 py-1.5 bg-emerald-950 border-2 border-emerald-900 border-b-emerald-800 rounded flex justify-between items-center font-mono text-emerald-400 shadow-[inset_0_0_10px_rgba(52,211,153,0.1)]">
+      <div className="flex flex-col">
+        <span className="text-[10px] text-emerald-600 font-bold tracking-[1px] uppercase">Opcode Translator</span>
+        <span className="text-base font-bold drop-shadow-[0_0_5px_rgba(52,211,153,0.4)]">
           {text}
         </span>
       </div>
-      <div style={{ fontSize: '12px', color: '#1f8a5c', textAlign: 'right' }}>
+      <div className="text-xs text-emerald-600 text-right">
         {subtext}
       </div>
     </div>

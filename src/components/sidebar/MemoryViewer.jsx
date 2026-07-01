@@ -39,96 +39,75 @@ export default function MemoryViewer({ memory, memVersion, baseAddr, setMemBaseA
     e.target.value = '';
   };
 
-  const rows = [];
+  const rowsData = [];
   for (let r = 0; r < rowCount; r++) {
     const rowAddr = baseAddr + r * 4;
     if (rowAddr > 0xFFFF) break;
-    rows.push(
-      <div key={r} className="mem-row">
-        <span className="mem-addr mono">{toHex(rowAddr, 4)}</span>
-        {Array.from({ length: 4 }, (_, c) => {
-          const val = memory[rowAddr + c] ?? 0;
-          return <span key={c} className="mem-cell mono">{toHex(val)}</span>;
-        })}
-      </div>
-    );
+    const cells = Array.from({ length: 4 }, (_, c) => memory[rowAddr + c] ?? 0);
+    rowsData.push({ rowAddr, cells });
   }
 
   return (
-    <div className="sb-section">
-      <div className="sb-section-title">Memory Viewer</div>
+    <div className="flex flex-col h-full">
+      <div className="font-orbitron text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3">Memory Viewer</div>
 
-      <form className="mem-jump-form" onSubmit={handleJump}>
+      <form className="flex gap-2 mb-3" onSubmit={handleJump}>
         <input
-          className="mem-jump-input mono"
-          placeholder="Address (hex)"
+          className="w-24 px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-md text-cyan-400 font-mono text-[13px] outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all uppercase placeholder-slate-600"
+          placeholder="Addr"
           value={jumpInput}
           onChange={e => setJumpInput(e.target.value.toUpperCase())}
           maxLength={4}
         />
-        <button className="mem-jump-btn" type="submit">Go</button>
+        <button className="flex items-center justify-center bg-cyan-700 hover:bg-cyan-600 text-white rounded-md px-3 py-1.5 font-inter text-[12px] font-bold shadow-sm transition-colors cursor-pointer shrink-0" type="submit">Go</button>
       </form>
 
       {/* ── Import / Export ── */}
-      <div style={{ marginBottom: '10px' }}>
+      <div className="mb-3">
         {/* Export section */}
-        <div style={{ display: 'flex', gap: '6px', marginBottom: '6px', alignItems: 'stretch' }}>
+        <div className="flex gap-1.5 mb-1.5 items-stretch">
           <select
-            className="settings-btn"
+            className="flex-1 px-2 py-1.5 bg-slate-800 border border-slate-700 rounded-md text-slate-300 font-inter text-xs outline-none focus:border-cyan-500 transition-colors"
             value={exportFormat}
             onChange={e => setExportFormat(e.target.value)}
-            style={{ flex: 1, padding: '6px 8px', fontSize: '12px' }}
           >
             <option value="json">JSON</option>
             <option value="hex">.HEX</option>
             <option value="bin">.BIN</option>
           </select>
           <button
-            className="settings-btn"
+            className="flex-1 flex items-center justify-center gap-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-md text-slate-300 font-inter text-xs font-semibold transition-colors px-2 py-1.5"
             onClick={() => setShowExport(v => !v)}
-            style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', fontSize: '12px' }}
           >
             <Download size={12} />
             Export
-            <ChevronDown size={11} style={{ transform: showExport ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+            <ChevronDown size={11} className={`transition-transform duration-150 ${showExport ? 'rotate-180' : ''}`} />
           </button>
           <button
-            className="settings-btn"
+            className="flex-1 flex items-center justify-center gap-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-md text-slate-300 font-inter text-xs font-semibold transition-colors px-2 py-1.5"
             onClick={() => fileInputRef.current.click()}
-            style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', fontSize: '12px' }}
           >
             <Upload size={12} />
             Import
           </button>
-          <input type="file" ref={fileInputRef} onChange={handleImport} style={{ display: 'none' }} accept=".json,.hex,.bin" />
+          <input type="file" ref={fileInputRef} onChange={handleImport} className="hidden" accept=".json,.hex,.bin" />
         </div>
 
         {/* Inline export name input */}
         {showExport && (
-          <div style={{
-            background: 'var(--bg-overlay)',
-            border: '1px solid var(--accent-border)',
-            borderRadius: 'var(--r-sm)',
-            padding: '10px 12px',
-            display: 'flex',
-            gap: '8px',
-            alignItems: 'center',
-            animation: 'fadeIn 0.15s ease',
-          }}>
+          <div className="bg-slate-900/80 border border-cyan-500/30 rounded-md p-2 flex gap-2 items-center animate-in fade-in duration-150">
             <input
               type="text"
-              className="mem-jump-input"
+              className="flex-1 px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-md text-cyan-400 font-mono text-[13px] outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all placeholder-slate-600"
               value={exportName}
               onChange={e => setExportName(e.target.value)}
               placeholder="Project name…"
-              style={{ flex: 1, fontSize: '12px' }}
               onKeyDown={e => e.key === 'Enter' && handleExport()}
               autoFocus
             />
             <button
-              className="mem-jump-btn"
+              className="flex items-center justify-center gap-1 bg-cyan-700 hover:bg-cyan-600 text-white rounded-md px-3 py-1.5 font-inter text-xs font-bold shadow-sm transition-colors cursor-pointer shrink-0"
               onClick={handleExport}
-              style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', padding: '8px 12px' }}
             >
               <Download size={12} />
               Save
@@ -137,22 +116,28 @@ export default function MemoryViewer({ memory, memVersion, baseAddr, setMemBaseA
         )}
       </div>
 
-      <div className="mem-grid" style={{ maxHeight: 'calc(100vh - 360px)', overflowY: 'auto' }}>
-        <div className="mem-header" style={{ position: 'sticky', top: 0, backgroundColor: 'var(--bg-elevated)', zIndex: 1 }}>
-          <span className="mem-addr">Addr</span>
-          <span className="mem-cell">+0</span>
-          <span className="mem-cell">+1</span>
-          <span className="mem-cell">+2</span>
-          <span className="mem-cell">+3</span>
+      <div className="flex-1 overflow-y-auto mt-2 bg-slate-900/50 border border-slate-700/50 rounded-lg flex flex-col min-h-[200px]">
+        <div className="flex items-center px-3 py-2 border-b border-slate-700/50 bg-slate-800/50 text-[10px] font-bold font-inter text-slate-400 uppercase tracking-wider sticky top-0 backdrop-blur-sm z-10">
+          <span className="w-10 shrink-0 text-left">Addr</span>
+          <span className="flex-1 text-center">+0</span>
+          <span className="flex-1 text-center">+1</span>
+          <span className="flex-1 text-center">+2</span>
+          <span className="flex-1 text-center">+3</span>
         </div>
-        {rows}
+        {rowsData.map(({ rowAddr, cells }, i) => (
+          <div key={i} className="flex items-center px-3 py-1.5 border-b border-slate-800 hover:bg-slate-800/50 transition-colors group">
+            <span className="w-10 shrink-0 font-mono text-[13px] text-cyan-400">{toHex(rowAddr, 4)}</span>
+            {cells.map((val, idx) => (
+              <span key={idx} className="flex-1 text-center font-mono text-[13px] text-slate-200">{toHex(val)}</span>
+            ))}
+          </div>
+        ))}
       </div>
 
       {(baseAddr + rowCount * 4) <= 0xFFFF && (
         <button
           onClick={() => setRowCount(prev => prev + 4)}
-          className="settings-btn"
-          style={{ width: '100%', marginTop: '8px', padding: '6px', fontSize: '12px' }}
+          className="w-full mt-2 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-md text-slate-300 font-inter text-xs font-semibold transition-colors"
         >
           Load More
         </button>

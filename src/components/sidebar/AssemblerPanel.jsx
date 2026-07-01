@@ -287,12 +287,11 @@ HLT           ; Stop execution
   const visibleSamples = SAMPLE_PROGRAMS.filter(p => p.category === activeCategory);
 
   return (
-    <div className="sb-section" style={{ display: 'flex', flexDirection: 'column', height: '100%', marginBottom: 0 }}>
-
+    <div className="flex flex-col h-full mb-0">
       {/* ── Description ── */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-        <Terminal size={14} style={{ color: 'var(--accent)', flexShrink: 0 }} />
-        <span style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+      <div className="flex items-center gap-2 mb-3">
+        <Terminal size={14} className="text-cyan-400 shrink-0" />
+        <span className="text-xs text-slate-400 leading-relaxed">
           Write 8085 assembly — supports labels, comments (<code>;</code>), and hex immediates.
         </span>
       </div>
@@ -300,25 +299,9 @@ HLT           ; Stop execution
       {/* ── Sample Library Toggle ── */}
       <button
         onClick={() => setShowSamples(s => !s)}
-        style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          background: showSamples ? 'var(--accent-subtle)' : 'var(--bg-raised)',
-          border: `1px solid ${showSamples ? 'var(--accent-border)' : 'var(--border-base)'}`,
-          borderRadius: 'var(--r-sm)',
-          padding: '8px 12px',
-          cursor: 'pointer',
-          marginBottom: '10px',
-          color: showSamples ? 'var(--accent)' : 'var(--text-secondary)',
-          transition: 'all var(--t-fast)',
-          fontFamily: "'Inter', sans-serif",
-          fontSize: '13px',
-          fontWeight: 600,
-        }}
+        className={`w-full flex items-center justify-between px-3 py-2 rounded-md mb-2.5 text-[13px] font-semibold font-inter transition-colors duration-150 ${showSamples ? 'bg-cyan-900/30 border border-cyan-500/30 text-cyan-400' : 'bg-slate-800 border border-slate-700 text-slate-400 hover:bg-slate-700'}`}
       >
-        <span style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+        <span className="flex items-center gap-2">
           <BookOpen size={14} />
           Sample Programs
         </span>
@@ -327,39 +310,14 @@ HLT           ; Stop execution
 
       {/* ── Sample Library Panel ── */}
       {showSamples && (
-        <div style={{
-          background: 'var(--bg-overlay)',
-          border: '1px solid var(--border-dim)',
-          borderRadius: 'var(--r-md)',
-          marginBottom: '10px',
-          overflow: 'hidden',
-        }}>
+        <div className="bg-slate-900/50 border border-slate-700/50 rounded-lg mb-2.5 overflow-hidden flex flex-col">
           {/* Category tabs */}
-          <div style={{
-            display: 'flex',
-            borderBottom: '1px solid var(--border-dim)',
-            overflowX: 'auto',
-          }}>
+          <div className="flex border-b border-slate-700/50 overflow-x-auto">
             {CATEGORIES.map(cat => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                style={{
-                  flexShrink: 0,
-                  padding: '7px 14px',
-                  background: activeCategory === cat ? 'var(--accent-subtle)' : 'transparent',
-                  color: activeCategory === cat ? 'var(--accent)' : 'var(--text-muted)',
-                  borderRight: '1px solid var(--border-dim)',
-                  borderLeft: 'none',
-                  borderTop: 'none',
-                  borderBottom: activeCategory === cat ? '2px solid var(--accent)' : '2px solid transparent',
-                  cursor: 'pointer',
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  letterSpacing: '0.5px',
-                  transition: 'all var(--t-fast)',
-                }}
+                className={`shrink-0 px-3.5 py-1.5 font-inter text-[11px] font-bold tracking-wide transition-colors border-b-2 ${activeCategory === cat ? 'bg-cyan-900/30 text-cyan-400 border-cyan-500' : 'bg-transparent text-slate-400 border-transparent hover:text-slate-300'}`}
               >
                 {cat}
               </button>
@@ -367,60 +325,24 @@ HLT           ; Stop execution
           </div>
 
           {/* Program cards */}
-          <div style={{ padding: '8px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div className="p-2 flex flex-col gap-1.5">
             {visibleSamples.map((prog, idx) => (
               <div
                 key={idx}
-                style={{
-                  background: 'var(--bg-raised)',
-                  border: '1px solid var(--border-base)',
-                  borderRadius: 'var(--r-sm)',
-                  padding: '10px 12px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '10px',
-                  transition: 'border-color var(--t-fast)',
-                }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent-border)'}
-                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border-base)'}
+                className="bg-slate-800 border border-slate-700 rounded-md px-3 py-2.5 flex items-center justify-between gap-2.5 transition-colors duration-150 hover:border-cyan-500/50 group"
               >
-                <div style={{ minWidth: 0 }}>
-                  <div style={{
-                    fontFamily: "'Orbitron', sans-serif",
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    color: 'var(--accent)',
-                    marginBottom: '3px',
-                  }}>
+                <div className="min-w-0">
+                  <div className="font-orbitron text-[11px] font-bold text-cyan-500 mb-0.5">
                     {prog.name}
                   </div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', lineHeight: 1.4 }}>
+                  <div className="text-[11px] text-slate-400 leading-snug">
                     {prog.desc}
                   </div>
                 </div>
                 <button
                   onClick={() => loadSample(prog)}
                   title={`Load "${prog.name}"`}
-                  style={{
-                    flexShrink: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '5px',
-                    background: 'var(--accent-dim)',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: 'var(--r-sm)',
-                    padding: '5px 10px',
-                    cursor: 'pointer',
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    transition: 'background var(--t-fast)',
-                    whiteSpace: 'nowrap',
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'var(--accent)'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'var(--accent-dim)'}
+                  className="shrink-0 flex items-center gap-1.5 bg-cyan-700 hover:bg-cyan-600 text-white rounded-md px-2.5 py-1 font-inter text-[11px] font-bold transition-colors whitespace-nowrap"
                 >
                   <Download size={11} />
                   Load
@@ -432,34 +354,25 @@ HLT           ; Stop execution
       )}
 
       {/* ── Base Addr + Assemble ── */}
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-end', marginBottom: '10px' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <label style={{
-            fontFamily: "'Orbitron', sans-serif",
-            fontSize: '9px',
-            fontWeight: 700,
-            color: 'var(--text-muted)',
-            textTransform: 'uppercase',
-            letterSpacing: '1px',
-          }}>
+      <div className="flex gap-2 items-end mb-2.5">
+        <div className="flex flex-col gap-1">
+          <label className="font-orbitron text-[9px] font-bold text-slate-400 uppercase tracking-wide">
             Base Addr
           </label>
           <input
             type="text"
-            className="mem-jump-input"
+            className="w-20 px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-md text-cyan-400 font-mono text-[13px] outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all uppercase"
             value={baseAddrInput}
             onChange={(e) => setBaseAddrInput(
               e.target.value.replace(/[^0-9A-Fa-f]/g, '').toUpperCase().slice(0, 4)
             )}
             onKeyDown={(e) => { if (e.key === 'Enter') handleAssemble(); }}
             placeholder="2000"
-            style={{ width: '80px' }}
           />
         </div>
         <button
-          className="mem-jump-btn"
+          className="flex items-center gap-1.5 shrink-0 px-3 py-1.5 bg-cyan-700 hover:bg-cyan-600 text-white rounded-md font-inter text-[12px] font-bold shadow-sm transition-colors"
           onClick={handleAssemble}
-          style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}
         >
           <Play size={12} />
           Assemble &amp; Load
@@ -468,8 +381,7 @@ HLT           ; Stop execution
 
       {/* ── Code Textarea ── */}
       <textarea
-        className="assembler-textarea"
-        style={{ flex: 1, minHeight: '180px' }}
+        className="flex-1 min-h-[180px] w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-slate-200 font-mono text-[13px] resize-y outline-none focus:border-cyan-500 focus:shadow-[0_0_12px_rgba(6,182,212,0.2)] transition-all"
         value={code}
         onChange={(e) => { setCode(e.target.value); setStatus(null); }}
         spellCheck={false}
@@ -478,28 +390,19 @@ HLT           ; Stop execution
         autoCapitalize="off"
         placeholder={'MVI A, 05H\nADD B\nHLT'}
       />
-      <div style={{
-        display: 'flex',
-        justifyContent: 'flex-end',
-        gap: '12px',
-        marginTop: '4px',
-        marginBottom: '8px',
-        fontSize: '10px',
-        color: 'var(--text-muted)',
-        fontFamily: "'JetBrains Mono', monospace",
-      }}>
+      <div className="flex justify-end gap-3 mt-1 mb-2 text-[10px] text-slate-500 font-mono">
         <span>{code.split('\n').length} lines</span>
         <span>{code.replace(/\s/g, '').length} chars</span>
       </div>
 
       {/* ── Status ── */}
       {status && (
-        <div className={`assembler-status ${status.type === 'error' ? 'status-error' : 'status-success'}`}>
-          <div className="status-header">
+        <div className={`mt-3 p-2.5 rounded-md border-l-4 ${status.type === 'error' ? 'border-red-500 bg-red-900/10' : 'border-green-500 bg-green-900/10'}`}>
+          <div className={`flex items-center gap-1.5 font-inter font-bold text-xs mb-1.5 ${status.type === 'error' ? 'text-red-500' : 'text-green-500'}`}>
             {status.type === 'error' ? <AlertTriangle size={14} /> : <CheckCircle size={14} />}
             {status.type === 'error' ? 'Assembly errors' : 'Success'}
           </div>
-          <ul className="status-list">
+          <ul className="pl-4 m-0 text-[11px] text-slate-400 font-mono space-y-0.5 list-disc">
             {status.messages.map((msg, i) => <li key={i}>{msg}</li>)}
           </ul>
         </div>

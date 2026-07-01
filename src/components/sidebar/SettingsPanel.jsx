@@ -4,36 +4,27 @@ import {
   ScrollText, Trash2, Hash, Cpu, Layers
 } from 'lucide-react';
 
-const PHOSPHOR_THEMES = [
-  { id: 'default', label: 'Cyber Blue',   swatch: '#00e5ff', bg: '#080c18' },
-  { id: 'amber',   label: 'Amber CRT',    swatch: '#ffb000', bg: '#100d00' },
-  { id: 'green',   label: 'Hacker Green', swatch: '#00ff41', bg: '#001200' },
-  { id: 'pink',    label: 'Synthwave',    swatch: '#ff00ff', bg: '#120018' },
-];
+// Phosphor themes removed per user request
 
 // ── Reusable toggle-switch row ────────────────────────────────────────────────
 function ToggleRow({ icon, label, value, onChange }) {
   return (
-    <div className="toggle-row" role="button" tabIndex={0}
+    <div className="flex items-center justify-between px-2 py-1.5 hover:bg-slate-800/50 rounded-md cursor-pointer transition-colors group mb-0.5" role="button" tabIndex={0}
       onClick={() => onChange(!value)}
       onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onChange(!value)}
     >
-      <span className="toggle-row-label">
-        {icon}
+      <span className="flex items-center gap-2 font-inter text-[11px] font-medium text-slate-300 group-hover:text-slate-200 transition-colors">
+        {React.cloneElement(icon, { className: 'text-slate-500 group-hover:text-cyan-400 transition-colors shrink-0' })}
         {label}
       </span>
-      <div className="toggle-switch" aria-checked={value} role="switch">
-        <div className={`toggle-track ${value ? 'on' : ''}`}>
-          <div className="toggle-thumb" />
-        </div>
+      <div className={`w-8 h-4.5 rounded-full p-0.5 transition-colors duration-200 ease-in-out shrink-0 ${value ? 'bg-cyan-500' : 'bg-slate-700'}`} aria-checked={value} role="switch">
+        <div className={`w-3.5 h-3.5 bg-white rounded-full shadow-sm transform transition-transform duration-200 ease-in-out ${value ? 'translate-x-3.5' : 'translate-x-0'}`} />
       </div>
     </div>
   );
 }
 
 export default function SettingsPanel({
-  theme, onThemeToggle,
-  glowIntensity, setGlowIntensity,
   keypadSound, setKeypadSound,
   soundProfile, setSoundProfile,
   volume, setVolume,
@@ -42,67 +33,21 @@ export default function SettingsPanel({
   showDecimal, setShowDecimal,
   showRealtimeTranslator, setShowRealtimeTranslator,
   strictMode, setStrictMode,
-  colorTheme, setColorTheme,
 }) {
   return (
-    <div className="sb-section">
-      <div className="sb-section-title">Settings</div>
-
-      {/* ── Phosphor Color Theme ── */}
-      <div className="settings-group">
-        <div className="settings-label">Phosphor Color Theme</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginBottom: '4px' }}>
-          {PHOSPHOR_THEMES.map(t => (
-            <button
-              key={t.id}
-              onClick={() => setColorTheme(t.id)}
-              className={`settings-btn ${colorTheme === t.id ? 'active' : ''}`}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '7px',
-                padding: '6px 8px', textAlign: 'left',
-                borderColor: colorTheme === t.id ? t.swatch : undefined,
-                boxShadow: colorTheme === t.id ? `0 0 8px ${t.swatch}55` : undefined,
-              }}
-            >
-              <span style={{
-                width: '12px', height: '12px', borderRadius: '50%',
-                background: t.swatch, flexShrink: 0,
-                boxShadow: `0 0 6px ${t.swatch}`,
-              }} />
-              <span style={{ fontSize: '11px' }}>{t.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Appearance ── */}
-      <div className="settings-group">
-        <div className="settings-label">Appearance</div>
-
-        <button className="settings-btn" onClick={onThemeToggle} style={{ width: '100%', marginBottom: '10px' }}>
-          {theme === 'dark'
-            ? <><Sun size={14}/> Switch to Light Mode</>
-            : <><Moon size={14}/> Switch to Dark Mode</>}
-        </button>
-
-        <div className="settings-label" style={{ marginTop: '4px' }}>Glow Intensity</div>
-        <div className="settings-btn-group scale-controls">
-          <button className={`settings-btn ${glowIntensity === 'low'    ? 'active' : ''}`} onClick={() => setGlowIntensity('low')}>Low</button>
-          <button className={`settings-btn ${glowIntensity === 'medium' ? 'active' : ''}`} onClick={() => setGlowIntensity('medium')}>Med</button>
-          <button className={`settings-btn ${glowIntensity === 'high'   ? 'active' : ''}`} onClick={() => setGlowIntensity('high')}>High</button>
-        </div>
-      </div>
+    <div className="flex flex-col h-full overflow-y-auto">
+      <div className="font-orbitron text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3 sticky top-0 bg-slate-900 z-10 py-1">Settings</div>
 
       {/* ── Emulation ── */}
-      <div className="settings-group">
-        <div className="settings-label">Emulation</div>
+      <div className="bg-slate-900/50 border border-slate-700/50 rounded-lg p-2.5 mb-3">
+        <div className="font-inter text-[10px] font-bold text-slate-400 mb-1.5 uppercase tracking-wide px-1">Emulation</div>
         <ToggleRow
           icon={strictMode ? <Shield size={14}/> : <ShieldOff size={14}/>}
           label="Strict Hardware Mode"
           value={strictMode}
           onChange={setStrictMode}
         />
-        <p style={{ fontSize: '10px', color: 'var(--text-muted)', lineHeight: 1.4, margin: '0 0 4px', padding: '0 4px' }}>
+        <p className="text-[9.5px] text-slate-500 leading-snug m-0 px-2 mt-1 italic">
           {strictMode
             ? 'Accurately simulates undocumented flags (V, X5). Reports illegal opcodes.'
             : 'Permissive: illegal opcodes silently halt execution.'}
@@ -110,8 +55,8 @@ export default function SettingsPanel({
       </div>
 
       {/* ── Audio ── */}
-      <div className="settings-group">
-        <div className="settings-label">Audio</div>
+      <div className="bg-slate-900/50 border border-slate-700/50 rounded-lg p-2.5 mb-3">
+        <div className="font-inter text-[10px] font-bold text-slate-400 mb-1.5 uppercase tracking-wide px-1">Audio</div>
         <ToggleRow
           icon={keypadSound ? <Volume2 size={14}/> : <VolumeX size={14}/>}
           label="Keypad Sound"
@@ -120,30 +65,31 @@ export default function SettingsPanel({
         />
 
         {keypadSound && (
-          <>
-            <div className="settings-btn-group scale-controls" style={{ marginBottom: '8px' }}>
-              <button className={`settings-btn ${soundProfile === 'mechanical' ? 'active' : ''}`} onClick={() => setSoundProfile('mechanical')}>Mechanical</button>
-              <button className={`settings-btn ${soundProfile === 'beep'       ? 'active' : ''}`} onClick={() => setSoundProfile('beep')}>Beep</button>
+          <div className="mt-2 px-1">
+            <div className="flex gap-1.5 mb-2.5">
+              {['mechanical', 'beep'].map(prof => (
+                <button key={prof} className={`flex-1 px-2 py-1 rounded-md font-inter text-[11px] font-semibold transition-colors capitalize border ${soundProfile === prof ? 'bg-cyan-900/30 text-cyan-400 border-cyan-500/50' : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700'}`} onClick={() => setSoundProfile(prof)}>{prof}</button>
+              ))}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '0 2px' }}>
-              <span className="settings-label" style={{ margin: 0, minWidth: 'fit-content' }}>Volume</span>
+            <div className="flex items-center gap-2">
+              <span className="font-inter text-[10px] font-bold text-slate-400 uppercase tracking-wide shrink-0">Vol</span>
               <input
                 type="range" min="0" max="100"
                 value={volume}
                 onChange={e => setVolume(Number(e.target.value))}
-                style={{ flex: 1 }}
+                className="flex-1 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
               />
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)', minWidth: '28px', textAlign: 'right', fontFamily: "'JetBrains Mono', monospace" }}>
+              <span className="text-[10px] text-slate-400 font-mono w-7 text-right">
                 {volume}%
               </span>
             </div>
-          </>
+          </div>
         )}
       </div>
 
       {/* ── Behavior & Layout ── */}
-      <div className="settings-group">
-        <div className="settings-label">Behavior &amp; Layout</div>
+      <div className="bg-slate-900/50 border border-slate-700/50 rounded-lg p-2.5 mb-3">
+        <div className="font-inter text-[10px] font-bold text-slate-400 mb-1.5 uppercase tracking-wide px-1">Behavior &amp; Layout</div>
         <ToggleRow
           icon={<ScrollText size={14}/>}
           label="Auto-scroll Log"
