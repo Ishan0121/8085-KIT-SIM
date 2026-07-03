@@ -78,7 +78,7 @@ export function DisplayInfoBtn({ addressValue, dataValue }) {
   } else if (addressValue === '----' && dataValue === '--') {
     statusText = <><b>System Reset.</b> Ready for input.</>;
   } else if (addressValue.trim() === '') {
-    statusText = <><b>Waiting for execution address.</b> Enter the starting address and press GO.</>;
+    statusText = <><b>Waiting for execution address.</b> Enter the starting address and press FILL.</>;
   } else if (['A', 'B', 'C', 'D', 'E', 'H', 'L', 'PC', 'SP'].some(r => addressValue.trim() === r)) {
     statusText = <><b>Examine Register.</b> Showing the current value of register <b>{addressValue.trim()}</b> in the DATA display.</>;
   }

@@ -158,44 +158,45 @@ export default function use8085({ strictMode = false } = {}) {
     addLog(`FILL: ${toHex(f, 4)}–${toHex(t, 4)} with ${toHex(b)}`);
   }, [refreshMemDisplay, addLog]);
 
-  // ---- GO (Execute) ----
-  const handleGo = useCallback(() => {
-    if (trainerMode !== TRAINER_MODE.EXECUTE) {
-      setTrainerMode(TRAINER_MODE.EXECUTE);
-      setInputMode(INPUT_MODE.ADDRESS);
-      setInputBuffer('');
-      setAddressDisplay('    ');
-      setDataDisplay('--');
-      addLog('GO: Enter starting address');
+  // ---- EXECUTE PROGRAM (Triggered by FILL in EXECUTE mode) ----
+  const handleExecute = useCallback(() => {
+    const startAddr = inputBuffer.length > 0 ? (parseInt(inputBuffer, 16) & 0xFFFF) : registers.PC;
+    addLog(`FILL: Executing from ${toHex(startAddr, 4)}`);
+    
+    // Run the emulator
+    const { finalRegisters, finalFlags, halted, steps, illegalOpcode } = executeProgram(
+      memRef.current, startAddr, registers, flags, 100000, breakpoints, portsRef.current, strictMode
+    );
+    
+    setRegisters(finalRegisters);
+    setFlags(finalFlags);
+    refreshMemDisplay();
+    setPortsVersion(v => v + 1);
+
+    if (illegalOpcode !== undefined) {
+      addLog(`ILLEGAL OPCODE: 0x${illegalOpcode.toString(16).toUpperCase().padStart(2,'0')} at PC=${toHex(finalRegisters.PC - 1, 4)} — halted (strict mode)`);
+    } else if (breakpoints.has(finalRegisters.PC)) {
+      addLog(`Breakpoint hit at ${toHex(finalRegisters.PC, 4)} after ${steps} steps`);
     } else {
-      const startAddr = inputBuffer.length > 0 ? (parseInt(inputBuffer, 16) & 0xFFFF) : registers.PC;
-      addLog(`GO: Executing from ${toHex(startAddr, 4)}`);
-      
-      // Run the emulator
-      const { finalRegisters, finalFlags, halted, steps, illegalOpcode } = executeProgram(
-        memRef.current, startAddr, registers, flags, 100000, breakpoints, portsRef.current, strictMode
-      );
-      
-      setRegisters(finalRegisters);
-      setFlags(finalFlags);
-      refreshMemDisplay();
-      setPortsVersion(v => v + 1);
-
-      if (illegalOpcode !== undefined) {
-        addLog(`ILLEGAL OPCODE: 0x${illegalOpcode.toString(16).toUpperCase().padStart(2,'0')} at PC=${toHex(finalRegisters.PC - 1, 4)} — halted (strict mode)`);
-      } else if (breakpoints.has(finalRegisters.PC)) {
-        addLog(`Breakpoint hit at ${toHex(finalRegisters.PC, 4)} after ${steps} steps`);
-      } else {
-        addLog(`Execution finished: ${steps} steps, Halted: ${halted}`);
-      }
-
-      setAddressDisplay(toHex(finalRegisters.PC, 4));
-      setDataDisplay('E ');
-      setInputMode(INPUT_MODE.IDLE);
-      setTrainerMode(TRAINER_MODE.MONITOR);
-      setInputBuffer('');
+      addLog(`Execution finished: ${steps} steps, Halted: ${halted}`);
     }
-  }, [trainerMode, inputBuffer, registers, flags, addLog, refreshMemDisplay, breakpoints, strictMode]);
+
+    setAddressDisplay(toHex(finalRegisters.PC, 4));
+    setDataDisplay('E ');
+    setInputMode(INPUT_MODE.IDLE);
+    setTrainerMode(TRAINER_MODE.MONITOR);
+    setInputBuffer('');
+  }, [inputBuffer, registers, flags, addLog, refreshMemDisplay, breakpoints, strictMode]);
+
+  // ---- GO (Enter Execute Mode) ----
+  const handleGo = useCallback(() => {
+    setTrainerMode(TRAINER_MODE.EXECUTE);
+    setInputMode(INPUT_MODE.ADDRESS);
+    setInputBuffer('');
+    setAddressDisplay('    ');
+    setDataDisplay('--');
+    addLog('GO: Enter starting address, then press FILL');
+  }, [addLog]);
 
   // ---- STEP ----
   const handleStep = useCallback(() => {
@@ -278,7 +279,13 @@ export default function use8085({ strictMode = false } = {}) {
       case 'BM':         addLog('BM: Block Move (enter src, dst, len)'); break;
       case 'INS_DATA':   addLog('INS DATA: Insert byte at current address'); break;
       case 'DEL_DATA':   addLog('DEL DATA: Delete byte at current address'); break;
-      case 'FILL':       addLog('FILL: Enter start addr, end addr, byte'); break;
+      case 'FILL':
+        if (trainerMode === TRAINER_MODE.EXECUTE) {
+          handleExecute();
+        } else {
+          addLog('FILL: Enter start addr, end addr, byte');
+        }
+        break;
       case 'VCT_INT':    addLog('VCT INT: Vectored interrupt triggered'); break;
       case 'REL_EXMEM':  handleMem(); break;
       case 'STRING_PRE': addLog('STRING PRE: String operation preset'); break;
@@ -294,7 +301,7 @@ export default function use8085({ strictMode = false } = {}) {
 
       default: break;
     }
-  }, [handleReset, handleNext, handleMem, handleExReg, handleGo, handleHexKey, inputMode, addLog]);
+  }, [handleReset, handleNext, handleMem, handleExReg, handleGo, handleExecute, handleHexKey, inputMode, trainerMode, addLog]);
 
   // Confirm current input (called by pressing NEXT after address entry)
   const confirmInput = useCallback(() => {

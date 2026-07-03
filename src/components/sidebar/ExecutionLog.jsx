@@ -7,9 +7,9 @@ function getLogClass(line) {
   const upper = line.toUpperCase();
   if (upper.includes('WRITE:') || upper.includes('MEM:'))  return 'log-write';
   if (upper.includes('STEP:'))                              return 'log-step';
-  if (upper.includes('GO:') || upper.includes('EXECUTION') || upper.includes('BREAKPOINT')) return 'log-go';
+  if (upper.includes('GO:') || upper.includes('EXECUTION') || upper.includes('BREAKPOINT') || upper.includes('FILL: EXECUTING')) return 'log-go';
   if (upper.includes('ILLEGAL') || upper.includes('ERROR')) return 'log-error';
-  if (upper.includes('RESET') || upper.includes('FILL:') || upper.includes('NEXT:')) return 'log-reset';
+  if (upper.includes('RESET') || (upper.includes('FILL:') && !upper.includes('EXECUTING')) || upper.includes('NEXT:')) return 'log-reset';
   return '';
 }
 
