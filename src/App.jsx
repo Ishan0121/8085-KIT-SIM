@@ -6,9 +6,10 @@ import Keypad from './components/hardware/Keypad';
 import FlagLEDBar from './components/hardware/FlagLEDBar';
 import ICInfoModal from './components/modals/ICInfoModal';
 import GuideModal from './components/modals/GuideModal';
+import RightPane from './components/sidebar/RightPane';
 import use8085 from './hooks/use8085';
 import { IC_INFO, toHex } from './data/cpu8085';
-import { Hexagon, BookOpen } from 'lucide-react';
+import { Hexagon, BookOpen, Menu } from 'lucide-react';
 import './App.css';
 
 // Keyboard shortcut mapping
@@ -56,6 +57,7 @@ export default function App() {
 
   const [icInfoKey, setIcInfoKey] = useState(null);
   const [showGuide, setShowGuide] = useState(false);
+  const [showRightPane, setShowRightPane] = useState(false);
   const prevRegisters = useRef(null);
 
   // ---- Persist Settings ----
@@ -216,6 +218,10 @@ export default function App() {
               <BookOpen size={14} style={{ marginRight: '4px' }} />
               Guide
             </button>
+            <button className="badge-btn desktop-only-btn" onClick={() => setShowRightPane(!showRightPane)} title="Toggle Right Pane">
+              <Menu size={14} style={{ marginRight: '4px' }} />
+              Pane
+            </button>
             <span className="badge badge-green">Phase 1</span>
             <span className="badge badge-blue">Digital Twin</span>
           </div>
@@ -289,6 +295,34 @@ export default function App() {
       {showGuide && (
         <GuideModal onClose={() => setShowGuide(false)} />
       )}
+
+      {/* Right Pane */}
+      <RightPane
+        isOpen={showRightPane}
+        onClose={() => setShowRightPane(false)}
+        registers={registers}
+        prevRegisters={prevRegisters.current}
+        flags={flags}
+        memory={memory}
+        memVersion={memVersion}
+        memBaseAddr={memBaseAddr}
+        setMemBaseAddr={setMemBaseAddr}
+        refreshMemDisplay={refreshMemDisplay}
+        log={log}
+        theme={theme}
+        onThemeToggle={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
+        glowIntensity={glowIntensity} setGlowIntensity={setGlowIntensity}
+        keypadSound={keypadSound} setKeypadSound={setKeypadSound}
+        soundProfile={soundProfile} setSoundProfile={setSoundProfile}
+        volume={volume} setVolume={setVolume}
+        autoScrollLog={autoScrollLog} setAutoScrollLog={setAutoScrollLog}
+        clearLogOnReset={clearLogOnReset} setClearLogOnReset={setClearLogOnReset}
+        showDecimal={showDecimal} setShowDecimal={setShowDecimal}
+        showRealtimeTranslator={showRealtimeTranslator} setShowRealtimeTranslator={setShowRealtimeTranslator}
+        setIcInfoKey={setIcInfoKey}
+        strictMode={strictMode} setStrictMode={setStrictMode}
+        colorTheme={colorTheme} setColorTheme={setColorTheme}
+      />
 
       {/* IC Info Modal */}
       {icInfoData && (

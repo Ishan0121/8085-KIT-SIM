@@ -268,6 +268,43 @@ export default function use8085({ strictMode = false } = {}) {
     }
   }, [trainerMode, inputMode, inputBuffer, currentAddr, confirmAddress, confirmData, addLog, addressDisplay, registers, setRegisters]);
 
+  // ---- PREV (String Pre) ----
+  const handlePrev = useCallback(() => {
+    if (trainerMode === TRAINER_MODE.EXAMINE_MEM) {
+      if (inputMode === INPUT_MODE.ADDRESS) {
+        confirmAddress();
+      } else {
+        if (inputBuffer.length > 0) confirmData();
+        const prevAddr = (currentAddr - 1) & 0xFFFF;
+        setCurrentAddr(prevAddr);
+        setAddressDisplay(toHex(prevAddr, 4));
+        setDataDisplay(toHex(memRef.current[prevAddr]));
+        setInputBuffer('');
+        setInputMode(INPUT_MODE.DATA);
+        addLog(`PREV: ${toHex(prevAddr, 4)} = ${toHex(memRef.current[prevAddr])}`);
+      }
+    } else if (trainerMode === TRAINER_MODE.EXAMINE_REG) {
+      const REG_ORDER = ['A', 'B', 'C', 'D', 'E', 'H', 'L', 'SP', 'PC'];
+      const currentReg = addressDisplay.trim();
+      const idx = REG_ORDER.indexOf(currentReg);
+      
+      if (idx !== -1) {
+        if (inputBuffer.length > 0) {
+          const val = parseInt(inputBuffer, 16);
+          setRegisters(prev => ({ ...prev, [currentReg]: val }));
+          addLog(`WRITE REG: ${currentReg} = ${toHex(val, currentReg === 'SP' || currentReg === 'PC' ? 4 : 2)}`);
+        }
+        
+        const prevReg = REG_ORDER[(idx - 1 + REG_ORDER.length) % REG_ORDER.length];
+        setAddressDisplay(prevReg.padEnd(4, ' '));
+        const val = registers[prevReg];
+        setDataDisplay(toHex(val, prevReg === 'SP' || prevReg === 'PC' ? 4 : 2));
+        setInputBuffer('');
+        setInputMode(INPUT_MODE.DATA);
+      }
+    }
+  }, [trainerMode, inputMode, inputBuffer, currentAddr, confirmAddress, confirmData, addLog, addressDisplay, registers, setRegisters]);
+
   // Master key handler
   const handleKey = useCallback((keyId) => {
     switch (keyId) {
@@ -288,7 +325,7 @@ export default function use8085({ strictMode = false } = {}) {
         break;
       case 'VCT_INT':    addLog('VCT INT: Vectored interrupt triggered'); break;
       case 'REL_EXMEM':  handleMem(); break;
-      case 'STRING_PRE': addLog('STRING PRE: String operation preset'); break;
+      case 'STRING_PRE': handlePrev(); break;
 
       case '0': case '1': case '2': case '3':
       case '4': case '5': case '6': case '7':
@@ -301,7 +338,7 @@ export default function use8085({ strictMode = false } = {}) {
 
       default: break;
     }
-  }, [handleReset, handleNext, handleMem, handleExReg, handleGo, handleExecute, handleHexKey, inputMode, trainerMode, addLog]);
+  }, [handleReset, handleNext, handlePrev, handleMem, handleExReg, handleGo, handleExecute, handleHexKey, inputMode, trainerMode, addLog]);
 
   // Confirm current input (called by pressing NEXT after address entry)
   const confirmInput = useCallback(() => {

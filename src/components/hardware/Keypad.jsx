@@ -66,7 +66,7 @@ const TOOLTIPS = {
   GO:         'Execute program from current PC address',
   BM:         'Block Move - copy memory block to another address',
   REL_EXMEM:  'Relocate / Examine extended memory',
-  STRING_PRE: 'String operations - preset',
+  STRING_PRE: 'Move to previous address',
   MEMC_NEXT:  'Memory check / Move to next address',
   FILL:       'Fill memory range with a constant value',
   C:  'Hex digit C (12) / Register C',

@@ -11,7 +11,7 @@ const KEY_REFERENCE = [
   { key: 'GO',         kbd: 'G',   primary: 'Enter execute mode (supply start address)', shift: 'Single-step (if supported)', color: 'func' },
   { key: 'B.M',        kbd: 'M',   primary: 'Block Move — copy a memory block to a new address', shift: '—', color: 'func' },
   { key: 'REL EXMEM',  kbd: 'R',   primary: 'Relocate / Examine extended memory region', shift: '—', color: 'func' },
-  { key: 'STRING PRE', kbd: 'S',   primary: 'String operation preset (configure string parameters)', shift: '—', color: 'func' },
+  { key: 'STRING PRE', kbd: 'S',   primary: 'Move to previous memory address', shift: '—', color: 'func' },
   { key: 'MEMC NEXT',  kbd: 'N',   primary: 'Memory Check / Advance to next memory address', shift: '—', color: 'func' },
   { key: 'FILL +',     kbd: '+',   primary: 'Execute program (in Execute Mode) or Fill memory', shift: '—', color: 'func' },
   { key: '0',          kbd: '0',   primary: 'Hex digit 0', shift: '—', color: 'hex' },

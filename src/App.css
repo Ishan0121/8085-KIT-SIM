@@ -278,12 +278,14 @@ kbd {
   .main-content { margin-left: var(--rail-width); }
   .trainer-enclosure-slim { min-width: 0; width: 100%; padding: 20px; }
   .trainer-area { padding: 20px 16px; }
+  .desktop-only-btn { display: none !important; }
 }
 
 @media (max-width: 600px) {
   .main-content { margin-left: 0; padding-bottom: 64px; }
   .topbar-title { font-size: 12px; }
   .topbar-badges .badge:not(.badge-btn) { display: none; }
+  .desktop-only-btn { display: none !important; }
   .trainer-enclosure-slim { padding: 14px; gap: 16px; }
   .hint-bar { display: none; }
 }
