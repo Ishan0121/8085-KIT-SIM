@@ -44,14 +44,14 @@ const getSavedSetting = (key, defaultVal) => {
 
 export default function App() {
   const [theme, setTheme] = useState(() => getSavedSetting('sim_theme', 'dark'));
-  const [glowIntensity, setGlowIntensity] = useState(() => getSavedSetting('sim_glowIntensity', 'high'));
+  const [glowIntensity, setGlowIntensity] = useState(() => getSavedSetting('sim_glowIntensity', 'low'));
   const [keypadSound, setKeypadSound] = useState(() => getSavedSetting('sim_keypadSound', true));
   const [soundProfile, setSoundProfile] = useState(() => getSavedSetting('sim_soundProfile', 'mechanical'));
   const [volume, setVolume] = useState(() => getSavedSetting('sim_volume', 50));
   const [autoScrollLog, setAutoScrollLog] = useState(() => getSavedSetting('sim_autoScrollLog', true));
   const [clearLogOnReset, setClearLogOnReset] = useState(() => getSavedSetting('sim_clearLogOnReset', false));
   const [showDecimal, setShowDecimal] = useState(() => getSavedSetting('sim_showDecimal', true));
-  const [showRealtimeTranslator, setShowRealtimeTranslator] = useState(() => getSavedSetting('sim_showRealtimeTranslator', true));
+  const [showRealtimeTranslator, setShowRealtimeTranslator] = useState(() => getSavedSetting('sim_showRealtimeTranslator', false));
   const [strictMode, setStrictMode] = useState(() => getSavedSetting('sim_strictMode', false));
   const [colorTheme, setColorTheme] = useState(() => getSavedSetting('sim_colorTheme', 'default'));
 
